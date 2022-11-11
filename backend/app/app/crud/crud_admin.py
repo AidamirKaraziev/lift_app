@@ -144,7 +144,7 @@ class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUp
         if com is None:
             return None, -106, None
         if com.is_actual is False:
-            return None, -1063, None
+            return None, -1062, None
 
         # загрузка данных новых
         db.query(UniversalUser).filter(UniversalUser.id == client_id).update(
