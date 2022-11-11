@@ -157,5 +157,9 @@ class UniversalUserDivision(BaseModel):
     division_id: int
 
 
+class UniversalUserCompany(BaseModel):
+    company_id: int
+
+
 class UniversalUserIsActual(BaseModel):
     is_actual: bool

@@ -36,11 +36,14 @@ from app.schemas.client import ClientCreate
 from app.core.templates_raise import get_raise
 from app.schemas.universal_user import UniversalUserDivision
 
-from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN
+from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+
+from backend.app.app.schemas.universal_user import UniversalUserCompany
 
 ROLES_ELIGIBLE = [ADMIN]
 EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
 ALL_EMPLOYEE = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
+CLIENT_LIST = [CLIENT]
 
 
 router = APIRouter()
@@ -435,6 +438,30 @@ def unzipping_users(
                                                    id_user=id_user,
                                                    role_list=ROLES_ELIGIBLE,
                                                    employee_list=ALL_EMPLOYEE)
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_universal_user(obj, request=request))
+
+
+#  АПИ ПО ИЗМЕНЕНИЮ КОМПАНИИ ДЛЯ КЛИЕНТА
+@router.put('/cp/admin/{client_id}/company/',
+            response_model=SingleEntityResponse,
+            name='Изменить компании для клиента',
+            description='Изменить компании для клиента',
+            tags=['Админ панель / Администратор'])
+def update_company_for_client(
+        request: Request,
+        new_data: UniversalUserCompany,
+        client_id: int = Path(..., title='Id клиента'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db)
+):
+    obj, code, indexes = crud_admin.change_company_for_client(db=session,
+                                                              current_user=current_user,
+                                                              company=new_data,
+                                                              client_id=client_id,
+                                                              role_list=ROLES_ELIGIBLE,
+                                                              client_list=CLIENT_LIST)
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))

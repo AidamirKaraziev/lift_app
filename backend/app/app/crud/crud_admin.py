@@ -33,6 +33,8 @@ from app.schemas.universal_user import UniversalUserDivision
 
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN
 
+from backend.app.app.models import Company
+from backend.app.app.schemas.universal_user import UniversalUserCompany
 
 ROLE_LIST = [ADMIN]
 FOLDER_UNIVERSAL_USER_PHOTO = './static/universal_user_photo/'
@@ -121,46 +123,37 @@ class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUp
         db.refresh(db_obj)
         return db_obj, 0, None
 
-    # def adding_photo(self, db: Session, id_user: int, file: Optional[UploadFile]):
-    #     path_name = FOLDER_UNIVERSAL_USER_PHOTO + f"{id_user}/"
-    #     if file is None:
-    #         # Удаляем все содержимое папки
-    #         path_to_clear = path_name + "*"
-    #         for file_to_clear in glob.glob(path_to_clear):
-    #             os.remove(file_to_clear)
-    #         db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': None})
-    #         db.commit()
-    #         return {"photo": None}
-    #     filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
-    #     # path_name = FOLDER_MODERATOR_PHOTO + f"{id_moderator}/"
-    #     element = ["universal_user_photo", str(id_user), filename]
-    #
-    #     path_for_db = "/".join(element)
-    #
-    #     if not os.path.exists(path_name):
-    #         os.makedirs(path_name)
-    #
-    #     # Удаляем все содержимое папки
-    #     path_to_clear = path_name + "*"
-    #     for file_to_clear in glob.glob(path_to_clear):
-    #         os.remove(file_to_clear)
-    #
-    #     with open(path_name + filename, "wb") as wf:
-    #         shutil.copyfileobj(file.file, wf)
-    #         file.file.close()  # удаляет временный
-    #
-    #     db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': path_for_db})
-    #     db.commit()
-    #     if not file:
-    #         raise UnfoundEntity(
-    #             message="Не отправлен загружаемый файл",
-    #             num=2,
-    #             description="Попробуйте загрузить файл еще раз",
-    #             path="$.body",
-    #         )
-    #     else:
-    #         return {"photo": path_for_db}
-    #
+    def change_company_for_client(self, *,
+                                  db: Session,
+                                  current_user: UniversalUser,
+                                  company: UniversalUserCompany,
+                                  client_id: int,
+                                  role_list: list,
+                                  client_list: list):
+        # проверить роль админа
+        code = self.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить роль меняемого
+        client = self.get(db=db, id=client_id)
+        if client is None:
+            return None, -105, None
+        if client.role_id not in client_list:
+            return None, -1042, None
+
+        # проверка division_id
+        com = db.query(Company).filter(Company.id == company.company_id).first()
+        if com is None:
+            return None, -106, None
+        if com.is_actual is False:
+            return None, -1063, None
+
+        # загрузка данных новых
+        db.query(UniversalUser).filter(UniversalUser.id == client_id).update(
+            {f'company_id': company.company_id})
+        db.commit()
+
+        return client, 0, None
 
 
 crud_admin = CrudAdmin(UniversalUser)
