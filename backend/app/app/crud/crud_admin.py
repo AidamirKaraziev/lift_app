@@ -150,7 +150,6 @@ class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUp
         db.query(UniversalUser).filter(UniversalUser.id == client_id).update(
             {f'company_id': company.company_id})
         db.commit()
-
         return client, 0, None
 
 
