@@ -38,7 +38,7 @@ from app.schemas.universal_user import UniversalUserDivision
 
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
 
-from backend.app.app.schemas.universal_user import UniversalUserCompany
+from app.schemas.universal_user import UniversalUserCompany
 
 ROLES_ELIGIBLE = [ADMIN]
 EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
@@ -60,98 +60,6 @@ async def get_site(filename):
 
     content_type, _ = guess_type(filename)
     return Response(content, media_type=content_type)
-
-#
-# # CREATE NEW UNIVERSAL_USER
-# @router.post('/cp/admin/universal-user/',
-#              response_model=SingleEntityResponse[UniversalUserGet],
-#              name='Создать универсального пользователя',
-#              description='Создать универсального пользователя',
-#              tags=['Админ панель / Администратор']
-#              )
-# def create_universal_user(
-#         request: Request,
-#         new_data: UniversalUserRequest,
-#         current_user=Depends(deps.get_current_universal_user_by_bearer),
-#         session=Depends(deps.get_db),
-# ):
-#     db_obj, code, index = crud_admin.create_new_user(db=session, current_user=current_user, new_data=new_data)
-#
-#     if code == -1:
-#         raise UnfoundEntity(
-#             message="Токен не распознан!",
-#             num=1,
-#             description="Такого пользователя не существует!",
-#             path="$.body"
-#         )
-#     if code == -2:
-#         raise InaccessibleEntity(
-#             message="Пользователь не обладает правами!",
-#             num=2,
-#             description="Пользователь не обладает правами, к созданию других пользователей!",
-#             path="$.body"
-#         )
-#     if code == -9:
-#         raise InaccessibleEntity(
-#             message="Впишите email, это обязательно!",
-#             num=2,
-#             description="Укажите email, для регистрации",
-#             path="$.body"
-#         )
-#     if code == -10:
-#         raise InaccessibleEntity(
-#             message="Пользователь с таким email уже есть!",
-#             num=2,
-#             description="Укажите другой email, для регистрации",
-#             path="$.body"
-#         )
-#     if code == -3:
-#         raise UnprocessableEntity(
-#             message="Не указан пароль!",
-#             num=3,
-#             description="Необходимо указать пароль",
-#             path="$.body"
-#         )
-#
-#     # проверка локации и зоны ответственности
-#     if code == -4:
-#         raise UnfoundEntity(
-#             message="Такого города нет!",
-#             num=4,
-#             description="Введен неправильный id города!",
-#             path="$.body"
-#         )
-#
-#     if code == -5:
-#         raise UnprocessableEntity(
-#             message="Выберите должность!",
-#             num=5,
-#             description="Необходимо выбрать должность!",
-#             path="$.body"
-#         )
-#     if code == -6:
-#         raise UnfoundEntity(
-#             message="Такой Должности нет!",
-#             num=6,
-#             description="Выберете существующую должность!",
-#             path="$.body"
-#         )
-#     if code == -7:
-#         raise UnfoundEntity(
-#             message="Такой Специальности нет!",
-#             num=7,
-#             description="Выберете существующую Специальность!",
-#             path="$.body"
-#         )
-#     if code == -8:
-#         raise UnfoundEntity(
-#             message="Такой компании нет!",
-#             num=8,
-#             description="Выберете существующую Компанию или создайте новую!",
-#             path="$.body"
-#         )
-#
-#     return SingleEntityResponse(data=get_universal_user(db_obj, request=request))
 
 
 # CREATE NEW EMPLOYEE

@@ -28,16 +28,14 @@ from app.schemas.universal_user import EmployeeCreate
 from app.crud.base_user import CRUDBaseUser
 from app.schemas.client import ClientCreate
 
-from app.models import Division
-from app.schemas.universal_user import UniversalUserDivision
 
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN
 
-from backend.app.app.models import Company
-from backend.app.app.schemas.universal_user import UniversalUserCompany
+from app.models import Company
+from app.schemas.universal_user import UniversalUserCompany
 
 ROLE_LIST = [ADMIN]
-FOLDER_UNIVERSAL_USER_PHOTO = './static/universal_user_photo/'
+# FOLDER_UNIVERSAL_USER_PHOTO = './static/universal_user_photo/'
 
 
 class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUpdate]):
@@ -73,55 +71,55 @@ class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUp
             return None, -1022, None
         db_obj, code, indexes = super().create_client(db=db, new_data=new_data)
         return db_obj, code, indexes
-
-    # Возможно в будущем удалить и импользовать базовый универсальный класс
-    def updating_admin_self(self, db: Session, *, current_user: UniversalUser,
-                            obj_in: Union[UniversalUserUpdate, Dict[str, Any]]) -> UniversalUser:
-        db_obj = crud_universal_users.get(db=db, id=current_user.id)
-        obj_data = jsonable_encoder(db_obj)
-        new_obj = jsonable_encoder(obj_in)
-
-        # Проверить есть ли такой user
-        if db_obj is None:
-            return None, -1, None
-        # Проверить является ли он is_superuser
-        if current_user.role_id != 1:
-            return None, -2, None
-        # BIRTHDAY
-        if new_obj['birthday'] is not None:
-            obj_in.birthday = str(date_from_timestamp(new_obj['birthday']))
-        # ГОРОДА
-        if new_obj['location_id'] is not None:
-            if crud_location.get(db=db, id=new_obj['location_id']) is None:
-                return None, -3, None
-        # ROLE
-        # if new_obj['role_id'] is None:
-        #     return None, -4, None
-        if new_obj['role_id'] is not None:
-            if crud_role.get(db=db, id=new_obj['role_id']) is None:
-                return None, -5, None
-        # WORKING SPECIALTY
-        if new_obj['working_specialty_id'] is not None:
-            if crud_working_specialty.get(db=db, id=new_obj['working_specialty_id']) is None:
-                return None, -6, None
-        # COMPANY
-        if new_obj['role_id'] == 6:
-            if new_obj['company_id'] is not None:
-                if crud_company.get(db=db, id=new_obj['company_id']) is None:
-                    return None, -7, None
-        if new_obj['role_id'] != 6 and new_obj['company_id'] is not None:
-            return None, -8, None
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
-        for field in obj_data:
-            if field in update_data:
-                setattr(db_obj, field, update_data[field])
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj, 0, None
+    #
+    # # Возможно в будущем удалить и импользовать базовый универсальный класс
+    # def updating_admin_self(self, db: Session, *, current_user: UniversalUser,
+    #                         obj_in: Union[UniversalUserUpdate, Dict[str, Any]]) -> UniversalUser:
+    #     db_obj = crud_universal_users.get(db=db, id=current_user.id)
+    #     obj_data = jsonable_encoder(db_obj)
+    #     new_obj = jsonable_encoder(obj_in)
+    #
+    #     # Проверить есть ли такой user
+    #     if db_obj is None:
+    #         return None, -1, None
+    #     # Проверить является ли он is_superuser
+    #     if current_user.role_id != 1:
+    #         return None, -2, None
+    #     # BIRTHDAY
+    #     if new_obj['birthday'] is not None:
+    #         obj_in.birthday = str(date_from_timestamp(new_obj['birthday']))
+    #     # ГОРОДА
+    #     if new_obj['location_id'] is not None:
+    #         if crud_location.get(db=db, id=new_obj['location_id']) is None:
+    #             return None, -3, None
+    #     # ROLE
+    #     # if new_obj['role_id'] is None:
+    #     #     return None, -4, None
+    #     if new_obj['role_id'] is not None:
+    #         if crud_role.get(db=db, id=new_obj['role_id']) is None:
+    #             return None, -5, None
+    #     # WORKING SPECIALTY
+    #     if new_obj['working_specialty_id'] is not None:
+    #         if crud_working_specialty.get(db=db, id=new_obj['working_specialty_id']) is None:
+    #             return None, -6, None
+    #     # COMPANY
+    #     if new_obj['role_id'] == 6:
+    #         if new_obj['company_id'] is not None:
+    #             if crud_company.get(db=db, id=new_obj['company_id']) is None:
+    #                 return None, -7, None
+    #     if new_obj['role_id'] != 6 and new_obj['company_id'] is not None:
+    #         return None, -8, None
+    #     if isinstance(obj_in, dict):
+    #         update_data = obj_in
+    #     else:
+    #         update_data = obj_in.dict(exclude_unset=True)
+    #     for field in obj_data:
+    #         if field in update_data:
+    #             setattr(db_obj, field, update_data[field])
+    #     db.add(db_obj)
+    #     db.commit()
+    #     db.refresh(db_obj)
+    #     return db_obj, 0, None
 
     def change_company_for_client(self, *,
                                   db: Session,
