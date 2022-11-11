@@ -78,7 +78,7 @@ def update_user(
 ):
     # проверка роли
     obj, code, indexes = crud_foreman.change_division_id(db=session, current_user=current_user, division=new_data,
-                                                         role_list=ROLE_FOREMAN)
+                                                         role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))
@@ -101,7 +101,7 @@ def update_dvision_for_employee(
                                                                  current_user=current_user,
                                                                  division=new_data,
                                                                  employee_id=employee_id,
-                                                                 role_list=ROLE_FOREMAN,
+                                                                 role_list=ROLES_ELIGIBLE,
                                                                  employee_list=EMPLOYEE_LIST)
     get_raise(code=code)
 

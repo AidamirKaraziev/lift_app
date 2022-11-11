@@ -121,77 +121,46 @@ class CrudAdmin(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUp
         db.refresh(db_obj)
         return db_obj, 0, None
 
-    def adding_photo(self, db: Session, id_user: int, file: Optional[UploadFile]):
-        path_name = FOLDER_UNIVERSAL_USER_PHOTO + f"{id_user}/"
-        if file is None:
-            # Удаляем все содержимое папки
-            path_to_clear = path_name + "*"
-            for file_to_clear in glob.glob(path_to_clear):
-                os.remove(file_to_clear)
-            db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': None})
-            db.commit()
-            return {"photo": None}
-        filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
-        # path_name = FOLDER_MODERATOR_PHOTO + f"{id_moderator}/"
-        element = ["universal_user_photo", str(id_user), filename]
-
-        path_for_db = "/".join(element)
-
-        if not os.path.exists(path_name):
-            os.makedirs(path_name)
-
-        # Удаляем все содержимое папки
-        path_to_clear = path_name + "*"
-        for file_to_clear in glob.glob(path_to_clear):
-            os.remove(file_to_clear)
-
-        with open(path_name + filename, "wb") as wf:
-            shutil.copyfileobj(file.file, wf)
-            file.file.close()  # удаляет временный
-
-        db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': path_for_db})
-        db.commit()
-        if not file:
-            raise UnfoundEntity(
-                message="Не отправлен загружаемый файл",
-                num=2,
-                description="Попробуйте загрузить файл еще раз",
-                path="$.body",
-            )
-        else:
-            return {"photo": path_for_db}
-
-    # def archiving_user(self, db: Session, *, id_user: int,
-    #                    current_user: UniversalUser,
-    #                    role_list: list,
-    #                    employee_list: list):
-    #     # проверить роль админа
-    #     code = super().check_role_list(current_user=current_user, role_list=role_list)
-    #     if code != 0:
-    #         return None, code, None
-    #     user = super().get(db=db, id=id_user)
-    #     if user is None:
-    #         return None, -105, None
-    #     if user.role_id not in employee_list:
-    #         return None, -1042, None
-    #     user, code, indexes = super().archiving(db=db, db_obj=user)
-    #     return user, 0, None
-
-    # def unzipping_user(self, db: Session, *, id_user: int,
-    #                    current_user: UniversalUser,
-    #                    role_list: list,
-    #                    employee_list: list):
-    #     # проверить роль админа
-    #     code = super().check_role_list(current_user=current_user, role_list=role_list)
-    #     if code != 0:
-    #         return None, code, None
-    #     user = super().get(db=db, id=id_user)
-    #     if user is None:
-    #         return None, -105, None
-    #     if user.role_id not in employee_list:
-    #         return None, -1042, None
-    #     user, code, indexes = super().unzipping(db=db, db_obj=user)
-    #     return user, 0, None
+    # def adding_photo(self, db: Session, id_user: int, file: Optional[UploadFile]):
+    #     path_name = FOLDER_UNIVERSAL_USER_PHOTO + f"{id_user}/"
+    #     if file is None:
+    #         # Удаляем все содержимое папки
+    #         path_to_clear = path_name + "*"
+    #         for file_to_clear in glob.glob(path_to_clear):
+    #             os.remove(file_to_clear)
+    #         db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': None})
+    #         db.commit()
+    #         return {"photo": None}
+    #     filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
+    #     # path_name = FOLDER_MODERATOR_PHOTO + f"{id_moderator}/"
+    #     element = ["universal_user_photo", str(id_user), filename]
+    #
+    #     path_for_db = "/".join(element)
+    #
+    #     if not os.path.exists(path_name):
+    #         os.makedirs(path_name)
+    #
+    #     # Удаляем все содержимое папки
+    #     path_to_clear = path_name + "*"
+    #     for file_to_clear in glob.glob(path_to_clear):
+    #         os.remove(file_to_clear)
+    #
+    #     with open(path_name + filename, "wb") as wf:
+    #         shutil.copyfileobj(file.file, wf)
+    #         file.file.close()  # удаляет временный
+    #
+    #     db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': path_for_db})
+    #     db.commit()
+    #     if not file:
+    #         raise UnfoundEntity(
+    #             message="Не отправлен загружаемый файл",
+    #             num=2,
+    #             description="Попробуйте загрузить файл еще раз",
+    #             path="$.body",
+    #         )
+    #     else:
+    #         return {"photo": path_for_db}
+    #
 
 
 crud_admin = CrudAdmin(UniversalUser)

@@ -2,7 +2,7 @@ from app.exceptions import UnprocessableEntity, InaccessibleEntity, UnfoundEntit
 
 
 email_already_have = -100
-location_is_none_not_found = -101
+location_not_found = -101
 
 role_is_none_not_found = -102
 role_incorrectly_selected = -1021  # неправильно выбрано, попытка создать клиента
@@ -19,6 +19,7 @@ division_is_not_actual = -1043  # НЕ АКТУАЛЬНЫЙ УЧАСТОК
 user_not_found = -105
 
 company_not_found = -106
+company_already_exists = -1061  # Такая компания уже есть
 
 not_is_actual = -107
 not_attribute_in_model = -108
@@ -114,6 +115,13 @@ def get_raise(code: int):
             message="Такой компании нет!",
             num=106,
             description="Выберете существующую Компанию или создайте новую!",
+            path="$.body"
+        )
+    if code == -1061:
+        raise UnprocessableEntity(
+            message="Такая компания уже есть в базе данных",
+            num=1,
+            description="Компания с таким названием уже есть в базе данных!",
             path="$.body"
         )
     if code == -107:

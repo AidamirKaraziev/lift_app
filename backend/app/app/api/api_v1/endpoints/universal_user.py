@@ -6,27 +6,7 @@ from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
 
 from fastapi.params import Path
 
-# from app.api import deps
-from app.core.response import SingleEntityResponse
 from app.schemas.token import TokenBase
-
-# from app.schemas.super_users import SuperUserEntrance, SuperUserGet
-
-# from app.getters.super_user import get_super_user
-#
-# from app.exceptions import UnfoundEntity, InaccessibleEntity
-# from app.schemas.super_users import SuperUserRequest
-#
-# # from app.crud.crud_super_users import crud_super_users
-#
-# from app.core.security import get_password_hash
-# from app.crud.crud_location import crud_location
-# from app.exceptions import UnprocessableEntity
-# from app.utils.time_stamp import date_from_timestamp
-#
-# # from app.crud.crud_super_users import crud_super_users
-# #
-# # from app.getters.super_user import get_super_user_delete
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
@@ -40,10 +20,7 @@ from app.core.security import create_token_universal_user
 from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
 from app.schemas.universal_user import UniversalUserUpdate
 
-# from backend.app.app.core.response import ListOfEntityResponse, Meta
-
-from app.core.response import ListOfEntityResponse, SingleEntityResponse
-from app.core.response import Meta
+from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 
 
 PATH_MODEL = "universal_user"

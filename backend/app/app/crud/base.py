@@ -147,3 +147,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             )
         else:
             return {path_type: path_for_db}
+
+    def archiving(self,  db: Session, *, db_obj: ModelType):
+        db.query(db_obj.__class__).filter(db_obj.__class__.id == db_obj.id).update({"is_actual": False})
+        db.commit()
+        return db_obj, 0, None
+
+    def unzipping(self,  db: Session, *, db_obj: ModelType):
+        db.query(db_obj.__class__).filter(db_obj.__class__.id == db_obj.id).update({"is_actual": True})
+        db.commit()
+        return db_obj, 0, None

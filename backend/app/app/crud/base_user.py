@@ -146,6 +146,12 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get_by_name(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
 
+    def get_clients_list(self, *, db: Session, company_id: int):
+        clients = db.query(self.model).filter(self.model.company_id == company_id)
+        # d = []
+        # d.append(clients)
+        return clients
+
     def create_employee(self, db: Session, new_data: EmployeeCreate):
         email = db.query(UniversalUser).filter(UniversalUser.email == new_data.email).first()
         if email is not None:
@@ -400,3 +406,5 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             return None, -1042, None
         user, code, indexes = self.unzipping(db=db, db_obj=user)
         return user, 0, None
+
+# 2131231231231
