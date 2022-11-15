@@ -273,8 +273,8 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             return -1023
         return 0
 
-    def check_data_for_update_user(self, db: Session, current_user: UniversalUser, new_data: UniversalUserUpdate):
-        # проверить город
+    # ПРОВЕРКА ДАННЫХ ДЛЯ UPDATE USER
+    def check_data_for_update_user(self, db: Session, new_data: UniversalUserUpdate):
         # ГОРОДА
         if new_data.location_id is not None:
             if crud_location.get(db=db, id=new_data.location_id) is None:
@@ -386,7 +386,7 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if user is None:
             return None, -105, None
         if user.role_id not in employee_list:
-            return None, -1042, None
+            return None, -1024, None
         user, code, indexes = self.archiving(db=db, db_obj=user)
         return user, 0, None
 
@@ -403,8 +403,58 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if user is None:
             return None, -105, None
         if user.role_id not in employee_list:
-            return None, -1042, None
+            return None, -1024, None
         user, code, indexes = self.unzipping(db=db, db_obj=user)
         return user, 0, None
 
-# 2131231231231
+    def updating_user(self, *, db=Session,
+                      current_user: UniversalUser,
+                      user_id: int,
+                      new_data: UniversalUserUpdate,
+                      role_list: list,
+                      changeable_list: list):
+        # проверить роль пользователя
+        code = self.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такой юзер
+        user = self.get(db=db, id=user_id)
+        if user is None:
+            return None, -105, None
+        if user.role_id not in changeable_list:
+            return None, -1024, None
+
+        new_data, code, indexes = self.check_data_for_update_user(db=db, new_data=new_data)
+        if code != 0:
+            return None, code, None
+        # сохранить чувака
+        self.update(db=db, db_obj=user, obj_in=new_data)
+        return user, 0, None
+
+    def updating_file_for_user(self, *, db=Session,
+                               current_user: UniversalUser,
+                               user_id: int,
+                               role_list: list,
+                               changeable_list: list,
+                               file: Optional[UploadFile],
+                               path_model: str,
+                               path_type: str,
+                               ):
+        # проверить роль пользователя
+        code = self.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такой юзер
+        user = self.get(db=db, id=user_id)
+        if user is None:
+            return None, -105, None
+        if user.role_id not in changeable_list:
+            return None, -1024, None
+
+        save_file = self.adding_file(db=db, file=file, path_model=path_model, path_type=path_type, db_obj=user)
+        # if code != 0:
+        #     return None, code, None
+        # сохранить чувака
+        # self.update(db=db, db_obj=user, obj_in=new_data)
+        return save_file, 0, None
+

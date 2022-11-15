@@ -38,5 +38,3 @@ class UniversalUser(Base):
 
     __table_args__ = (UniqueConstraint('email', 'is_actual', name='_email_is_actual_uc'),
                       )
-
-

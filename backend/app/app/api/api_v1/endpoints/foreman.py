@@ -38,7 +38,10 @@ from app.schemas.universal_user import UniversalUserDivision
 from app.core.templates_raise import get_raise
 
 from app.core.roles import MECHANIC, ENGINEER, DISPATCHER, FOREMAN
-
+PATH_MODEL = "universal_user"
+PATH_TYPE_PHOTO = "photo"
+PATH_TYPE_IDENTITY_CARD = "identity_card"
+PATH_TYPE_QUALIFICATION = "qualification_file"
 #
 ROLES_ELIGIBLE = [FOREMAN]
 EMPLOYEE_LIST = [MECHANIC, ENGINEER, DISPATCHER]
@@ -150,6 +153,138 @@ def unzipping_users(
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))
+
+
+# UPDATE USERS
+@router.put('/cp/foreman/universal_user/{user_id}/',
+            response_model=SingleEntityResponse[UniversalUserGet],
+            name='Изменить пользователя',
+            description='Изменить данные пользователя',
+            tags=['Админ панель / Прораб']
+            )
+def update_user(
+        request: Request,
+        new_data: UniversalUserUpdate,
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+
+    obj, code, indexes = crud_admin.updating_user(db=session,
+                                                  current_user=current_user,
+                                                  user_id=user_id,
+                                                  new_data=new_data,
+                                                  role_list=ROLES_ELIGIBLE,
+                                                  changeable_list=EMPLOYEE_LIST)
+
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_universal_user(obj, request=request))
+
+
+# UPDATE photo
+@router.put("/cp/foreman/universal_user/{user_id}/photo/",
+            response_model=SingleEntityResponse,
+            name='Изменить фото другому пользователю',
+            description='Изменить фото для пользователя, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Прораб'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_foreman.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=EMPLOYEE_LIST,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_PHOTO, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
+
+
+# UPDATE identity-card
+@router.put("/cp/foreman/universal_user/{user_id}/identity-card/",
+            response_model=SingleEntityResponse,
+            name='Изменить удостоверение другому пользователю',
+            description='Изменить удостоверение пользователю, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Прораб'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_foreman.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=EMPLOYEE_LIST,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_IDENTITY_CARD, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
+
+
+# UPDATE qualification_file
+@router.put("/cp/foreman/universal_user/{user_id}/qualification-file/",
+            response_model=SingleEntityResponse,
+            name='Изменить ЦОК другому пользователю',
+            description='Изменить ЦОК пользователю, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Прораб'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_foreman.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=EMPLOYEE_LIST,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_QUALIFICATION, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
 
 
 if __name__ == "__main__":

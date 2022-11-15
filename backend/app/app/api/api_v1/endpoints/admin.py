@@ -40,9 +40,15 @@ from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIEN
 
 from app.schemas.universal_user import UniversalUserCompany
 
+PATH_MODEL = "universal_user"
+PATH_TYPE_PHOTO = "photo"
+PATH_TYPE_IDENTITY_CARD = "identity_card"
+PATH_TYPE_QUALIFICATION = "qualification_file"
+
 ROLES_ELIGIBLE = [ADMIN]
 EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
 ALL_EMPLOYEE = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
+ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT]
 CLIENT_LIST = [CLIENT]
 
 
@@ -373,6 +379,138 @@ def update_company_for_client(
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))
+
+
+# UPDATE USERS
+@router.put('/cp/admin/universal_user/{user_id}/',
+            response_model=SingleEntityResponse[UniversalUserGet],
+            name='Изменить пользователя',
+            description='Изменить данные пользователя',
+            tags=['Админ панель / Администратор']
+            )
+def update_user(
+        request: Request,
+        new_data: UniversalUserUpdate,
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+
+    obj, code, indexes = crud_admin.updating_user(db=session,
+                                                  current_user=current_user,
+                                                  user_id=user_id,
+                                                  new_data=new_data,
+                                                  role_list=ROLES_ELIGIBLE,
+                                                  changeable_list=ALL)
+
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_universal_user(obj, request=request))
+
+
+# UPDATE photo
+@router.put("/cp/admin/universal_user/{user_id}/photo/",
+            response_model=SingleEntityResponse,
+            name='Изменить фото другому пользователю',
+            description='Изменить фото для пользователя, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Администратор'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_admin.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=ALL,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_PHOTO, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
+
+
+# UPDATE identity-card
+@router.put("/cp/admin/universal_user/{user_id}/identity-card/",
+            response_model=SingleEntityResponse,
+            name='Изменить удостоверение другому пользователю',
+            description='Изменить удостоверение пользователю, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Администратор'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_admin.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=ALL_EMPLOYEE,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_IDENTITY_CARD, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
+
+
+# UPDATE qualification_file
+@router.put("/cp/admin/universal_user/{user_id}/qualification-file/",
+            response_model=SingleEntityResponse,
+            name='Изменить ЦОК другому пользователю',
+            description='Изменить ЦОК пользователю, если отправить пусто поле информация сбросится',
+            tags=['Админ панель / Администратор'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        user_id: int = Path(..., title='Id пользователя'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        ):
+
+    save_path, code, indexes = crud_admin.updating_file_for_user(
+        db=session,
+        current_user=current_user,
+        user_id=user_id,
+        role_list=ROLES_ELIGIBLE,
+        changeable_list=ALL_EMPLOYEE,
+        file=file,
+        path_model=PATH_MODEL,
+        path_type=PATH_TYPE_QUALIFICATION, )
+    get_raise(code=code)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
+                                                        request=request))
 
 
 if __name__ == "__main__":

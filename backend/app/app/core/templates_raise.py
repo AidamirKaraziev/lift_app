@@ -4,10 +4,11 @@ from app.exceptions import UnprocessableEntity, InaccessibleEntity, UnfoundEntit
 email_already_have = -100
 location_not_found = -101
 
-role_is_none_not_found = -102
+role_not_found = -102
 role_incorrectly_selected = -1021  # неправильно выбрано, попытка создать клиента
 role_without_access = -1022  # недостаточно прав
 role_no_rights = -1023  # нет прав
+role_changeable_list = -1024  # Не входит в список меняемых пользователей
 
 working_specialty_not_found = -103
 
@@ -67,6 +68,13 @@ def get_raise(code: int):
             message="Вы не обладаете правами!",
             num=1023,
             description="Пользователь не обладает правами!",
+            path="$.body"
+        )
+    if code == -1024:
+        raise InaccessibleEntity(
+            message="Этого пользователя нет в изменяемом списке!",
+            num=1024,
+            description="Этого пользователя нет в изменяемом списке!",
             path="$.body"
         )
     if code == -103:

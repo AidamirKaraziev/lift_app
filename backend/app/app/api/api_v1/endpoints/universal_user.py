@@ -140,6 +140,7 @@ def update_user(
 
     db_obj, code, index = crud_universal_users.update_user_self(
         db=session, current_user=current_user, new_data=new_data)
+
     if code == -105:
         raise UnfoundEntity(
             message="Нет такого пользователя!",
@@ -214,7 +215,7 @@ def create_upload_file(
 
 
 # UPDATE qualification_file
-@router.put("/cp/universal_user/me/qualification-file /",
+@router.put("/cp/universal_user/me/qualification-file/",
             response_model=SingleEntityResponse,
             name='Изменить ЦОК',
             description='Изменить ЦОК для пользователя, если отправить пусто поле информация сбросится',
