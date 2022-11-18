@@ -157,3 +157,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.query(db_obj.__class__).filter(db_obj.__class__.id == db_obj.id).update({"is_actual": True})
         db.commit()
         return db_obj, 0, None
+
+    def check_list(self, verify_list: list, all_list: list):
+        for element in verify_list:
+            if element not in all_list:
+                return -109
+            else:
+                return 0

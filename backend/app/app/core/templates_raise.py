@@ -26,6 +26,8 @@ company_is_not_actual = -1062  # НЕ АКТУАЛЬНАЯ КОМПАНИЯ
 not_is_actual = -107
 not_attribute_in_model = -108
 
+checked_items_is_not_in_the_list = -109  # Одного из проверяемых элементов нет в проверяемом списке
+
 
 def get_raise(code: int):
     if code == -100:
@@ -153,6 +155,13 @@ def get_raise(code: int):
             message="Модель в базе данных не имеет такого атрибута для файла!",
             num=108,
             description="Модель в базе данных не имеет такого атрибута для файла!",
+            path="$.body"
+        )
+    if code == -109:
+        raise UnprocessableEntity(
+            message="Один из проверяемых элементов отсутствует в списке",
+            num=109,
+            description="Один из проверяемых элементов отсутствует в списке",
             path="$.body"
         )
     if code != 0:

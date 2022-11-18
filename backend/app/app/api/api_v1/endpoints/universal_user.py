@@ -238,6 +238,31 @@ def create_upload_file(
     return SingleEntityResponse(data=get_universal_user(current_user, request=request))
 
 
+# GET USER OF COMPANY
+@router.get('/all-test-my/',
+            response_model=ListOfEntityResponse,
+            name='Список клиентов определенной компании',
+            description='Список клиентов определенной компании',
+            tags=['Админ панель / Пользователь']
+            )
+def get_data(
+        request: Request,
+        session=Depends(deps.get_db),
+        # user_id: int = Path(..., title='ID user'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        page: int = Query(1, title="Номер страницы")
+):
+    # проверка компании
+    # проверка
+
+    logging.info(crud_universal_users.get_multi_test(db=session, page=None))
+
+    data, paginator = crud_universal_users.get_multi_test(db=session, page=page)
+
+    return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
 if __name__ == "__main__":
     logging.info('Running...')
 
