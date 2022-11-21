@@ -24,6 +24,7 @@ def get_company(company: Company, request: Optional[Request],
         cont_address=company.cont_address,
         photo=company.photo,
         email=company.email,
+        site=company.site,
         location_id=get_location(company.location) if company.location is not None else None,
         is_actual=company.is_actual
     )

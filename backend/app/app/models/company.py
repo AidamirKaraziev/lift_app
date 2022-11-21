@@ -16,6 +16,7 @@ class Company(Base):
     cont_address = Column(String)
     photo = Column(String)
     location_id = Column(Integer, ForeignKey("locations.id", ondelete="SET NULL"))
+    site = Column(String)
 
     is_actual = Column(Boolean, default=True)
 

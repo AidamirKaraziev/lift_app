@@ -4,12 +4,6 @@ from pydantic import BaseModel, Field
 from app.schemas.location import LocationGet
 
 
-# class CompanyBase(BaseModel):
-#     pass
-#
-#
-#
-
 class CompanyBase(BaseModel):
     id: int = Field(..., title="ID Компании")
     name: str = Field(..., title="Название Компании")
@@ -18,6 +12,7 @@ class CompanyBase(BaseModel):
     cont_address: Optional[str]
     photo: Optional[str]
     email: Optional[str]
+    site: Optional[str]
     location_id: Optional[LocationGet]
     is_actual: bool
 
@@ -28,6 +23,7 @@ class CompanyCreate(BaseModel):
     cont_phone: Optional[str]
     cont_address: Optional[str]
     email: Optional[str]
+    site: Optional[str]
     location_id: Optional[int]
 
 
@@ -37,6 +33,7 @@ class CompanyUpdate(BaseModel):
     cont_phone: Optional[str]
     cont_address: Optional[str]
     email: Optional[str]
+    site: Optional[str]
     location_id: Optional[int]
 
 
@@ -48,6 +45,7 @@ class CompanyGet(BaseModel):
     cont_address: Optional[str]
     photo: Optional[str]
     email: Optional[str]
+    site: Optional[str]
     location_id: Optional[LocationGet]
     is_actual: bool
 
