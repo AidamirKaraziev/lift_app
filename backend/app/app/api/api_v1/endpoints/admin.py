@@ -329,18 +329,18 @@ def archiving_users(
                                                    current_user=current_user,
                                                    id_user=id_user,
                                                    role_list=ROLES_ELIGIBLE,
-                                                   employee_list=ALL_EMPLOYEE)
+                                                   employee_list=ALL)
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))
 
 
 # АПИ ПО РАЗАРХИВАЦИИ ПОЛЬЗОВАТЕЛЕЙ
-@router.get('/cp/admin/{id_user}/unzip/',
-            response_model=SingleEntityResponse,
-            name='Разморозка сотрудника',
-            description='Разархивация пользователя, доступ к приложению размораживается',
-            tags=['Админ панель / Администратор'])
+@router.delete('/cp/admin/{id_user}/unzip/',
+               response_model=SingleEntityResponse,
+               name='Разморозка сотрудника',
+               description='Разархивация пользователя, доступ к приложению размораживается',
+               tags=['Админ панель / Администратор'])
 def unzipping_users(
         request: Request,
         id_user: int = Path(..., title='Id пользователя'),
@@ -351,7 +351,7 @@ def unzipping_users(
                                                    current_user=current_user,
                                                    id_user=id_user,
                                                    role_list=ROLES_ELIGIBLE,
-                                                   employee_list=ALL_EMPLOYEE)
+                                                   employee_list=ALL)
     get_raise(code=code)
 
     return SingleEntityResponse(data=get_universal_user(obj, request=request))

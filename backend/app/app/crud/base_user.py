@@ -103,13 +103,32 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def get_multi_by_role(self, db: Session, *,
-                          role_list: list,
+    # ЭТА ХРЕНЬ НЕ НУЖНА
+    # ВЫВОД ВСЕХ СОТРУДНИКОВ (НЕ КЛИЕНТЫ, НЕ АДМИНЫ)
+    # def get_multi_by_role(self, db: Session, *,
+    #                       role_list: list,
+    #                       page: Optional[int] = None
+    #                       ) -> Tuple[List[ModelType], Paginator]:
+    #     # вытаскивать id из role_list
+    #
+    #     query = db.query(self.model).filter(self.model.role_id != 1 and self.model.role_id != 6)
+    #     return pagination.get_page(query, page)
+
+    # КЛИЕНТЫ КОМПАНИИ
+    def get_multi_client_by_company(self, db: Session, *,
+                                    company_id: int,
+                                    page: Optional[int] = None
+                                    ) -> Tuple[List[ModelType], Paginator]:
+
+        query = db.query(self.model).filter(self.model.role_id == 6 and self.model.company_id == company_id)
+        return pagination.get_page(query, page)
+
+    # ВСЕ КЛИЕНТЫ
+    def get_multi_clients(self, db: Session, *,
                           page: Optional[int] = None
                           ) -> Tuple[List[ModelType], Paginator]:
-        # вытаскивать id из role_list
 
-        query = db.query(self.model).filter(self.model.role_id != 1 and self.model.role_id != 6)
+        query = db.query(self.model).filter(self.model.role_id == 6)
         return pagination.get_page(query, page)
 
     def create_for_user(
@@ -155,9 +174,9 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get_by_name(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
 
-    def get_clients_list(self, *, db: Session, company_id: int):
-        clients = db.query(self.model).filter(self.model.company_id == company_id)
-        return clients
+    # def get_clients_list(self, *, db: Session, company_id: int):
+    #     clients = db.query(self.model).filter(self.model.company_id == company_id)
+    #     return clients
 
     def create_employee(self, db: Session, new_data: EmployeeCreate):
         email = db.query(UniversalUser).filter(UniversalUser.email == new_data.email).first()
@@ -465,11 +484,4 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # self.update(db=db, db_obj=user, obj_in=new_data)
         return save_file, 0, None
 
-    def get_multi_test(self, db: Session, *, page: Optional[int] = None) -> Tuple[List[ModelType], Paginator]:
 
-        empty_list = []
-        list_1 = [2]
-        for i in list_1:
-            query = db.query(UniversalUser).filter(UniversalUser.role_id == i).all()
-            empty_list.append(query)
-            return pagination.get_page(empty_list, page)

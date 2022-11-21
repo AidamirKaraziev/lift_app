@@ -83,49 +83,11 @@ class CrudCompany(CRUDBase[Company, CompanyCreate, CompanyUpdate]):
         obj, code, indexes = super().unzipping(db=db, db_obj=obj)
         return obj, code, None
 
-    # добавление фото
-    # def adding_photo(self, db: Session, id_company: int, file: Optional[UploadFile]):
-    #     path_name = DATA_FOLDER_COMPANY + f"{id_company}/"
-    #     if file is None:
-    #         # Удаляем все содержимое папки
-    #         path_to_clear = path_name + "*"
-    #         for file_to_clear in glob.glob(path_to_clear):
-    #             os.remove(file_to_clear)
-    #         db.query(Company).filter(Company.id == id_company).update({f'photo': None})
-    #         db.commit()
-    #         return {f"photo": None}
-    #     # if file is None:
-    #     #     db.query(User).filter(User.id == id_user).update({f'photo_{num}': None})
-    #     #     db.commit()
-    #     #     return {"photo": None}
-    #
-    #     filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
-    #     # path_name = DATA_FOLDER + f"{id_user}/{num}/"
-    #     element = ["photo_company", str(id_company), filename]
-    #
-    #     path_for_db = "/".join(element)
-    #
-    #     if not os.path.exists(path_name):
-    #         os.makedirs(path_name)
-    #
-    #     # Удаляем все содержимое папки
-    #     path_to_clear = path_name + "*"
-    #     for file_to_clear in glob.glob(path_to_clear):
-    #         os.remove(file_to_clear)
-    #
-    #     with open(path_name + filename, "wb") as wf:
-    #         shutil.copyfileobj(file.file, wf)
-    #         file.file.close()  # удаляет временный
-    #
-    #     db.query(Company).filter(Company.id == id_company).update({f'photo': path_for_db})
-    #     db.commit()
-    #     if not file:
-    #         raise UnfoundEntity(message="Не отправлен загружаемый файл",
-    #                             num=2,
-    #                             description="Попробуйте загрузить файл еще раз",
-    #                             path="$.body",)
-    #     else:
-    #         return {"photo": path_for_db}
+    def get_company(self, *, db: Session, company_id: int):
+        comp = db.query(Company).filter(Company.id == company_id).first()
+        if comp is None:
+            return None, -106, None
+        return comp, 0, None
 
 
 crud_company = CrudCompany(Company)

@@ -112,11 +112,11 @@ def update_dvision_for_employee(
 
 
 # АПИ ПО АРХИВАЦИИ ПОЛЬЗОВАТЕЛЕЙ
-@router.get('/cp/foreman/{id_user}/archive/',
-            response_model=SingleEntityResponse,
-            name='Заморозить сотрудника',
-            description='Архивация пользователя, доступ к приложению замораживается',
-            tags=['Админ панель / Прораб'])
+@router.delete('/cp/foreman/{id_user}/archive/',
+               response_model=SingleEntityResponse,
+               name='Заморозить сотрудника',
+               description='Архивация пользователя, доступ к приложению замораживается',
+               tags=['Админ панель / Прораб'])
 def archiving_users(
         request: Request,
         id_user: int = Path(..., title='Id пользователя'),

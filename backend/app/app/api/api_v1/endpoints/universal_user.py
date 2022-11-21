@@ -22,6 +22,8 @@ from app.schemas.universal_user import UniversalUserUpdate
 
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 
+from app.core.templates_raise import get_raise
+from app.crud.crud_company import crud_company
 
 PATH_MODEL = "universal_user"
 PATH_TYPE_PHOTO = "photo"
@@ -47,7 +49,7 @@ def entrance(
 
 
 # GET-MULTY
-@router.get('/all-users/',
+@router.get('/cp/all-users/',
             response_model=ListOfEntityResponse,
             name='Список пользователей',
             description='Получение списка всех пользователей',
@@ -67,7 +69,7 @@ def get_data(
 
 
 # GET-MULTY EMPLOYEE
-@router.get('/all-employee/',
+@router.get('/cp/all-employee/',
             response_model=ListOfEntityResponse,
             name='Список сотрудников',
             description='Получение списка всех сотрудников',
@@ -81,6 +83,55 @@ def get_data(
     logging.info(crud_universal_users.get_multi_employee(db=session, page=None))
 
     data, paginator = crud_universal_users.get_multi_employee(db=session, page=page)
+
+    return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+# GET CLIENT OF COMPANY
+@router.get('/cp/client/{company_id}/',
+            response_model=ListOfEntityResponse,
+            name='Список клиентов определенной компании',
+            description='Список клиентов определенной компании',
+            tags=['Админ панель / Пользователь']
+            )
+def get_data(
+        request: Request,
+        session=Depends(deps.get_db),
+        company_id: int = Path(..., title='ID user'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        page: int = Query(1, title="Номер страницы")
+):
+    # проверка компании
+    comp, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+
+    logging.info(crud_universal_users.get_multi_client_by_company(db=session, company_id=company_id, page=None))
+
+    data, paginator = crud_universal_users.get_multi_client_by_company(db=session, page=page, company_id=company_id)
+
+    return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+# GET CLIENT
+@router.get('/cp/all-client/',
+            response_model=ListOfEntityResponse,
+            name='Список клиентов ',
+            description='Список клиентов',
+            tags=['Админ панель / Пользователь']
+            )
+def get_data(
+        request: Request,
+        session=Depends(deps.get_db),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        page: int = Query(1, title="Номер страницы")
+):
+    # проверка компании
+
+    logging.info(crud_universal_users.get_multi_clients(db=session, page=None))
+
+    data, paginator = crud_universal_users.get_multi_clients(db=session, page=page)
 
     return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
                                 meta=Meta(paginator=paginator))
@@ -236,31 +287,6 @@ def create_upload_file(
                             path="$.body",
                             )
     return SingleEntityResponse(data=get_universal_user(current_user, request=request))
-
-
-# GET USER OF COMPANY
-@router.get('/all-test-my/',
-            response_model=ListOfEntityResponse,
-            name='Список клиентов определенной компании',
-            description='Список клиентов определенной компании',
-            tags=['Админ панель / Пользователь']
-            )
-def get_data(
-        request: Request,
-        session=Depends(deps.get_db),
-        # user_id: int = Path(..., title='ID user'),
-        # current_user=Depends(deps.get_current_universal_user_by_bearer),
-        page: int = Query(1, title="Номер страницы")
-):
-    # проверка компании
-    # проверка
-
-    logging.info(crud_universal_users.get_multi_test(db=session, page=None))
-
-    data, paginator = crud_universal_users.get_multi_test(db=session, page=page)
-
-    return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
-                                meta=Meta(paginator=paginator))
 
 
 if __name__ == "__main__":
