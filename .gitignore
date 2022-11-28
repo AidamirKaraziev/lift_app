@@ -4,4 +4,10 @@
 пароль.txt
 __pycache__/
 
+
 **/__pycache__
+**/logs
+**/logs/debug.log
+*.log
+*.DS_Store
+**/.DS_Store
