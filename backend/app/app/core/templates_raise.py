@@ -21,7 +21,6 @@ user_not_found = -105
 
 company_not_found = -106
 company_already_exists = -1061  # Такая компания уже есть
-company_is_not_actual = -1062  # НЕ АКТУАЛЬНАЯ КОМПАНИЯ
 
 not_is_actual = -107
 not_attribute_in_model = -108
@@ -133,13 +132,6 @@ def get_raise(code: int):
             message="Такая компания уже есть в базе данных",
             num=1,
             description="Компания с таким названием уже есть в базе данных!",
-            path="$.body"
-        )
-    if code == -1062:
-        raise UnprocessableEntity(
-            message="Компания не актуальна!",
-            num=1062,
-            description="Компания была удалена или заморожена!",
             path="$.body"
         )
     if code == -107:
