@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.api_v1.endpoints import entrance, location, working_specialty, role, vova_test, universal_user, admin,\
-    company, client, contact_person, division, foreman
-
+from app.api.api_v1.endpoints import entrance, location, working_specialty, role, vova_test, universal_user,\
+     client, contact_person, division, foreman, admin, company
+#
 
 api_router = APIRouter()
 

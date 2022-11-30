@@ -16,6 +16,7 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
 #RUN source $HOME/ad/.local/bin.poetry && poetry update && poetry install
 
 RUN pip3 install --upgrade pip
+RUN pip install --force-reinstall httpcore==0.15
 # RUN pip install poetry==1.2.0a1
 RUN pip install greensms
 
