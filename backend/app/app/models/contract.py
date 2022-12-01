@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from app.models.company import Company
 from app.models.type_contract import TypeContract
 
+from app.models.cost_type import CostType
+
 
 class Contract(Base):
     __tablename__ = 'contracts'
@@ -14,8 +16,10 @@ class Contract(Base):
     validity_period = Column(Date)  # срок действия дата / бс
     type_contract_id = Column(Integer, ForeignKey("types_contracts.id", ondelete="SET NULL"))
     file = Column(String)
+    cost_type_id = Column(Integer, ForeignKey("cost_types.id", ondelete="SET NULL"))
 
     is_actual = Column(Boolean, default=True)
 
     company = relationship(Company)
     type_contract = relationship(TypeContract)
+    cost_type = relationship(CostType)
