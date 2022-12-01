@@ -23,6 +23,7 @@ from .factory_model import FactoryModel
 from .organization import Organization
 from .contact_person import ContactPerson
 from .type_contract import TypeContract
+from .cost_type import CostType
 # from .object import Object
 
 # from .user import User
