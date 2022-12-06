@@ -27,6 +27,12 @@ not_attribute_in_model = -108
 
 checked_items_is_not_in_the_list = -109  # Одного из проверяемых элементов нет в проверяемом списке
 
+type_contract_not_found = -110
+cost_type_not_found = -111
+
+contract_name_is_exists = -112  # Договор с таким названием существует
+contract_not_found = -1121  # нет договора
+
 
 def get_raise(code: int):
     if code == -100:
@@ -154,6 +160,34 @@ def get_raise(code: int):
             message="Один из проверяемых элементов отсутствует в списке",
             num=109,
             description="Один из проверяемых элементов отсутствует в списке",
+            path="$.body"
+        )
+    if code == -110:
+        raise UnfoundEntity(
+            message="Такого типа Договоров нет!!",
+            num=110,
+            description="Выберете существующий тип Договорив!",
+            path="$.body"
+        )
+    if code == -111:
+        raise UnfoundEntity(
+            message="Такого типа Цен нет!!",
+            num=111,
+            description="Выберете существующий тип Цен!",
+            path="$.body"
+        )
+    if code == -112:
+        raise UnfoundEntity(
+            message="Договор с таким названием существует!",
+            num=112,
+            description="Договор с таким названием существует!",
+            path="$.body"
+        )
+    if code == -1121:
+        raise UnfoundEntity(
+            message="Договора не существует!",
+            num=1121,
+            description="Договора не существует!",
             path="$.body"
         )
     if code != 0:

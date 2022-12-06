@@ -12,11 +12,11 @@ class Contract(Base):
     __tablename__ = 'contracts'
     id = Column(Integer, primary_key=True)
     company_id = Column(Integer, ForeignKey("company.id", ondelete="SET NULL"))
-    title = Column(String)
+    title = Column(String, unique=True)
     validity_period = Column(Date)  # срок действия дата / бс
     type_contract_id = Column(Integer, ForeignKey("types_contracts.id", ondelete="SET NULL"))
-    file = Column(String)
     cost_type_id = Column(Integer, ForeignKey("cost_types.id", ondelete="SET NULL"))
+    file = Column(String)
 
     is_actual = Column(Boolean, default=True)
 

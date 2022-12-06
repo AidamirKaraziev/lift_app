@@ -1,0 +1,219 @@
+import logging
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
+# from fastapi.params import Path, Form
+
+from fastapi.params import Path
+
+# from app.api import deps
+from app.core.response import SingleEntityResponse
+
+from app.crud.crud_universal_user import crud_universal_users
+from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
+
+from app.getters.universal_user import get_universal_user
+
+from app.api import deps
+
+# from app.schemas.admin import AdminGet
+
+from app.crud.crud_admin import crud_admin
+from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
+from app.schemas.universal_user import UniversalUserRequest
+
+from app.schemas.universal_user import UniversalUserUpdate
+
+from fastapi import Response, Request
+from mimetypes import guess_type
+
+from os.path import isfile
+
+from app.schemas.universal_user import EmployeeCreate
+from app.schemas.admin import AdminCreate
+from app.schemas.client import ClientCreate
+
+from app.core.templates_raise import get_raise
+
+from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+
+from app.crud.crud_contract import crud_contracts
+from app.getters.contract import get_contract
+from app.schemas.contract import ContractCreate, ContractUpdate
+
+from app.core.response import ListOfEntityResponse, Meta
+
+from app.schemas.contract import ContractGet
+
+PATH_MODEL = "contract"
+PATH_TYPE = "file"
+
+ROLE_ADMIN = [ADMIN]
+EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
+ALL_EMPLOYEE = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
+ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT]
+CLIENT_LIST = [CLIENT]
+
+
+router = APIRouter()
+
+
+# CREATE NEW COMPANY
+@router.post('/contract/',
+             response_model=SingleEntityResponse,
+             name='Добавить Договор',
+             description='Добавить один Договор в базу данных ',
+             tags=['Админ панель / Договор']
+             )
+def create_contract(
+        request: Request,
+        new_data: ContractCreate,
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+
+    contract, code, index = crud_contracts.create_contract(db=session,
+                                                           new_data=new_data,
+                                                           current_user=current_user,
+                                                           having_rights=ROLE_ADMIN)
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_contract(obj=contract, request=request))
+
+
+# Вывод всех договоров
+# GET-MULTY
+@router.get('/all-contract/',
+            response_model=ListOfEntityResponse,
+            name='Список Договоров',
+            description='Получение списка всех Договоров',
+            tags=['Админ панель / Договор']
+            )
+def get_data(
+        request: Request,
+        session=Depends(deps.get_db),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        page: int = Query(1, title="Номер страницы")
+):
+    logging.info(crud_contracts.get_multi(db=session, page=None))
+
+    data, paginator = crud_contracts.get_multi(db=session, page=page)
+
+    return ListOfEntityResponse(data=[get_contract(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+# GET ID
+@router.get('/contract/{contract_id}/',
+            response_model=SingleEntityResponse,
+            name='Договор',
+            description='Получение данных Договора',
+            tags=['Админ панель / Договор']
+            )
+def get_data(
+        request: Request,
+        contract_id: int = Path(..., title='ID Договора'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+    obj, code, indexes = crud_contracts.get(db=session, id=contract_id)
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_contract(obj, request=request))
+
+
+# UPDATE
+@router.put('/contract/{contract_id}/',
+            response_model=SingleEntityResponse,
+            name='Изменить данные Договора',
+            description='Изменяет изменяет данные Договора',
+            tags=['Админ панель / Договор'])
+def update_contract(
+        request: Request,
+        new_data: ContractUpdate,
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        contract_id: int = Path(..., title='Id договора'),
+        session=Depends(deps.get_db)
+):
+    # проверка на роли
+    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLE_ADMIN)
+    get_raise(code=code)
+
+    contract, code, indexes = crud_contracts.update_contract(db=session, new_data=new_data, contract_id=contract_id)
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_contract(obj=contract, request=request))
+
+
+# UPDATE FILE
+@router.put("/contract/{contract_id}/file/",
+            response_model=SingleEntityResponse[ContractGet],
+            name='Изменить файл',
+            description='Изменить файл для компаний, если отправить пустой файл сбрасывает фото',
+            tags=['Админ панель / Договор'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        contract_id: int = Path(..., title='Id Договора'),
+        session=Depends(deps.get_db),
+        ):
+    # проверка на роли
+    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLE_ADMIN)
+    get_raise(code=code)
+
+    obj, code, indexes = crud_contracts.get(db=session, id=contract_id)
+    get_raise(code=code)
+    save_path = crud_contracts.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE,
+                                           db_obj=obj)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_contract(obj, request=request))
+
+
+# АПИ ПО АРХИВАЦИИ ДОГОВОРА
+@router.delete('/contract/{contract_id}/archive/',
+               response_model=SingleEntityResponse,
+               name='Заморозить договор',
+               description='Архивация договора',
+               tags=['Админ панель / Договор'])
+def archiving_contracts(
+        request: Request,
+        contract_id: int = Path(..., title='Id Договора'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db)
+):
+    obj, code, indexes = crud_contracts.archiving_contract(db=session,
+                                                           current_user=current_user,
+                                                           contract_id=contract_id,
+                                                           role_list=ROLE_ADMIN)
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_contract(obj, request=request))
+
+
+# АПИ ПО РАЗАРХИВАЦИИ Договора
+@router.get('/contract/{contract_id}/unzip/',
+            response_model=SingleEntityResponse,
+            name='Разморозка договора',
+            description='Разархивация Договора',
+            tags=['Админ панель / Договор'])
+def unzipping_contracts(
+        request: Request,
+        contract_id: int = Path(..., title='Id Договора'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db)
+):
+    obj, code, indexes = crud_contracts.unzipping_contract(db=session,
+                                                           current_user=current_user,
+                                                           contract_id=contract_id,
+                                                           role_list=ROLE_ADMIN)
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_contract(obj, request=request))
+
+
+if __name__ == "__main__":
+    logging.info('Running...')

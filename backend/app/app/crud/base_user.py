@@ -103,17 +103,6 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    # ЭТА ХРЕНЬ НЕ НУЖНА
-    # ВЫВОД ВСЕХ СОТРУДНИКОВ (НЕ КЛИЕНТЫ, НЕ АДМИНЫ)
-    # def get_multi_by_role(self, db: Session, *,
-    #                       role_list: list,
-    #                       page: Optional[int] = None
-    #                       ) -> Tuple[List[ModelType], Paginator]:
-    #     # вытаскивать id из role_list
-    #
-    #     query = db.query(self.model).filter(self.model.role_id != 1 and self.model.role_id != 6)
-    #     return pagination.get_page(query, page)
-
     # КЛИЕНТЫ КОМПАНИИ
     def get_multi_client_by_company(self, db: Session, *,
                                     company_id: int,
