@@ -147,7 +147,7 @@ def update_contract(
 @router.put("/contract/{contract_id}/file/",
             response_model=SingleEntityResponse[ContractGet],
             name='Изменить файл',
-            description='Изменить файл для компаний, если отправить пустой файл сбрасывает фото',
+            description='Изменить файл для Договоров, если отправить пустой файл сбрасывает файл',
             tags=['Админ панель / Договор'],
             )
 def create_upload_file(

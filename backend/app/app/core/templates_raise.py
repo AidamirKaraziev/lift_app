@@ -33,6 +33,9 @@ cost_type_not_found = -111
 contract_name_is_exists = -112  # Договор с таким названием существует
 contract_not_found = -1121  # нет договора
 
+contact_person_not_found = -113
+# contract_person_phone_is_exists = 1131  # Контактное лицо с таким названием существует
+
 
 def get_raise(code: int):
     if code == -100:

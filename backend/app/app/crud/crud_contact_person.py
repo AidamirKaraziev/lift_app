@@ -9,7 +9,6 @@ from fastapi import UploadFile
 from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
 
-from app.exceptions import UnfoundEntity
 from app.models.company import Company
 
 
@@ -17,9 +16,10 @@ from app.models import UniversalUser
 from app.models.contact_person import ContactPerson
 from app.schemas.contact_person import ContactPersonCreate, ContactPersonUpdate
 
-from app.exceptions import InaccessibleEntity
 
 from app.core.roles import ADMIN, FOREMAN
+
+from app.crud.crud_universal_user import crud_universal_users
 
 DATA_FOLDER_CONTACT_PERSON = "./static/photo_contact_person/"
 ADMIN_FOREMAN_LIST = [ADMIN, FOREMAN]
@@ -75,56 +75,83 @@ class CrudContactPerson(CRUDBase[ContactPerson, ContactPersonCreate, ContactPers
         pass
 
     # добавление фото
-    def adding_photo(self, db: Session, id_obj: int, file: Optional[UploadFile], user: UniversalUser):
-        # проверить роли
-        if [i for i in ADMIN_FOREMAN_LIST if user.role_id != i]:
-            raise InaccessibleEntity(
-                message="Вы не обладаете правами",
-                num=1,
-                description="Вы не обладаете правами администратора и прораба",
-                path="$.body"
-            )
-        path_name = DATA_FOLDER_CONTACT_PERSON + f"{id_obj}/"
-        if file is None:
-            # Удаляем все содержимое папки
-            path_to_clear = path_name + "*"
-            for file_to_clear in glob.glob(path_to_clear):
-                os.remove(file_to_clear)
-            db.query(ContactPerson).filter(ContactPerson.id == id_obj).update({f'photo': None})
-            db.commit()
-            return {f"photo": None}
-        # if file is None:
-        #     db.query(User).filter(User.id == id_user).update({f'photo_{num}': None})
-        #     db.commit()
-        #     return {"photo": None}
+    # def adding_photo(self, db: Session, id_obj: int, file: Optional[UploadFile], user: UniversalUser):
+    #     # проверить роли
+    #     if [i for i in ADMIN_FOREMAN_LIST if user.role_id != i]:
+    #         raise InaccessibleEntity(
+    #             message="Вы не обладаете правами",
+    #             num=1,
+    #             description="Вы не обладаете правами администратора и прораба",
+    #             path="$.body"
+    #         )
+    #     path_name = DATA_FOLDER_CONTACT_PERSON + f"{id_obj}/"
+    #     if file is None:
+    #         # Удаляем все содержимое папки
+    #         path_to_clear = path_name + "*"
+    #         for file_to_clear in glob.glob(path_to_clear):
+    #             os.remove(file_to_clear)
+    #         db.query(ContactPerson).filter(ContactPerson.id == id_obj).update({f'photo': None})
+    #         db.commit()
+    #         return {f"photo": None}
+    #     # if file is None:
+    #     #     db.query(User).filter(User.id == id_user).update({f'photo_{num}': None})
+    #     #     db.commit()
+    #     #     return {"photo": None}
+    #
+    #     filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
+    #     # path_name = DATA_FOLDER + f"{id_user}/{num}/"
+    #     element = ["photo_contact_person", str(id_obj), filename]
+    #
+    #     path_for_db = "/".join(element)
+    #
+    #     if not os.path.exists(path_name):
+    #         os.makedirs(path_name)
+    #
+    #     # Удаляем все содержимое папки
+    #     path_to_clear = path_name + "*"
+    #     for file_to_clear in glob.glob(path_to_clear):
+    #         os.remove(file_to_clear)
+    #
+    #     with open(path_name + filename, "wb") as wf:
+    #         shutil.copyfileobj(file.file, wf)
+    #         file.file.close()  # удаляет временный
+    #
+    #     db.query(ContactPerson).filter(ContactPerson.id == id_obj).update({f'photo': path_for_db})
+    #     db.commit()
+    #     if not file:
+    #         raise UnfoundEntity(message="Не отправлен загружаемый файл",
+    #                             num=2,
+    #                             description="Попробуйте загрузить файл еще раз",
+    #                             path="$.body",)
+    #     else:
+    #         return {"photo": path_for_db}
+    def archiving_contact_person(self, db: Session, *, current_user: UniversalUser, contact_person_id: int,
+                                 role_list: list):
+        # проверить роль
+        code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такая компания
+        obj = super().get(db=db, id=contact_person_id)
+        if obj is None:
+            return None, -113, None
+        # вызвать архивацию
+        obj, code, indexes = super().archiving(db=db, db_obj=obj)
+        return obj, code, None
 
-        filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
-        # path_name = DATA_FOLDER + f"{id_user}/{num}/"
-        element = ["photo_contact_person", str(id_obj), filename]
-
-        path_for_db = "/".join(element)
-
-        if not os.path.exists(path_name):
-            os.makedirs(path_name)
-
-        # Удаляем все содержимое папки
-        path_to_clear = path_name + "*"
-        for file_to_clear in glob.glob(path_to_clear):
-            os.remove(file_to_clear)
-
-        with open(path_name + filename, "wb") as wf:
-            shutil.copyfileobj(file.file, wf)
-            file.file.close()  # удаляет временный
-
-        db.query(ContactPerson).filter(ContactPerson.id == id_obj).update({f'photo': path_for_db})
-        db.commit()
-        if not file:
-            raise UnfoundEntity(message="Не отправлен загружаемый файл",
-                                num=2,
-                                description="Попробуйте загрузить файл еще раз",
-                                path="$.body",)
-        else:
-            return {"photo": path_for_db}
+    def unzipping_contact_person(self, db: Session, *, current_user: UniversalUser, contact_person_id: int,
+                                 role_list: list):
+        # проверить роль
+        code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такая компания
+        obj = super().get(db=db, id=contact_person_id)
+        if obj is None:
+            return None, -113, None
+        # вызвать архивацию
+        obj, code, indexes = super().unzipping(db=db, db_obj=obj)
+        return obj, code, None
 
 
 crud_contact_person = CrudContactPerson(ContactPerson)

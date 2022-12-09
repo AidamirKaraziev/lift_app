@@ -31,9 +31,17 @@ from app.schemas.contact_person import ContactPersonUpdate
 
 from app.crud.crud_universal_user import crud_universal_users
 
+from app.core.templates_raise import get_raise
+
+from app.core.roles import ADMIN, FOREMAN, CLIENT
+from app.schemas.contact_person import ContactPersonGet
+
 PATH_MODEL = "contact_person"
 PATH_TYPE = "photo"
-ADMIN_FOREMAN_ROLE = [1, 2]
+
+ADMIN_FOREMAN_ROLE = [ADMIN, FOREMAN]
+ROLE_ADMIN_FOREMAN_CLIENT = [ADMIN, FOREMAN, CLIENT]
+
 router = APIRouter()
 # DELETE
 
@@ -94,6 +102,7 @@ def create_contact_person(
             description="Выбранной вами компании не существует!",
             path="$.body"
         )
+    get_raise(code=code)
     return SingleEntityResponse(data=get_contact_person(contact_person=contact_person, request=request))
 
 
@@ -193,6 +202,78 @@ def create_upload_file(
                             )
     return SingleEntityResponse(data=get_contact_person(crud_contact_person.get(db=session, id=contact_person_id),
                                                         request=request))
+
+
+# UPDATE Photo
+@router.put("/contact-person/{contact_person_id}/photo/",
+            response_model=SingleEntityResponse[ContactPersonGet],
+            name='Изменить фото',
+            description='Изменить фото для контактного лица, если отправить пустой файл сбрасывает фото',
+            tags=['Админ панель / Контактное лицо'],
+            )
+def create_upload_file(
+        request: Request,
+        file: Optional[UploadFile] = File(None),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        contact_person_id: int = Path(..., title='Id Договора'),
+        session=Depends(deps.get_db),
+        ):
+    # проверка на роли
+    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLE_ADMIN_FOREMAN_CLIENT)
+    get_raise(code=code)
+
+    obj, code, indexes = crud_contact_person.get(db=session, id=contact_person_id)
+    get_raise(code=code)
+    save_path = crud_contact_person.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE,
+                                                db_obj=obj)
+    if not save_path:
+        raise UnfoundEntity(message="Не отправлен загружаемый файл",
+                            num=2,
+                            description="Попробуйте загрузить файл еще раз",
+                            path="$.body",
+                            )
+    return SingleEntityResponse(data=get_contact_person(obj, request=request))
+
+
+# АПИ ПО АРХИВАЦИИ ДОГОВОРА
+@router.delete('/contact-person/{contact_person_id}/archive/',
+               response_model=SingleEntityResponse,
+               name='Заморозить Контактное лицо',
+               description='Архивация Контактное лицо',
+               tags=['Админ панель / Контактное лицо'])
+def archiving_contracts(
+        request: Request,
+        contact_person_id: int = Path(..., title='Id Контактное лицо'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db)
+):
+    obj, code, indexes = crud_contact_person.archiving_contact_person(db=session,
+                                                                      current_user=current_user,
+                                                                      contact_person_id=contact_person_id,
+                                                                      role_list=ADMIN_FOREMAN_ROLE)
+    get_raise(code=code)
+
+    return SingleEntityResponse(data=get_contact_person(obj, request=request))
+
+
+# АПИ ПО РАЗАРХИВАЦИИ Договора
+@router.get('/contact-person/{contact_person_id}/unzip/',
+            response_model=SingleEntityResponse,
+            name='Разморозка Контактное лицо',
+            description='Разархивация Контактное лицо',
+            tags=['Админ панель / Контактное лицо'])
+def unzipping_contracts(
+        request: Request,
+        contact_person_id: int = Path(..., title='Id Контактное лицо'),
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db)
+):
+    obj, code, indexes = crud_contact_person.unzipping_contact_person(db=session,
+                                                                      current_user=current_user,
+                                                                      contact_person_id=contact_person_id,
+                                                                      role_list=ADMIN_FOREMAN_ROLE)
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_contact_person(obj, request=request))
 
 
 if __name__ == "__main__":
