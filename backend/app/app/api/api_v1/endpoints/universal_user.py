@@ -218,7 +218,7 @@ def update_user(
 
 
 # UPDATE photo
-@router.put("/cp/universal_user/me/photo/",
+@router.put("/cp/universal-user/me/photo/",
             response_model=SingleEntityResponse,
             name='Изменить фото',
             description='Изменить фото для пользователя, если отправить пусто поле информация сбросится',
@@ -242,7 +242,7 @@ def create_upload_file(
 
 
 # UPDATE identity-card
-@router.put("/cp/universal_user/me/identity-card/",
+@router.put("/cp/universal-user/me/identity-card/",
             response_model=SingleEntityResponse,
             name='Изменить удостоверение',
             description='Изменить удостоверение для пользователя, если отправить пусто поле информация сбросится',
@@ -266,7 +266,7 @@ def create_upload_file(
 
 
 # UPDATE qualification_file
-@router.put("/cp/universal_user/me/qualification-file/",
+@router.put("/cp/universal-user/me/qualification-file/",
             response_model=SingleEntityResponse,
             name='Изменить ЦОК',
             description='Изменить ЦОК для пользователя, если отправить пусто поле информация сбросится',

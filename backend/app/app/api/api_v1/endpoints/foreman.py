@@ -156,7 +156,7 @@ def unzipping_users(
 
 
 # UPDATE USERS
-@router.put('/cp/foreman/universal_user/{user_id}/',
+@router.put('/cp/foreman/universal-user/{user_id}/',
             response_model=SingleEntityResponse[UniversalUserGet],
             name='Изменить пользователя',
             description='Изменить данные пользователя',
@@ -183,7 +183,7 @@ def update_user(
 
 
 # UPDATE photo
-@router.put("/cp/foreman/universal_user/{user_id}/photo/",
+@router.put("/cp/foreman/universal-user/{user_id}/photo/",
             response_model=SingleEntityResponse,
             name='Изменить фото другому пользователю',
             description='Изменить фото для пользователя, если отправить пусто поле информация сбросится',
@@ -218,7 +218,7 @@ def create_upload_file(
 
 
 # UPDATE identity-card
-@router.put("/cp/foreman/universal_user/{user_id}/identity-card/",
+@router.put("/cp/foreman/universal-user/{user_id}/identity-card/",
             response_model=SingleEntityResponse,
             name='Изменить удостоверение другому пользователю',
             description='Изменить удостоверение пользователю, если отправить пусто поле информация сбросится',
@@ -253,7 +253,7 @@ def create_upload_file(
 
 
 # UPDATE qualification_file
-@router.put("/cp/foreman/universal_user/{user_id}/qualification-file/",
+@router.put("/cp/foreman/universal-user/{user_id}/qualification-file/",
             response_model=SingleEntityResponse,
             name='Изменить ЦОК другому пользователю',
             description='Изменить ЦОК пользователю, если отправить пусто поле информация сбросится',
