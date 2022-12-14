@@ -165,45 +165,5 @@ class CrudUniversalUser(CRUDBaseUser[UniversalUser, UniversalUserCreate, Univers
     def get_by_email(self, db: Session, *, email: str):
         return db.query(UniversalUser).filter(UniversalUser.email == email).first()
 
-    # def adding_photo(self, db: Session, id_user: int, file: Optional[UploadFile]):
-    #     path_name = FOLDER_UNIVERSAL_USER_PHOTO + f"{id_user}/"
-    #     if file is None:
-    #         # Удаляем все содержимое папки
-    #         path_to_clear = path_name + "*"
-    #         for file_to_clear in glob.glob(path_to_clear):
-    #             os.remove(file_to_clear)
-    #         db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': None})
-    #         db.commit()
-    #         return {"photo": None}
-    #     filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
-    #     # path_name = FOLDER_MODERATOR_PHOTO + f"{id_moderator}/"
-    #     element = ["universal_user_photo", str(id_user), filename]
-    #
-    #     path_for_db = "/".join(element)
-    #
-    #     if not os.path.exists(path_name):
-    #         os.makedirs(path_name)
-    #
-    #     # Удаляем все содержимое папки
-    #     path_to_clear = path_name + "*"
-    #     for file_to_clear in glob.glob(path_to_clear):
-    #         os.remove(file_to_clear)
-    #
-    #     with open(path_name + filename, "wb") as wf:
-    #         shutil.copyfileobj(file.file, wf)
-    #         file.file.close()  # удаляет временный
-    #
-    #     db.query(UniversalUser).filter(UniversalUser.id == id_user).update({f'photo': path_for_db})
-    #     db.commit()
-    #     if not file:
-    #         raise UnfoundEntity(
-    #             message="Не отправлен загружаемый файл",
-    #             num=2,
-    #             description="Попробуйте загрузить файл еще раз",
-    #             path="$.body",
-    #         )
-    #     else:
-    #         return {"photo": path_for_db}
-
 
 crud_universal_users = CrudUniversalUser(UniversalUser)

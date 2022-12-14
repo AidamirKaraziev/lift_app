@@ -26,6 +26,7 @@ class UniversalUserBase(BaseModel):
     company_id: Optional[CompanyGet]
     division_id: Optional[DivisionGet]
     qualification_file: Optional[str]
+    date_of_employment: Optional[Date]
     is_actual: Optional[bool]
 
 
@@ -41,6 +42,7 @@ class UniversalUserRequest(BaseModel):
     role_id: Optional[int]
     working_specialty_id: Optional[int]
     company_id: Optional[int]
+    date_of_employment: Optional[int]
     # identity_card: Optional[str]
 
 
@@ -59,6 +61,7 @@ class UniversalUserCreate(BaseModel):
     # identity_card: Optional[str]
     company_id: Optional[int]  # переделать в CompanyGet
     division_id: Optional[int]
+    date_of_employment: Optional[int]
     # qualification_file: Optional[str]
     # is_actual: Optional[bool]
 
@@ -78,6 +81,7 @@ class UniversalUserUpdate(BaseModel):
     # qualification_file: Optional[str]
     # company_id: Optional[CompanyGet]
     # division_id: Optional[int]
+    date_of_employment: Optional[int]
     # is_actual: Optional[bool]
 
 
@@ -96,6 +100,7 @@ class UniversalUserGet(BaseModel):
     qualification_file: Optional[str]
     company_id: Optional[CompanyGet]
     division_id: Optional[DivisionGet]
+    date_of_employment: Optional[Date]
     is_actual: Optional[bool]
 
 
@@ -129,6 +134,7 @@ class EmployeeCreate(BaseModel):
     # identity_card: Optional[str]
     # company_id: Optional[int]  # переделать в CompanyGet
     division_id: Optional[int]
+    date_of_employment: Optional[int]
     # qualification_file: Optional[str]
     # is_actual: Optional[bool]
 

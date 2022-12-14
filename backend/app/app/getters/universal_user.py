@@ -37,6 +37,7 @@ def get_universal_user(universal_user: UniversalUser, request: Optional[Request]
             universal_user.qualification_file = None
 
     universal_user.birthday = to_timestamp(universal_user.birthday)
+    universal_user.date_of_employment = to_timestamp(universal_user.date_of_employment)
     return UniversalUserGet(
         id=universal_user.id,
         name=universal_user.name,
@@ -54,5 +55,6 @@ def get_universal_user(universal_user: UniversalUser, request: Optional[Request]
         if universal_user.company is not None else None,
         division_id=get_division(obj=universal_user.division, request=request)
         if universal_user.division is not None else None,
+        date_of_employment=universal_user.date_of_employment,
         is_actual=universal_user.is_actual
     )

@@ -176,6 +176,9 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # Проверить дату дня рождения
         if new_data.birthday is not None:
             new_data.birthday = date_from_timestamp(new_data.birthday)
+        if new_data.date_of_employment is not None:
+            new_data.date_of_employment = date_from_timestamp(new_data.date_of_employment)
+
         # проверить город
         if new_data.location_id is not None:
             loc = db.query(Location).filter(Location.id == new_data.location_id).first()
@@ -215,6 +218,8 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # Проверить дату дня рождения
         if new_data.birthday is not None:
             new_data.birthday = date_from_timestamp(new_data.birthday)
+        if new_data.date_of_employment is not None:
+            new_data.date_of_employment = date_from_timestamp(new_data.date_of_employment)
         # проверить город
         if new_data.location_id is not None:
             loc = db.query(Location).filter(Location.id == new_data.location_id).first()
@@ -296,6 +301,8 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 return None, -101, None
         if new_data.birthday is not None:
             new_data.birthday = str(date_from_timestamp(new_data.birthday))
+        if new_data.date_of_employment is not None:
+            new_data.date_of_employment = str(date_from_timestamp(new_data.date_of_employment))
         return new_data, 0, None
 
     def adding_file(self, db: Session, *, file: Optional[UploadFile], path_model: str, path_type: str,

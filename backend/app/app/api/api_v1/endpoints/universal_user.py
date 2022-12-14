@@ -188,33 +188,17 @@ def update_user(
         current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
 ):
+    role_list = [current_user.role_id]
+    changeable_list = role_list
+    obj, code, indexes = crud_universal_users.updating_user(db=session,
+                                                            current_user=current_user,
+                                                            user_id=current_user.id,
+                                                            new_data=new_data,
+                                                            role_list=role_list,
+                                                            changeable_list=changeable_list)
 
-    db_obj, code, index = crud_universal_users.update_user_self(
-        db=session, current_user=current_user, new_data=new_data)
-
-    if code == -105:
-        raise UnfoundEntity(
-            message="Нет такого пользователя!",
-            num=105,
-            description="Нет пользователя с таким id!",
-            path="$.body"
-        )
-    if code == -107:
-        raise UnprocessableEntity(
-            message="Пользователь не актуален!",
-            num=2,
-            description="Статус пользователя не актуален, возможно его удалили!",
-            path="$.body"
-        )
-    if code == -101:
-        raise UnfoundEntity(
-            message="Такого города не существует!",
-            num=101,
-            description="Выберете существующий город!",
-            path="$.body"
-        )
-
-    return SingleEntityResponse(data=get_universal_user(db_obj, request=request))
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_universal_user(obj, request=request))
 
 
 # UPDATE photo

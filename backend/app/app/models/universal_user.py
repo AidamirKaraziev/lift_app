@@ -28,6 +28,7 @@ class UniversalUser(Base):
     division_id = Column(Integer, ForeignKey("divisions.id", ondelete="SET NULL"))
     company_id = Column(Integer, ForeignKey("company.id", ondelete="SET NULL"))
     qualification_file = Column(String)
+    date_of_employment = Column(Date)
     is_actual = Column(Boolean, default=True)
 
     working_specialty = relationship(WorkingSpecialty)
