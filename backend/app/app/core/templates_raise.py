@@ -37,6 +37,12 @@ contact_person_not_found = -113
 # contract_person_phone_is_exists = 1131  # Контактное лицо с таким названием существует
 
 
+organization_not_found = -114
+organization_title_is_exist = -1141  # с таким названием уже есть
+
+
+
+
 def get_raise(code: int):
     if code == -100:
         raise InaccessibleEntity(
@@ -191,6 +197,20 @@ def get_raise(code: int):
             message="Договора не существует!",
             num=1121,
             description="Договора не существует!",
+            path="$.body"
+        )
+    if code == -114:
+        raise UnfoundEntity(
+            message="Организации не существует!",
+            num=114,
+            description="Выберете существующую организацию!",
+            path="$.body"
+        )
+    if code == -1141:
+        raise UnfoundEntity(
+            message="Организация с таким названием существует!",
+            num=1141,
+            description="Организация с таким названием существует!",
             path="$.body"
         )
     if code != 0:
