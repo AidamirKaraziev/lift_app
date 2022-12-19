@@ -62,11 +62,11 @@ class OrganizationGet(BaseModel):
     is_actual: bool
 
 
-class CompanyPhoto(BaseModel):
+class OrganizationPhoto(BaseModel):
     photo: Optional[str]
 
 
-class CompanyGetById(BaseModel):
+class OrganizationGetById(BaseModel):
     id: Optional[int]
 
 

@@ -12,7 +12,6 @@ class FactoryModel(Base):  # TEST
     model = Column(String)
 
     type_object = relationship(TypeObject)
-    # сделать уникальное значение по 3 полям
 
     __table_args__ = (UniqueConstraint('type_object_id', 'factory', 'model', name='_type_object_factory_model_uc'),
                       )

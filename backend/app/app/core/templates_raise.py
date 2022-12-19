@@ -40,7 +40,8 @@ contact_person_not_found = -113
 organization_not_found = -114
 organization_title_is_exist = -1141  # с таким названием уже есть
 
-
+factory_model_nit_found = -115
+factory_model_is_exist = -1151
 
 
 def get_raise(code: int):
@@ -211,6 +212,20 @@ def get_raise(code: int):
             message="Организация с таким названием существует!",
             num=1141,
             description="Организация с таким названием существует!",
+            path="$.body"
+        )
+    if code == -115:
+        raise UnfoundEntity(
+            message="Такой модели техники не существует!",
+            num=115,
+            description="Выберете существующую Модель техники!",
+            path="$.body"
+        )
+    if code == -1151:
+        raise UnfoundEntity(
+            message="Модель техники с таким названием уже существует!",
+            num=1151,
+            description="Модель техники с таким названием уже существует!",
             path="$.body"
         )
     if code != 0:
