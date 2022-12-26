@@ -32,7 +32,9 @@ class Object(Base):
     lifting_heights = Column(Integer)
     load_capacity = Column(Integer)
     width = Column(Integer)
-    cost_nds = Column(Integer)
+
+    # эта часть под вопросом
+    cost_nds = Column(Integer)  # цены не особенно нужны потому что это цены объекта получаются
     cost_no_nds = Column(Integer)
 
     company_id = Column(Integer, ForeignKey("company.id", ondelete="SET NULL"))
@@ -49,7 +51,9 @@ class Object(Base):
 
     acceptance_certificate = Column(String)
     act_pto = Column(String)
+    geo = Column(String)
     is_actual = Column(Boolean)
+
     organization = relationship(Organization)
     division = relationship(Division)
     factory_model = relationship(FactoryModel)
