@@ -34,8 +34,6 @@ class CrudCompany(CRUDBase[Company, CompanyCreate, CompanyUpdate]):
         return db_obj, 0, None
 
     def update_company(self, db: Session, *, company: Optional[CompanyUpdate], company_id: int):
-        # возможно добавить проверку на Администратора
-
         # проверить есть ли компания с таким id
         this_company = (db.query(Company).filter(Company.id == company_id).first())
         if this_company is None:

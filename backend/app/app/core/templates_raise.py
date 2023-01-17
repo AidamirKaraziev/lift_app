@@ -36,15 +36,15 @@ contract_not_found = -1121  # нет договора
 contact_person_not_found = -113
 # contract_person_phone_is_exists = 1131  # Контактное лицо с таким названием существует
 
-
 organization_not_found = -114
 organization_title_is_exist = -1141  # с таким названием уже есть
 
 factory_model_not_found = -115
 factory_model_is_exist = -1151
+# factory_number_is_exist = -117
 
 object_not_found = -116
-factory_number_is_exist = -117
+
 registration_number_is_exist = -118
 
 foreman_not_found = -119
@@ -249,13 +249,13 @@ def get_raise(code: int):
             description="Выберете существующий Объект!",
             path="$.body"
         )
-    if code == -117:
-        raise UnfoundEntity(
-            message="Техника с таким заводским номером уже есть!",
-            num=117,
-            description="Техника с таким заводским номером уже есть!",
-            path="$.body"
-        )
+    # if code == -117:
+    #     raise UnfoundEntity(
+    #         message="Техника с таким заводским номером уже есть!",
+    #         num=117,
+    #         description="Техника с таким заводским номером уже есть!",
+    #         path="$.body"
+    #     )
     if code == -118:
         raise UnfoundEntity(
             message="Техника с таким регистрационным номером уже есть",

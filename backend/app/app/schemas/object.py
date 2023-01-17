@@ -128,9 +128,9 @@ class ObjectUpdate(BaseModel):
     contact_person_id: Optional[int]
     contract_id: Optional[int]
 
-    date_inspection: Optional[Date]
-    planned_inspection: Optional[Date]
-    period_inspection: Optional[Date]
+    date_inspection: Optional[int]
+    planned_inspection: Optional[int]
+    period_inspection: Optional[int]
 
     foreman_id: Optional[int]
     mechanic_id: Optional[int]
