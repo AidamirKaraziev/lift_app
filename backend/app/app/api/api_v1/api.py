@@ -7,7 +7,6 @@ from app.api.api_v1.endpoints import entrance, location, working_specialty, role
 
 api_router = APIRouter()
 
-api_router.include_router(object.router)
 api_router.include_router(universal_user.router)
 api_router.include_router(admin.router)
 api_router.include_router(foreman.router)
@@ -27,3 +26,4 @@ api_router.include_router(vova_test.router)
 api_router.include_router(working_specialty.router)
 api_router.include_router(contract.router)
 api_router.include_router(organization.router)
+api_router.include_router(object.router)
