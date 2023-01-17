@@ -40,8 +40,15 @@ contact_person_not_found = -113
 organization_not_found = -114
 organization_title_is_exist = -1141  # с таким названием уже есть
 
-factory_model_nit_found = -115
+factory_model_not_found = -115
 factory_model_is_exist = -1151
+
+object_not_found = -116
+factory_number_is_exist = -117
+registration_number_is_exist = -118
+
+foreman_not_found = -119
+mechanic_not_found = -120
 
 
 def get_raise(code: int):
@@ -200,6 +207,13 @@ def get_raise(code: int):
             description="Договора не существует!",
             path="$.body"
         )
+    if code == -113:
+        raise UnfoundEntity(
+            message="Контактного лица не существует!",
+            num=113,
+            description="Контактного лица не существует!",
+            path="$.body"
+        )
     if code == -114:
         raise UnfoundEntity(
             message="Организации не существует!",
@@ -226,6 +240,41 @@ def get_raise(code: int):
             message="Модель техники с таким названием уже существует!",
             num=1151,
             description="Модель техники с таким названием уже существует!",
+            path="$.body"
+        )
+    if code == -116:
+        raise UnfoundEntity(
+            message="Такого объекта не существует!",
+            num=116,
+            description="Выберете существующий Объект!",
+            path="$.body"
+        )
+    if code == -117:
+        raise UnfoundEntity(
+            message="Техника с таким заводским номером уже есть!",
+            num=117,
+            description="Техника с таким заводским номером уже есть!",
+            path="$.body"
+        )
+    if code == -118:
+        raise UnfoundEntity(
+            message="Техника с таким регистрационным номером уже есть",
+            num=118,
+            description="Техника с таким регистрационным номером уже есть",
+            path="$.body"
+        )
+    if code == -119:
+        raise UnfoundEntity(
+            message="Такого прораба не существует!",
+            num=119,
+            description="Выберете существующего прораба",
+            path="$.body"
+        )
+    if code == -120:
+        raise UnfoundEntity(
+            message="Такого механика не существует!",
+            num=120,
+            description="Выберете существующего механика!",
             path="$.body"
         )
     if code != 0:

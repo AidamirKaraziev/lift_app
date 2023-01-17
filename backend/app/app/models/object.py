@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, UniqueConstraint
 # List append in sqlalchemy
 
 from sqlalchemy.orm import relationship
@@ -25,8 +25,8 @@ class Object(Base):
     # type_object_id = Column(Integer, ForeignKey("type_objects.id", ondelete="SET NULL"))  # (lift, lift_mr)
 
     factory_model_id = Column(Integer, ForeignKey("factories_models.id", ondelete="SET NULL"))
-    factory_number = Column(String, unique=True)  # unique
-    registration_number = Column(String, unique=True)  # unique
+    factory_number = Column(String, unique=True)
+    registration_number = Column(String, unique=True)
 
     number_of_stops = Column(Integer)
     lifting_heights = Column(Integer)
@@ -52,7 +52,7 @@ class Object(Base):
     acceptance_certificate = Column(String)
     act_pto = Column(String)
     geo = Column(String)
-    is_actual = Column(Boolean)
+    is_actual = Column(Boolean, default=True)
 
     organization = relationship(Organization)
     division = relationship(Division)
@@ -62,7 +62,8 @@ class Object(Base):
     contact_person = relationship(ContactPerson)
     foreman = relationship("UniversalUser", foreign_keys=[foreman_id])
     mechanic = relationship("UniversalUser", foreign_keys=[mechanic_id])
-
+    __table_args__ = (UniqueConstraint('factory_number', 'registration_number', name='_factory_and_reg_number_uc'),
+                      )
 
 # class DefectiveActBase(Base):  # TEST
 #     __tablename__ = "defective_acts_bases"

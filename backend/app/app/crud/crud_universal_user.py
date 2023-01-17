@@ -39,63 +39,6 @@ ADMIN_LIST = [ADMIN]
 
 
 class CrudUniversalUser(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUpdate]):
-    # def create_new_user(self, db: Session, *, current_user: UniversalUser, new_data: UniversalUserRequest):
-    #     # проверить есть ли такой юзер
-    #     # admin = crud_universal_users.get(db=Session, id=current_user.id)
-    #     admin = db.query(UniversalUser).filter(UniversalUser.id == current_user.id).first()
-    #     if admin is None:
-    #         return None, -1, None
-    #     # Проверить есть ли у него роль 1
-    #     if [i for i in ADMIN_LIST if admin.role_id != i]:
-    #         return None, -2, None
-    #
-    #     # if admin.role_id != 1:
-    #     # проверка такого эмейла
-    #     if new_data.email is None:  # ВОТ ЭТО ВООБЩЕ НЕ ОБЯЗАТЕЛЬНО
-    #         return None, -9, None   # not have email in new_data
-    #
-    #     email = db.query(UniversalUser).filter(UniversalUser.email == new_data.email).first()
-    #     if email is not None:
-    #         return None, -10, None  # have email in db
-    #
-    #     # проверять хеш пароль
-    #     if new_data.password is None:
-    #         return None, -3, None  # нет пароля
-    #     psw = get_password_hash(password=new_data.password)
-    #     new_data.password = psw
-    #     # Проверить дату дня рождения
-    #     if new_data.birthday is not None:
-    #         new_data.birthday = date_from_timestamp(new_data.birthday)
-    #         # поверить дату больше ли сегодняшней
-    #         # return None, -3, None
-    #     # проверить город
-    #     if new_data.location_id is not None:
-    #         loc = db.query(Location).filter(Location.id == new_data.location_id).first()
-    #         if loc is None:
-    #             return None, -4, None  # нет города
-    #     # Проверить не избранность должности
-    #     if new_data.role_id is None:
-    #         return None, -5, None
-    #     # проверить отсутствие такой должности
-    #     if new_data.role_id is not None:
-    #         rol = db.query(Role).filter(Role.id == new_data.role_id).first()
-    #         if rol is None:
-    #             return None, -6, None
-    #
-    #     # Проверить специальность
-    #     if new_data.working_specialty_id is not None:
-    #         spec = db.query(WorkingSpecialty).filter(WorkingSpecialty.id == new_data.working_specialty_id).first()
-    #         if spec is None:
-    #             return None, -7, None
-    #
-    #     # Проверить компанию
-    #     if new_data.company_id is not None:
-    #         comp = db.query(Company).filter(Company.id == new_data.company_id).first()
-    #         if comp is None:
-    #             return None, -8, None
-    #     db_obj = super().create(db=db, obj_in=new_data)
-    #     return db_obj, 0, None
-
     def create_foreman(self,  db: Session, *, current_user: UniversalUser, new_data: ForemanCreate):
         # проверить есть ли такой current_user
         admin = db.query(UniversalUser).filter(UniversalUser.id == current_user.id).first()
