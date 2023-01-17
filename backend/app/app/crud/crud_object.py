@@ -41,18 +41,20 @@ from app.schemas.object import ObjectCreate, ObjectUpdate
 from app.models import Organization, FactoryModel, Company, ContactPerson
 from app.models.contract import Contract
 
+from app.crud.crud_universal_user import crud_universal_users
+
 ROLE_RIGHTS = [ADMIN, FOREMAN]
 ROLE_MECHANIC = [MECHANIC]
 ROLE_FOREMAN = [FOREMAN]
 
 
 class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
-
-    def get_obj(self, *, db: Session, id: int):
-        obj = db.query(Object).filter(Object.id == id).first()
-        if obj is None:
-            return None, -116, None
-        return obj, 0, None
+    # МОЖНО УДАЛИТЬ ТАК КАК ЗАМЕНИЛ НА getting_object
+    # def get_obj(self, *, db: Session, id: int):
+    #     obj = db.query(Object).filter(Object.id == id).first()
+    #     if obj is None:
+    #         return None, -116, None
+    #     return obj, 0, None
 
     def create_object(self, db: Session, *, new_data: ObjectCreate):
         # проверка на организацию
@@ -199,74 +201,37 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         db_obj = super().update(db=db, db_obj=this_object, obj_in=new_data)
         return db_obj, 0, None
 
-    # def create_foreman(self,  db: Session, *, current_user: UniversalUser, new_data: ForemanCreate):
-    #     # проверить есть ли такой current_user
-    #     admin = db.query(UniversalUser).filter(UniversalUser.id == current_user.id).first()
-    #     if admin is None:
-    #         return None, -1, None
-    #     # проверить должность current_user
-    #     if current_user.role_id != 1:
-    #         return None, -2, None
-    #     # проверка есть ли такой email in db
-    #     email = db.query(UniversalUser).filter(UniversalUser.email == new_data.email).first()
-    #     if email is not None:
-    #         return None, -3, None  # have email in db
-    #
-    #     # проверять хеш пароль
-    #     # if new_data.password is None:
-    #     #     return None, -3, None  # нет пароля
-    #     psw = get_password_hash(password=new_data.password)
-    #     new_data.password = psw
-    #
-    #     # Проверить дату дня рождения
-    #     if new_data.birthday is not None:
-    #         new_data.birthday = date_from_timestamp(new_data.birthday)
-    #
-    #     if new_data.location_id is not None:
-    #         loc = db.query(Location).filter(Location.id == new_data.location_id).first()
-    #         if loc is None:
-    #             return None, -4, None  # нет города
-    #
-    #     if new_data.role_id != 2:
-    #         return None, -5, None
-    #
-    #     if new_data.working_specialty_id is not None:
-    #         spec = db.query(WorkingSpecialty).filter(WorkingSpecialty.id == new_data.working_specialty_id).first()
-    #         if spec is None:
-    #             return None, -6, None
-    #     # Проверить участок
-    #     if new_data.division_id is not None:
-    #         div = db.query(Division).filter(Division.id == new_data.division_id).first()
-    #         if div is None:
-    #             return None, -7, None
-    #     db_obj = super().create(db=db, obj_in=new_data)
-    #     return db_obj, 0, None
-    #
-    # def get_universal_user(self, db: Session, *, universal_user: UniversalUserEntrance):
-    #
-    #     # getting_universal_user = db.query(UniversalUser).filter(UniversalUser.email == universal_user.email,
-    #     #                                                         UniversalUser.is_actual == True).first()
-    #     getting_universal_user = db.query(UniversalUser).filter(UniversalUser.email == universal_user.email).first()
-    #     if getting_universal_user is None or not verify_password(plain_password=universal_user.password,
-    #                                                              hashed_password=getting_universal_user.password):
-    #         raise UnprocessableEntity(
-    #             message="Неверный логин или пароль",
-    #             num=1,
-    #             description="Неверный логи или пароль",
-    #             path="$.body"
-    #         )
-    #     if getting_universal_user.is_actual is False:
-    #         raise UnprocessableEntity(
-    #             message="Вам отказано в доступе",
-    #             num=1,
-    #             description="Администратор ограничил вам доступ",
-    #             path="$.body"
-    #         )
-    #
-    #     return getting_universal_user
-    #
-    # def get_by_email(self, db: Session, *, email: str):
-    #     return db.query(UniversalUser).filter(UniversalUser.email == email).first()
+    def archiving_object(self, db: Session, *, current_user: UniversalUser, object_id: int, role_list: list):
+        # проверить роль
+        code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такая компания
+        obj = super().get(db=db, id=object_id)
+        if obj is None:
+            return None, -116, None
+        # вызвать архивацию
+        obj, code, indexes = super().archiving(db=db, db_obj=obj)
+        return obj, code, None
+
+    def unzipping_object(self, db: Session, *, current_user: UniversalUser, object_id: int, role_list: list):
+        # проверить роль
+        code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
+        if code != 0:
+            return None, code, None
+        # проверить есть ли такая компания
+        obj = super().get(db=db, id=object_id)
+        if obj is None:
+            return None, -116, None
+        # вызвать архивацию
+        obj, code, indexes = super().unzipping(db=db, db_obj=obj)
+        return obj, code, None
+
+    def getting_object(self, *, db: Session, object_id: int):
+        obj = db.query(Object).filter(Object.id == object_id).first()
+        if obj is None:
+            return None, -116, None
+        return obj, 0, None
 
 
 crud_objects = CrudObject(Object)

@@ -129,16 +129,10 @@ def create_upload_file(
     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE_ADMIN_CLIENT)
     get_raise(code=code)
 
-    obj = crud_company.get(db=session, id=company_id)
+    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+    crud_company.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE, db_obj=obj)
 
-    save_path = crud_company.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE,
-                                         db_obj=obj)
-    if not save_path:
-        raise UnfoundEntity(message="Не отправлен загружаемый файл",
-                            num=2,
-                            description="Попробуйте загрузить файл еще раз",
-                            path="$.body",
-                            )
     return SingleEntityResponse(data=get_company(crud_company.get(db=session, id=company_id), request=request))
 
 
