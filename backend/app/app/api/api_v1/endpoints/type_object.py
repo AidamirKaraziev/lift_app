@@ -13,7 +13,7 @@ from app.getters.type_object import get_type_objects
 router = APIRouter()
 
 
-# Вывод всех типов Договора
+# Вывод всех типов ОБЪЕКТОВ
 @router.get('/type-object/',
             response_model=ListOfEntityResponse,
             name='Список типов объектов',
