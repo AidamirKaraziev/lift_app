@@ -25,6 +25,7 @@ from .contact_person import ContactPerson
 from .type_contract import TypeContract
 from .cost_type import CostType
 from .type_act import TypeAct
+from .act_base import ActBase
 # from .object import Object
 
 # from .user import User

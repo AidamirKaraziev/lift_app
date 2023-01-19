@@ -20,6 +20,7 @@ router = APIRouter()
             tags=['Админ панель / Типы Актов']
             )
 def get_data(
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
         page: int = Query(1, title="Номер страницы")
 ):

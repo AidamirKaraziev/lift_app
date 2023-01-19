@@ -50,6 +50,11 @@ registration_number_is_exist = -118
 foreman_not_found = -119
 mechanic_not_found = -120
 
+act_base_not_found = -121
+act_base_uc_factory_mode_id_and_type_act_id_is_exist = -1211
+
+type_act_not_found = -122
+
 
 def get_raise(code: int):
     if code == -100:
@@ -194,7 +199,7 @@ def get_raise(code: int):
             path="$.body"
         )
     if code == -112:
-        raise UnfoundEntity(
+        raise InaccessibleEntity(
             message="Договор с таким названием существует!",
             num=112,
             description="Договор с таким названием существует!",
@@ -222,7 +227,7 @@ def get_raise(code: int):
             path="$.body"
         )
     if code == -1141:
-        raise UnfoundEntity(
+        raise InaccessibleEntity(
             message="Организация с таким названием существует!",
             num=1141,
             description="Организация с таким названием существует!",
@@ -236,7 +241,7 @@ def get_raise(code: int):
             path="$.body"
         )
     if code == -1151:
-        raise UnfoundEntity(
+        raise InaccessibleEntity(
             message="Модель техники с таким названием уже существует!",
             num=1151,
             description="Модель техники с таким названием уже существует!",
@@ -257,7 +262,7 @@ def get_raise(code: int):
     #         path="$.body"
     #     )
     if code == -118:
-        raise UnfoundEntity(
+        raise InaccessibleEntity(
             message="Техника с таким регистрационным номером уже есть",
             num=118,
             description="Техника с таким регистрационным номером уже есть",
@@ -275,6 +280,27 @@ def get_raise(code: int):
             message="Такого механика не существует!",
             num=120,
             description="Выберете существующего механика!",
+            path="$.body"
+        )
+    if code == -121:
+        raise UnfoundEntity(
+            message="Такого Шаблона Актов не существует!",
+            num=121,
+            description="Выберете существующий Шаблон Актов!",
+            path="$.body"
+        )
+    if code == -1211:
+        raise InaccessibleEntity(
+            message="В базе данных уже есть act_base с уникальными полями",
+            num=1211,
+            description="В базе данных уже есть act_base с уникальными полями",
+            path="$.body"
+        )
+    if code == -122:
+        raise UnfoundEntity(
+            message="Такого Типа Актов не существует!",
+            num=122,
+            description="Выберете существующий Тип Актов!",
             path="$.body"
         )
     if code != 0:

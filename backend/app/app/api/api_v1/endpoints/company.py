@@ -18,7 +18,6 @@ from app.crud.crud_universal_user import crud_universal_users
 from app.core.roles import ADMIN, CLIENT
 from app.core.templates_raise import get_raise
 
-# from backend.app.app.getters.universal_user import get_universal_user
 
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]
@@ -85,7 +84,9 @@ def get_data(
         current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
 ):
-    return SingleEntityResponse(data=get_company(crud_company.get(db=session, id=company_id), request=request))
+    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+    return SingleEntityResponse(data=get_company(obj, request=request))
 
 
 # UPDATE
