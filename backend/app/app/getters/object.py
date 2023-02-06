@@ -15,6 +15,8 @@ from app.getters.universal_user import get_universal_user
 from app.models import Object
 from app.schemas.object import ObjectGet
 
+from app.utils.time_stamp import to_timestamp
+
 
 def get_object(obj: Object, request: Optional[Request],
                config: Settings = settings) -> Optional[ObjectGet]:
@@ -34,12 +36,14 @@ def get_object(obj: Object, request: Optional[Request],
             obj.act_pto = url + str(obj.act_pto)
         else:
             obj.act_pto = None
-            
+
+    # ВОТ ЭТО НАХУЙ НЕ НАДО ВСЕ ЛОМАЕТ
     # возможно потом надо будет переводить в  таймстемп
     # if obj.birthday is not None:
     # obj.birthday = to_timestamp(obj.birthday)
-    # obj.date_of_employment = to_timestamp(obj.date_of_employment)
-    
+    # obj.date_inspection = to_timestamp(obj.date_inspection)
+    # obj.date_inspection = to_timestamp(obj.date_inspection)
+
     return ObjectGet(
         id=obj.id,
         organization_id=get_organization(obj.organization, request=request) if obj.organization is not None else None,
@@ -73,5 +77,5 @@ def get_object(obj: Object, request: Optional[Request],
         acceptance_certificate=obj.acceptance_certificate,
         act_pto=obj.act_pto,
         geo=obj.geo,
-        is_actual=obj.is_actual,
+        is_actual=obj.is_actual
     )

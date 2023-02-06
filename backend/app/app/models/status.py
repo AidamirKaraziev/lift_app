@@ -5,6 +5,6 @@ from app.db.base_class import Base
 
 
 class Status(Base):
-    __tablename__ = 'status'
+    __tablename__ = 'statuses'
     id = Column(Integer, primary_key=True, autoincrement=False)
-    # name = Column(String, unique=True)
+    name = Column(String, unique=True)

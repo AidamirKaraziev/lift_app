@@ -19,7 +19,9 @@ def get_contract(obj: Contract, request: Optional[Request],
             obj.file = url + str(obj.file)
         # else:
         #     obj.file = None
-    obj.validity_period = to_timestamp(obj.validity_period)
+
+    # ВОТ ЭТО НАХУЙ НЕ НАДО ВСЕ ЛОМАЕТ
+    # obj.validity_period = to_timestamp(obj.validity_period)
     return ContractGet(
         id=obj.id,
         company_id=get_company(company=obj.company, request=request)

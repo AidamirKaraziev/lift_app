@@ -114,43 +114,4 @@ class Object(Base):
 #     status = Column(Boolean)
 #
 #
-# class UTP(Base):  # TEST
-#     __tablename__ = "unique_trade_offers"
-#     id = Column(Integer, primary_key=True)
 #
-#
-# class Company(Base):  # TEST
-#     __tablename__ = 'company'
-#     id = Column(Integer, primary_key=True)
-#     title = Column(String)
-#
-#     director_name = Column(String)
-#     phone = Column(String)
-#     address = Column(String)
-#     photo = Column(String)
-#     location_id = Column(Integer, ForeignKey("locations.id", ondelete="SET NULL"))
-#
-#     is_actual = Column(Boolean, default=True)
-#
-#     location = relationship(Location)
-#
-#
-# class Contract(Base):  # TEST
-#     __tablename__ = "contracts"
-#     id = Column(Integer)
-#     company_id = Column(Integer, ForeignKey())
-#     contract_title = Column()  # unique
-#     validity_period = Column(Date)
-#     type_contract = Column(String)
-#     file = Column(String)
-#
-#
-# class ContactPerson(Base):  # TEST
-#     __tablename__ = 'contact_persons'
-#     id = Column(Integer, primary_key=True)
-#     company_id = Column(Integer, ForeignKey)
-#     name = Column(String)
-#     phone = Column(String)
-#     email = Column(String)
-#     photo = Column(String)
-#     address = Column(String)

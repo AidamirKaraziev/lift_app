@@ -48,7 +48,7 @@ def get_data(
 
     data, paginator = crud_objects.get_multi(db=session, page=page)
 
-    return ListOfEntityResponse(data=[get_object(datum, request=request) for datum in data],
+    return ListOfEntityResponse(data=[get_object(obj=datum, request=request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 

@@ -35,6 +35,7 @@ def get_universal_user(universal_user: UniversalUser, request: Optional[Request]
             universal_user.qualification_file = url + str(universal_user.qualification_file)
         else:
             universal_user.qualification_file = None
+    # ВОТ ЭТО НАХУЙ НЕ НАДО ВСЕ ЛОМАЕТ
     # возможно потом надо будет переводить в  таймстемп
     # if universal_user.birthday is not None:
     # universal_user.birthday = to_timestamp(universal_user.birthday)

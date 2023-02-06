@@ -26,6 +26,10 @@ from .type_contract import TypeContract
 from .cost_type import CostType
 from .type_act import TypeAct
 from .act_base import ActBase
+from .status import Status
+from .act_fact import ActFact
+from .act_fact_of_mechanic_id import ActFactOfMechanicId
+
 # from .object import Object
 
 # from .user import User

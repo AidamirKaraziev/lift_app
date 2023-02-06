@@ -55,6 +55,10 @@ act_base_uc_factory_mode_id_and_type_act_id_is_exist = -1211
 
 type_act_not_found = -122
 
+act_fact_not_found = -123
+
+status_not_found = -124
+
 
 def get_raise(code: int):
     if code == -100:
@@ -301,6 +305,20 @@ def get_raise(code: int):
             message="Такого Типа Актов не существует!",
             num=122,
             description="Выберете существующий Тип Актов!",
+            path="$.body"
+        )
+    if code == -123:
+        raise UnfoundEntity(
+            message="Такого фактического акта не существует!",
+            num=123,
+            description="Выберете существующий Фактический акт!",
+            path="$.body"
+        )
+    if code == -124:
+        raise UnfoundEntity(
+            message="Такого статуса не существует!",
+            num=124,
+            description="Выберете существующий статус!",
             path="$.body"
         )
     if code != 0:
