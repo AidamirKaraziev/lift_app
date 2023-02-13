@@ -49,13 +49,6 @@ ROLE_FOREMAN = [FOREMAN]
 
 
 class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
-    # МОЖНО УДАЛИТЬ ТАК КАК ЗАМЕНИЛ НА getting_object
-    # def get_obj(self, *, db: Session, id: int):
-    #     obj = db.query(Object).filter(Object.id == id).first()
-    #     if obj is None:
-    #         return None, -116, None
-    #     return obj, 0, None
-
     def create_object(self, db: Session, *, new_data: ObjectCreate):
         # проверка на организацию
         if new_data.organization_id is not None:
@@ -137,66 +130,66 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
             org = db.query(Organization).filter(Organization.id == new_data.organization_id).first()
             if org is None:
                 return None, -114, None  # нет организации
-            # проверка на участок
-            if new_data.division_id is not None:
-                div = db.query(Division).filter(Division.id == new_data.division_id).first()
-                if div is None:
-                    return None, -104, None  # нет участка
-            # проверка на модель техники
-            if new_data.factory_model_id is not None:
-                fac = db.query(FactoryModel).filter(FactoryModel.id == new_data.factory_model_id).first()
-                if fac is None:
-                    return None, -115, None  # нет Модели техники
-            # проверка на заводской номер
-            if new_data.factory_number is not None:
-                fac_num = db.query(Object).filter(Object.factory_number == new_data.factory_number).first()
-                if fac_num is not None:
-                    return None, -1151, None  # номер техники уже существует
-            # проверка на регистрационный номер
-            if new_data.registration_number is not None:
-                reg = db.query(Object).filter(Object.registration_number == new_data.registration_number).first()
-                if reg is not None:
-                    return None, -118, None  # регистрационный номер уже есть
-            # проверка на компанию
-            if new_data.company_id is not None:
-                com = db.query(Company).filter(Company.id == new_data.company_id).first()
-                if com is None:
-                    return None, -106, None  # нет компании
-            # проверка на контактное лицо
-            if new_data.contact_person_id is not None:
-                pers = db.query(ContactPerson).filter(ContactPerson.id == new_data.contact_person_id).first()
-                if pers is None:
-                    return None, -113, None  # нет контактное лицо
-            # проверка на контракт
-            if new_data.contract_id is not None:
-                con = db.query(Contract).filter(Contract.id == new_data.contract_id).first()
-                if con is None:
-                    return None, -1121, None  # нет компании
-            # перевод дат в нужный формат
-            if new_data.date_inspection is not None:
-                new_data.date_inspection = date_from_timestamp(new_data.date_inspection)
-            if new_data.planned_inspection is not None:
-                new_data.planned_inspection = date_from_timestamp(new_data.planned_inspection)
-            if new_data.period_inspection is not None:
-                new_data.period_inspection = date_from_timestamp(new_data.period_inspection)
+        # проверка на участок
+        if new_data.division_id is not None:
+            div = db.query(Division).filter(Division.id == new_data.division_id).first()
+            if div is None:
+                return None, -104, None  # нет участка
+        # проверка на модель техники
+        if new_data.factory_model_id is not None:
+            fac = db.query(FactoryModel).filter(FactoryModel.id == new_data.factory_model_id).first()
+            if fac is None:
+                return None, -115, None  # нет Модели техники
+        # проверка на заводской номер
+        if new_data.factory_number is not None:
+            fac_num = db.query(Object).filter(Object.factory_number == new_data.factory_number).first()
+            if fac_num is not None:
+                return None, -1151, None  # номер техники уже существует
+        # проверка на регистрационный номер
+        if new_data.registration_number is not None:
+            reg = db.query(Object).filter(Object.registration_number == new_data.registration_number).first()
+            if reg is not None:
+                return None, -118, None  # регистрационный номер уже есть
+        # проверка на компанию
+        if new_data.company_id is not None:
+            com = db.query(Company).filter(Company.id == new_data.company_id).first()
+            if com is None:
+                return None, -106, None  # нет компании
+        # проверка на контактное лицо
+        if new_data.contact_person_id is not None:
+            pers = db.query(ContactPerson).filter(ContactPerson.id == new_data.contact_person_id).first()
+            if pers is None:
+                return None, -113, None  # нет контактное лицо
+        # проверка на контракт
+        if new_data.contract_id is not None:
+            con = db.query(Contract).filter(Contract.id == new_data.contract_id).first()
+            if con is None:
+                return None, -1121, None  # нет компании
+        # перевод дат в нужный формат
+        if new_data.date_inspection is not None:
+            new_data.date_inspection = date_from_timestamp(new_data.date_inspection)
+        if new_data.planned_inspection is not None:
+            new_data.planned_inspection = date_from_timestamp(new_data.planned_inspection)
+        if new_data.period_inspection is not None:
+            new_data.period_inspection = date_from_timestamp(new_data.period_inspection)
 
-            # проверка на ответственный прораб
-            if new_data.foreman_id is not None:
-                foreman = db.query(UniversalUser).filter(UniversalUser.id == new_data.foreman_id).first()
-                if foreman is None:
-                    return None, -105, None  # нет пользователя
-                # проверка на роли прораба
-                if foreman.role_id not in ROLE_FOREMAN:
-                    return None, -119, None
+        # проверка на ответственный прораб
+        if new_data.foreman_id is not None:
+            foreman = db.query(UniversalUser).filter(UniversalUser.id == new_data.foreman_id).first()
+            if foreman is None:
+                return None, -105, None  # нет пользователя
+            # проверка на роли прораба
+            if foreman.role_id not in ROLE_FOREMAN:
+                return None, -119, None
 
-            # проверка на ответственный механик
-            if new_data.mechanic_id is not None:
-                mech = db.query(UniversalUser).filter(UniversalUser.id == new_data.mechanic_id).first()
-                if mech is None:
-                    return None, -105, None  # нет пользователя
-                #     проверка на роль механика
-                if mech.role_id not in ROLE_MECHANIC:
-                    return None, -120, None
+        # проверка на ответственный механик
+        if new_data.mechanic_id is not None:
+            mech = db.query(UniversalUser).filter(UniversalUser.id == new_data.mechanic_id).first()
+            if mech is None:
+                return None, -105, None  # нет пользователя
+            #     проверка на роль механика
+            if mech.role_id not in ROLE_MECHANIC:
+                return None, -120, None
         # обновление данных
         db_obj = super().update(db=db, db_obj=this_object, obj_in=new_data)
         return db_obj, 0, None

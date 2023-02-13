@@ -56,7 +56,7 @@ class ActFactCreate(BaseModel):
     status_id: Optional[int]
 
 
-# Изменение юзера
+# изменение фактического акта
 class ActFactUpdate(BaseModel):
     # id: int
     object_id: Optional[int]
