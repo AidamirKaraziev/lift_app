@@ -63,11 +63,11 @@ def create_locations(
 
 
 # Апи удаляет город
-@router.delete('/locations/{location_id}/',
-               response_model=SingleEntityResponse,
-               name='Удалить город',
-               description='Полностью удаляет город',
-               tags=['Админ панель / Города'])
+@router.get('/locations/{location_id}/',
+            response_model=SingleEntityResponse,
+            name='Удалить город',
+            description='Полностью удаляет город',
+            tags=['Админ панель / Города'])
 def delete_location(
         location_id: int = Path(..., title='Id проекта'),
         # current_user=Depends(deps.get_current_user_by_bearer),

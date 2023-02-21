@@ -16,7 +16,6 @@ from app.getters.activity_sphere import get_activity_sphere
 from app.getters.partner_competence import get_partner_competence
 
 
-# Геттерс для фронта
 def get_project(project: Optional[Project], request: Request) -> Optional[ProjectGet]:
     return ProjectGet(
         id=project.id,

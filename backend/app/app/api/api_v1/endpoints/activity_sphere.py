@@ -149,11 +149,11 @@ def update_upload_file(
 
 
 # DELETE
-@router.delete('/activity-spheres/{activity_sphere_id}/',
-               response_model=SingleEntityResponse,
-               name='Удалить сферу деятельности',
-               description='Полностью удаляет сферу деятельности',
-               tags=['Админ панель / Сферы деятельности'])
+@router.get('/activity-spheres/{activity_sphere_id}/',
+            response_model=SingleEntityResponse,
+            name='Удалить сферу деятельности',
+            description='Полностью удаляет сферу деятельности',
+            tags=['Админ панель / Сферы деятельности'])
 def delete_partner_competences(
         request: Request,
         activity_sphere_id: int = Path(..., title='Id сферы деятельности'),

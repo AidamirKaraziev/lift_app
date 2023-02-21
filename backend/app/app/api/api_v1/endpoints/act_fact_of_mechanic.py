@@ -30,16 +30,20 @@ PATH_TYPE = "file"
 router = APIRouter()
 
 
+# апи вывода по айди фактического акта
+
+
 # GET-MULTY
-@router.get('/all-acts-fact/',
+@router.get('/list-mechanic/',
             response_model=ListOfEntityResponse,
-            name='Список Фактических Актов',
-            description='Получение списка всех Фактических Актов',
-            tags=['Админ панель / Фактические Акты']
+            name='Список механиков участвующих в работе',
+            description='Получение списка механиков участвующих в работе',
+            tags=['Админ панель / Список Механиков']
             )
 def get_data(
         request: Request,
         session=Depends(deps.get_db),
+        act_fact_id: int = Path(..., title='ID факт акта'),
         page: int = Query(1, title="Номер страницы")
 ):
     logging.info(crud_acts_fact.get_multi(db=session, page=None))

@@ -175,11 +175,11 @@ def create_upload_file(
 
 
 # АПИ ПО АРХИВАЦИИ ДОГОВОРА
-@router.delete('/contract/{contract_id}/archive/',
-               response_model=SingleEntityResponse,
-               name='Заморозить договор',
-               description='Архивация договора',
-               tags=['Админ панель / Договор'])
+@router.get('/contract/{contract_id}/archive/',
+            response_model=SingleEntityResponse,
+            name='Заморозить договор',
+            description='Архивация договора',
+            tags=['Админ панель / Договор'])
 def archiving_contracts(
         request: Request,
         contract_id: int = Path(..., title='Id Договора'),

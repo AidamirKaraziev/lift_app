@@ -40,5 +40,8 @@ def get_acts_facts(obj: ActFact, request: Optional[Request],
         main_mechanic_id=get_universal_user(obj.main_mechanic, request=request) if obj.main_mechanic is not None else None,
 
         file=obj.file,
-        status_id=get_statuses(obj.status) if obj.status is not None else None
+        status_id=get_statuses(obj.status) if obj.status is not None else None,
+        acts_fact_of_mechanic=[
+            get_universal_user(aom.mechanic, request=request) for aom in obj.acts_fact_of_mechanic
+        ]
     )

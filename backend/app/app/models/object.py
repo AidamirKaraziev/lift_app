@@ -18,7 +18,7 @@ from app.models.universal_user import UniversalUser
 class Object(Base):
     __tablename__ = "objects"
     id = Column(Integer, primary_key=True)
-    # name = Column(String)
+    name = Column(String)
     organization_id = Column(Integer, ForeignKey('organizations.id', ondelete="SET NULL"))
     division_id = Column(Integer, ForeignKey('divisions.id', ondelete="SET NULL"))
     address = Column(String)

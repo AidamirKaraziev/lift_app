@@ -35,7 +35,6 @@ class Project(Base):
     location = relationship(Location)
     stages_of_implementation = relationship(StageOfImplementation)
 
-    #
     activity_spheres_of_project = relationship('ActivitySpheresOfProject',
                                                back_populates='project', cascade="all, delete")
     partner_competencies_of_project = relationship('PartnerCompetenceOfProject',

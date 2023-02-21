@@ -194,11 +194,11 @@ def create_act_pto_file(
 
 
 # АПИ ПО АРХИВАЦИИ объекта
-@router.delete('/object/{object_id}/archive/',
-               response_model=SingleEntityResponse,
-               name='Заморозить объекта',
-               description='Архивация объекта',
-               tags=['Админ панель / Объекты'])
+@router.get('/object/{object_id}/archive/',
+            response_model=SingleEntityResponse,
+            name='Заморозить объекта',
+            description='Архивация объекта',
+            tags=['Админ панель / Объекты'])
 def archiving_objects(
         request: Request,
         object_id: int = Path(..., title='Id объекта'),

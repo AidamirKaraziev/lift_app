@@ -112,11 +112,11 @@ def create_moderator(
 
 
 # Апи удаления модератора АДМИНОМ
-@router.delete("/cp/moderators/{moderator_id}/",
-               response_model=SingleEntityResponse,
-               name='Удаление модератора',
-               description='Модератора удаляет админ',
-               tags=['Админ панель / Модератор'])
+@router.get("/cp/moderators/{moderator_id}/",
+            response_model=SingleEntityResponse,
+            name='Удаление модератора',
+            description='Модератора удаляет админ',
+            tags=['Админ панель / Модератор'])
 def remove_with_path(
         request: Request,
         moderator_id: int = Path(...),

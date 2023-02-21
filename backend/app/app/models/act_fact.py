@@ -29,7 +29,6 @@ class ActFact(Base):
     foreman = relationship("UniversalUser", foreign_keys=[foreman_id])
     main_mechanic = relationship("UniversalUser", foreign_keys=[main_mechanic_id])
     status = relationship(Status)
-    acts_fact_of_mechanic = relationship('ActFactOfMechanicId',
+
+    acts_fact_of_mechanic = relationship('ActFactOfMechanic',
                                          back_populates='act_fact', cascade="all, delete")
-    # НАДО ДОДЕЛАТЬ
-    # list_mechanic = relationship("UniversalUser", foreign_keys=[list_mechanic_id])

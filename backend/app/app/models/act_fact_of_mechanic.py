@@ -6,7 +6,7 @@ from .universal_user import UniversalUser
 from app.db.base_class import Base
 
 
-class ActFactOfMechanicId(Base):
+class ActFactOfMechanic(Base):
     __tablename__ = 'acts_fact_of_mechanic'
     id = Column(Integer, primary_key=True)
     act_fact_id = Column(Integer, ForeignKey(ActFact.id, ondelete="CASCADE"),  nullable=False)

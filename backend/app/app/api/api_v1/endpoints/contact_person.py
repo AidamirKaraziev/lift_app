@@ -236,11 +236,11 @@ def create_upload_file(
 
 
 # АПИ ПО АРХИВАЦИИ ДОГОВОРА
-@router.delete('/contact-person/{contact_person_id}/archive/',
-               response_model=SingleEntityResponse,
-               name='Заморозить Контактное лицо',
-               description='Архивация Контактное лицо',
-               tags=['Админ панель / Контактное лицо'])
+@router.get('/contact-person/{contact_person_id}/archive/',
+            response_model=SingleEntityResponse,
+            name='Заморозить Контактное лицо',
+            description='Архивация Контактное лицо',
+            tags=['Админ панель / Контактное лицо'])
 def archiving_contracts(
         request: Request,
         contact_person_id: int = Path(..., title='Id Контактное лицо'),

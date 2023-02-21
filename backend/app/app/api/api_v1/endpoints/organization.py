@@ -146,11 +146,11 @@ def create_upload_file(
 
 
 # АПИ ПО АРХИВАЦИИ ОРГАНИЗАЦИИ
-@router.delete('/organization/{organization_id}/archive/',
-               response_model=SingleEntityResponse,
-               name='Заморозить организацию',
-               description='Архивация организации',
-               tags=['Админ панель / Организации'])
+@router.get('/organization/{organization_id}/archive/',
+            response_model=SingleEntityResponse,
+            name='Заморозить организацию',
+            description='Архивация организации',
+            tags=['Админ панель / Организации'])
 def archiving_organizations(
         request: Request,
         organization_id: int = Path(..., title='Id ОРГАНИЗАЦИИ'),

@@ -336,11 +336,11 @@ def archiving_users(
 
 
 # АПИ ПО РАЗАРХИВАЦИИ ПОЛЬЗОВАТЕЛЕЙ
-@router.delete('/cp/admin/{id_user}/unzip/',
-               response_model=SingleEntityResponse,
-               name='Разморозка сотрудника',
-               description='Разархивация пользователя, доступ к приложению размораживается',
-               tags=['Админ панель / Администратор'])
+@router.get('/cp/admin/{id_user}/unzip/',
+            response_model=SingleEntityResponse,
+            name='Разморозка сотрудника',
+            description='Разархивация пользователя, доступ к приложению размораживается',
+            tags=['Админ панель / Администратор'])
 def unzipping_users(
         request: Request,
         id_user: int = Path(..., title='Id пользователя'),

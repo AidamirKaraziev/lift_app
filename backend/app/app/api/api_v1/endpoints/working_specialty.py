@@ -61,11 +61,11 @@ def create_working_specialty(
 
 
 # Апи удаляет специальность
-@router.delete('/working-specialty/{working_specialty_id}/',
-               response_model=SingleEntityResponse,
-               name='Удалить специальность',
-               description='Полностью удаляет специальность',
-               tags=['Админ панель / Специальности'])
+@router.get('/working-specialty/{working_specialty_id}/',
+            response_model=SingleEntityResponse,
+            name='Удалить специальность',
+            description='Полностью удаляет специальность',
+            tags=['Админ панель / Специальности'])
 def delete_working_specialty(
         working_specialty_id: int = Path(..., title='Id проекта'),
         # current_user=Depends(deps.get_current_user_by_bearer),
