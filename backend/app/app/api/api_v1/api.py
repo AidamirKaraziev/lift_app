@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.api_v1.endpoints import entrance, location, working_specialty, role, vova_test, universal_user,\
+from app.api.api_v1.endpoints import entrance, location, working_specialty, role, universal_user,\
      client, contact_person, division, foreman, admin, company, type_contract, cost_type, contract, organization, \
      type_object, factory_model, object, type_act, act_base, status, act_fact
 
@@ -25,7 +25,6 @@ api_router.include_router(status.router)
 api_router.include_router(role.router)
 # api_router.include_router(role.router, tags=["Админ панель / Должности"])
 # api_router.include_router(working_specialty.router, tags=["Админ панель / Специальности"])
-api_router.include_router(vova_test.router)
 api_router.include_router(working_specialty.router)
 api_router.include_router(contract.router)
 api_router.include_router(organization.router)
