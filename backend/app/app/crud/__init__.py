@@ -1,5 +1,5 @@
 # from .crud_item import item
-from .crud_user import crud_user as user
+# from .crud_user import crud_user as user
 from .crud_verif_code import verif_codes_service
 # For a new basic set of CRUD operations you could just do
 

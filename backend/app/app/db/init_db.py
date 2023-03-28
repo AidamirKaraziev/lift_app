@@ -17,12 +17,14 @@ def init_db(db: Session) -> None:
     # the tables un-commenting the next line
     # Base.metadata.create_all(bind=engine)
 
-    user = crud.user.get_by_tel(db, tel=settings.FIRST_SUPERUSER)
-    if not user:
-        user_in = schemas.UserCreate(
-            tel=settings.FIRST_SUPERUSER
-        )
-        user = crud.user.create(db, obj_in=user_in)  # noqa: F841
+    # я изменял 27.03.23
+    # user = crud.user.get_by_tel(db, tel=settings.FIRST_SUPERUSER)
+    # if not user:
+    #     user_in = schemas.UserCreate(
+    #         tel=settings.FIRST_SUPERUSER
+    #     )
+    #     user = crud.user.create(db, obj_in=user_in)  # noqa: F841
+    pass
 
 #
 # def init_db(db: Session) -> None:

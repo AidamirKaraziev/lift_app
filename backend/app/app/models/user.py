@@ -29,7 +29,7 @@ class User(Base):
     location = relationship(Location)
     # location = relationship(Location, back_populates='users')
 
-    devices = relationship('Device', back_populates='user', cascade="all, delete", passive_deletes=True)
+    devices = relationship('Device', back_populates='universal_user', cascade="all, delete", passive_deletes=True)
     # projects = relationship('Project', back_populates='user', cascade="all, delete")
     project = relationship(
         "Project",

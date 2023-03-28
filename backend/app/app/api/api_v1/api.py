@@ -2,11 +2,12 @@ from fastapi import APIRouter
 
 from app.api.api_v1.endpoints import entrance, location, working_specialty, role, universal_user,\
      client, contact_person, division, foreman, admin, company, type_contract, cost_type, contract, organization, \
-     type_object, factory_model, object, type_act, act_base, status, act_fact
+     type_object, factory_model, object, type_act, act_base, status, act_fact, step
 
 
 api_router = APIRouter()
 
+api_router.include_router(step.router)
 api_router.include_router(act_fact.router)
 api_router.include_router(universal_user.router)
 api_router.include_router(admin.router)

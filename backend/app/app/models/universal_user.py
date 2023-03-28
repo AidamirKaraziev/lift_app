@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
 from app.models import Location
-from app.models import Role
+from app.models.role import Role
 
 from app.models.working_specialty import WorkingSpecialty
 from app.models.company import Company
@@ -41,3 +41,5 @@ class UniversalUser(Base):
                       )
     acts_fact_of_mechanic = relationship('ActFactOfMechanic',
                                          back_populates='mechanic', cascade="all, delete")
+    # devices = relationship('Device', back_populates='universal_user', cascade="all, delete", passive_deletes=True)
+
