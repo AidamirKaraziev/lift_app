@@ -48,7 +48,7 @@ def get_data(
              )
 def create_locations(
         new_data: LocationCreate,
-        # current_user=Depends(deps.get_current_user_by_bearer),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
 ):
     obj = crud_location.get_by_name(db=session, name=new_data.name)
@@ -70,7 +70,7 @@ def create_locations(
             tags=['Админ панель / Города'])
 def delete_location(
         location_id: int = Path(..., title='Id проекта'),
-        # current_user=Depends(deps.get_current_user_by_bearer),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db)
 ):
     if crud_location.get(db=session, id=location_id) is None:

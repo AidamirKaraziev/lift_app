@@ -59,6 +59,12 @@ act_fact_not_found = -123
 
 status_not_found = -124
 
+step_not_found = -125
+step_name_is_exist = -1251
+
+sub_step_not_found = -126
+sub_step_name_is_exist = -1261
+
 
 def get_raise(code: int):
     if code == -100:
@@ -319,6 +325,34 @@ def get_raise(code: int):
             message="Такого статуса не существует!",
             num=124,
             description="Выберете существующий статус!",
+            path="$.body"
+        )
+    if code == -1251:
+        raise InaccessibleEntity(
+            message="Этап с таким названием уже есть!",
+            num=1251,
+            description="Этап с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -125:
+        raise UnfoundEntity(
+            message="Такого этапа не существует!",
+            num=125,
+            description="Выберете существующий этап!",
+            path="$.body"
+        )
+    if code == -126:
+        raise UnfoundEntity(
+            message="Такого подэтапа не существует!",
+            num=126,
+            description="Выберете существующий подэтап!",
+            path="$.body"
+        )
+    if code == -1261:
+        raise InaccessibleEntity(
+            message="Подэтап с таким названием уже есть!",
+            num=1261,
+            description="Подэтап с таким названием уже есть!",
             path="$.body"
         )
     if code != 0:
