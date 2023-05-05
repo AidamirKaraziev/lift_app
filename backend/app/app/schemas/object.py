@@ -19,6 +19,7 @@ from app.schemas.universal_user import UniversalUserGet
 
 class ObjectBase(BaseModel):
     id: int
+    name: Optional[str]
     organization_id: Optional[int]
     division_id: Optional[int]
     address: Optional[str]
@@ -71,6 +72,7 @@ class ObjectBase(BaseModel):
 # Создание юзера
 class ObjectCreate(BaseModel):
     # id: int
+    name: Optional[str]
     organization_id: Optional[int]
     division_id: Optional[int]
     address: Optional[str]
@@ -108,6 +110,7 @@ class ObjectCreate(BaseModel):
 # Изменение юзера
 class ObjectUpdate(BaseModel):
     # id: int
+    name: Optional[str]
     organization_id: Optional[int]
     division_id: Optional[int]
     address: Optional[str]
@@ -145,6 +148,7 @@ class ObjectUpdate(BaseModel):
 # вывод юзера
 class ObjectGet(BaseModel):
     id: int
+    name: Optional[str]
     organization_id: Optional[OrganizationGet]
     division_id: Optional[DivisionGet]
     address: Optional[str]

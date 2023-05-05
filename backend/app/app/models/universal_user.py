@@ -42,4 +42,3 @@ class UniversalUser(Base):
     acts_fact_of_mechanic = relationship('ActFactOfMechanic',
                                          back_populates='mechanic', cascade="all, delete")
     # devices = relationship('Device', back_populates='universal_user', cascade="all, delete", passive_deletes=True)
-
