@@ -7,7 +7,7 @@ from app.db.base_class import Base
 from app.models import Location
 from app.models.stage_of_implementation import StageOfImplementation
 
-from app.models import User
+# from app.models import User
 
 
 class Project(Base):
