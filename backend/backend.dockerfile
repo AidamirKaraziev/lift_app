@@ -18,6 +18,7 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
 RUN pip3 install --upgrade pip
 # RUN pip install poetry==1.2.0a1
 RUN pip install greensms
+RUN pip install --force-reinstall httpcore==0.15
 
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY ./app/pyproject.toml ./app/poetry.lock* /app/

@@ -16,6 +16,7 @@ entrance = "^1.1.17"
 python-jose="^3.3.0"
 passlib="^1.7.4"
 user-agents="^2.2.0"
+httpcore="^0.15"
 #fastapi-mail = {version = "^1.1.4", optional = true}
 #python-dotenv="^0.21.0"
 
