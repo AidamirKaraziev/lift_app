@@ -14,7 +14,7 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     birthday = Column(Date)
-    location_id = Column(Integer, ForeignKey("locations.id", ondelete="SET NULL"))
+    # location_id = Column(Integer, ForeignKey("locations.id", ondelete="SET NULL"))
 
     photo_main = Column(String)
     photo_1 = Column(String)
@@ -25,17 +25,17 @@ class User(Base):
     about_me = Column(String)
     contact_phone = Column(String)
     telegram = Column(String)
-
-    location = relationship(Location)
+    #
+    # location = relationship(Location)
     # location = relationship(Location, back_populates='users')
 
     devices = relationship('Device', back_populates='user', cascade="all, delete", passive_deletes=True)
     # projects = relationship('Project', back_populates='user', cascade="all, delete")
-    project = relationship(
-        "Project",
-        back_populates="user",
-        cascade="all, delete",
-        passive_deletes=True,
-    )
+    # project = relationship(
+    #     "Project",
+    #     back_populates="user",
+    #     cascade="all, delete",
+    #     passive_deletes=True,
+    # )
     # Добавить
     # My_project()

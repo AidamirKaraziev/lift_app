@@ -4,6 +4,7 @@
 python /app/app/backend_pre_start.py
 
 # Run migrations
+alembic revision --autogenerate -m "initial"
 alembic upgrade head
 
 # Create initial data in DB
