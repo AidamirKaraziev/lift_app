@@ -1,10 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
-# List append in sqlalchemy
-
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
-
 
 from app.models.contact_person import ContactPerson
 from app.models.contract import Contract
@@ -12,7 +9,6 @@ from app.models.factory_model import FactoryModel
 from app.models.organization import Organization
 from app.models.division import Division
 from app.models.company import Company
-from app.models.universal_user import UniversalUser
 
 
 class Object(Base):
@@ -22,7 +18,6 @@ class Object(Base):
     organization_id = Column(Integer, ForeignKey('organizations.id', ondelete="SET NULL"))
     division_id = Column(Integer, ForeignKey('divisions.id', ondelete="SET NULL"))
     address = Column(String)
-    # type_object_id = Column(Integer, ForeignKey("type_objects.id", ondelete="SET NULL"))  # (lift, lift_mr)
 
     factory_model_id = Column(Integer, ForeignKey("factories_models.id", ondelete="SET NULL"))
     factory_number = Column(String, unique=True)  # unique
@@ -58,94 +53,3 @@ class Object(Base):
     contact_person = relationship(ContactPerson)
     foreman = relationship("UniversalUser", foreign_keys=[foreman_id])
     mechanic = relationship("UniversalUser", foreign_keys=[mechanic_id])
-
-
-# class DefectiveActBase(Base):  # TEST
-#     __tablename__ = "defective_acts_bases"
-#     id = Column(Integer, primary_key=True)
-#     model_id = Column(Integer, ForeignKey("factories_models.id", ondelete="SET NULL"))
-#     # type_act_id = Column(Integer, ForeignKey)
-#     step_list = Column(List)
-
-#
-# class DefectiveActFact(Base):
-#     pass
-#
-#
-# class ActBase(Base):
-#     __tablename__ = "acts_bases"
-#     id = Column(Integer, primary_key=True)
-#     factory_model_id = Column(Integer, ForeignKey("factories_models.id", ondelete="SET NULL"))
-#     type_act_id = Column(Integer, ForeignKey)
-#     step_list = Column(List)
-#
-#
-# class TypeObject(Base):
-#     __tablename__ = "type_objects"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String, unique=True)
-#
-#
-# class TypeAct(Base):
-#     __tablename__ = "type_acts"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String, unique=True)  # (1,3,6,12, defective)
-#
-#
-# class ActFact(Base):  # TEST
-#     __tablename__ = "acts"
-#     id = Column(Integer, primary_key=True)
-#
-#     act_base_id = Column(Integer, ForeignKey("acts_bases.id", ondelete="SET NULL"))
-#
-#     step_list_done = Column(List)
-#     date_create = Column(Date)
-#     date_start = Column(Date)
-#     date_finish = Column(Date)
-#     file = Column(String)
-#
-#     foreman_id = Column(Integer, ForeignKey)
-#     mechanic_id = Column(Integer, ForeignKey)
-#     status = Column(Boolean)
-#
-#
-# class UTP(Base):  # TEST
-#     __tablename__ = "unique_trade_offers"
-#     id = Column(Integer, primary_key=True)
-#
-#
-# class Company(Base):  # TEST
-#     __tablename__ = 'company'
-#     id = Column(Integer, primary_key=True)
-#     title = Column(String)
-#
-#     director_name = Column(String)
-#     phone = Column(String)
-#     address = Column(String)
-#     photo = Column(String)
-#     location_id = Column(Integer, ForeignKey("locations.id", ondelete="SET NULL"))
-#
-#     is_actual = Column(Boolean, default=True)
-#
-#     location = relationship(Location)
-#
-#
-# class Contract(Base):  # TEST
-#     __tablename__ = "contracts"
-#     id = Column(Integer)
-#     company_id = Column(Integer, ForeignKey())
-#     contract_title = Column()  # unique
-#     validity_period = Column(Date)
-#     type_contract = Column(String)
-#     file = Column(String)
-#
-#
-# class ContactPerson(Base):  # TEST
-#     __tablename__ = 'contact_persons'
-#     id = Column(Integer, primary_key=True)
-#     company_id = Column(Integer, ForeignKey)
-#     name = Column(String)
-#     phone = Column(String)
-#     email = Column(String)
-#     photo = Column(String)
-#     address = Column(String)

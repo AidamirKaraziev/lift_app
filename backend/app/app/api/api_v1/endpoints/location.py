@@ -26,7 +26,7 @@ router = APIRouter()
             response_model=ListOfEntityResponse,
             name='Список городов',
             description='Получение списка всех городов',
-            tags=['Мобильное приложение / Города']
+            tags=['Админ панель / Города']
             )
 def get_data(
         session=Depends(deps.get_db),
