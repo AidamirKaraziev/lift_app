@@ -8,10 +8,7 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
-# from app.models import User
-# from app.models.user import User
-
-from app.models.universal_user import UniversalUser
+from app.models.user import User
 
 
 class Device(Base):
@@ -24,7 +21,7 @@ class Device(Base):
     created = Column(DateTime(), nullable=True, default=datetime.utcnow)
     detected_os = Column(String(), nullable=True)
 
-    user_id = Column(Integer(), ForeignKey(UniversalUser.id, ondelete="CASCADE"), nullable=False)
+    user_id = Column(Integer(), ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
 
-    universal_user = relationship(UniversalUser, back_populates='devices')
+    user = relationship(User, back_populates='devices')
     firebase_tokens = relationship("FirebaseToken", cascade="all, delete-orphan", back_populates="device")
