@@ -49,7 +49,7 @@ def create_working_specialty(
         # current_user=Depends(deps.get_current_user_by_bearer),
         session=Depends(deps.get_db),
 ):
-    obj = crud_working_specialty.get_by_name(db=session, name=new_data.name)
+    obj = crud_working_specialty.get_by_name_old(db=session, name=new_data.name)
     if obj is not None:
         raise UnprocessableEntity(
             message="Такая специальность уже есть в базе данных",

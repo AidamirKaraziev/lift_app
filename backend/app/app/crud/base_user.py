@@ -160,7 +160,7 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.commit()
         return obj
 
-    def get_by_name(self, db: Session, name: str) -> Optional[ModelType]:
+    def get_by_name_old(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
 
     # def get_clients_list(self, *, db: Session, company_id: int):

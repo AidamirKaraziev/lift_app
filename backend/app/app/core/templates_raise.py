@@ -65,6 +65,12 @@ step_name_is_exist = -1251
 sub_step_not_found = -126
 sub_step_name_is_exist = -1261
 
+fault_category_not_found = -127
+fault_category_name_is_exist = -1271
+
+reason_fault_not_found = -128
+reason_fault_name_is_exist = -1281
+
 
 def get_raise(code: int):
     if code == -100:
@@ -353,6 +359,34 @@ def get_raise(code: int):
             message="Подэтап с таким названием уже есть!",
             num=1261,
             description="Подэтап с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -127:
+        raise UnfoundEntity(
+            message="Такой категории неисправности не существует!",
+            num=127,
+            description="Выберете существующую категорию неисправности!",
+            path="$.body"
+        )
+    if code == -1271:
+        raise UnprocessableEntity(
+            message="Категория неисправности с таким названием уже есть!",
+            num=1271,
+            description="Категория неисправности с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -128:
+        raise UnfoundEntity(
+            message="Такой причина неисправности не существует!",
+            num=128,
+            description="Выберете существующую причину неисправности!",
+            path="$.body"
+        )
+    if code == -1281:
+        raise UnprocessableEntity(
+            message="Причина неисправности с таким названием уже есть!",
+            num=1281,
+            description="Причина неисправности с таким названием уже есть!",
             path="$.body"
         )
     if code != 0:
