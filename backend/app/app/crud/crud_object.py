@@ -10,9 +10,10 @@ from app.utils.time_stamp import date_from_timestamp
 from app.core.roles import ADMIN, FOREMAN, MECHANIC
 
 from app.schemas.object import ObjectCreate, ObjectUpdate
-from app.models import Object, Organization, FactoryModel, Company, ContactPerson, Location, Division, UniversalUser, Contract
+from app.models import Object, Organization, FactoryModel, Company, ContactPerson, Location, Division, UniversalUser
 from app.crud.crud_universal_user import crud_universal_users
 
+from app.models.contract import Contract
 
 ROLE_RIGHTS = [ADMIN, FOREMAN]
 ROLE_MECHANIC = [MECHANIC]

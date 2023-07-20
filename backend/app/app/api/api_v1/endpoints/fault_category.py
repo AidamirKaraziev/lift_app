@@ -24,7 +24,7 @@ router = APIRouter()
 @router.get('/fault-category/all',
             response_model=ListOfEntityResponse,
             name='get_all_categories',
-            description='Получение списка всех участков',
+            description='Получение списка всех категорий неисправности',
             tags=['Админ панель / Категории неисправности']
             )
 def get_all_categories(
