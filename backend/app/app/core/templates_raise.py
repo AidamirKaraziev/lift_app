@@ -71,6 +71,11 @@ fault_category_name_is_exist = -1271
 reason_fault_not_found = -128
 reason_fault_name_is_exist = -1281
 
+order_not_found = -129
+order_name_is_exist = -1291
+
+universal_user_nor_found = -130
+
 
 def get_raise(code: int):
     if code == -100:
@@ -387,6 +392,27 @@ def get_raise(code: int):
             message="Причина неисправности с таким названием уже есть!",
             num=1281,
             description="Причина неисправности с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -129:
+        raise UnfoundEntity(
+            message="Такого заказа не существует!",
+            num=129,
+            description="Выберете существующий заказ!",
+            path="$.body"
+        )
+    if code == -1291:
+        raise UnprocessableEntity(
+            message="Заказ с таким названием уже есть!",
+            num=1291,
+            description="Заказ с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -130:
+        raise UnfoundEntity(
+            message="Нет такого пользователя!",
+            num=130,
+            description="Нет такого пользователя!",
             path="$.body"
         )
     if code != 0:

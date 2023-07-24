@@ -2,25 +2,19 @@ import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
 from fastapi.params import Path
 from app.api import deps
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 
-
 from app.core.templates_raise import get_raise
-
-
 from app.crud.crud_object import crud_objects
 from app.getters.object import get_object
 from app.schemas.object import ObjectCreate, ObjectUpdate, ObjectGet
 
 from app.core.roles import ADMIN, FOREMAN
 
-from app.exceptions import UnfoundEntity
 
 PATH_MODEL = "objects"
 PATH_TYPE_LETTER_OF_APPOINTMENT = "letter_of_appointment"

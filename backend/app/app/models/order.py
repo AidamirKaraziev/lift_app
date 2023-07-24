@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
@@ -9,7 +9,7 @@ from app.models import Status
 
 
 class Order(Base):
-    __tablename__ = "orders"
+    __tablename__ = "order"
     id = Column(Integer, primary_key=True)
     object_id = Column(Integer, ForeignKey(Object.id, ondelete="SET NULL"))
     creator_id = Column(Integer, ForeignKey(UniversalUser.id, ondelete="SET NULL"))
@@ -20,12 +20,12 @@ class Order(Base):
     commentary = Column(String)
     reason_fault_id = Column(Integer, ForeignKey(ReasonFault.id, ondelete="SET NULL"))
 
-    created_at = Column(Date)
-    accepted_at = Column(Date)
-    in_progress_at = Column(Date)
-    done_at = Column(Date)
+    created_at = Column(DateTime)
+    accepted_at = Column(DateTime)
+    in_progress_at = Column(DateTime)
+    done_at = Column(DateTime)
 
-    status_id = Column(Integer, ForeignKey(Status.id, ondelete="SET NULL"))
+    status_id = Column(Integer, ForeignKey(Status.id, ondelete="SET NULL"), default=1)
 
     object = relationship(Object)
     creator = relationship("UniversalUser", foreign_keys=[creator_id])
@@ -33,5 +33,3 @@ class Order(Base):
     executor = relationship("UniversalUser", foreign_keys=[executor_id])
     reason_fault = relationship(ReasonFault)
     status = relationship(Status)
-
-# создать fault_category

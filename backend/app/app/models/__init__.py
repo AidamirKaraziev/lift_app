@@ -24,6 +24,6 @@ from .act_fact_of_mechanic import ActFactOfMechanic
 from .step import Step
 from .sub_step import SubStep
 
-from .orders import Order
+from .order import Order
 from .fault_category import FaultCategory
 from .reason_fault import ReasonFault
