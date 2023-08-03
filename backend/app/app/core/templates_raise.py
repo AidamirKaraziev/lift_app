@@ -76,6 +76,10 @@ order_name_is_exist = -1291
 
 universal_user_nor_found = -130
 
+order_photo_not_found = -131
+order_photo_user_not_is_executor = -1311
+order_photo_file_is_none = -1312
+
 
 def get_raise(code: int):
     if code == -100:
@@ -413,6 +417,20 @@ def get_raise(code: int):
             message="Нет такого пользователя!",
             num=130,
             description="Нет такого пользователя!",
+            path="$.body"
+        )
+    if code == -1311:
+        raise UnprocessableEntity(
+            message="Добавлять фотографии может только назначенный исполнитель!",
+            num=1311,
+            description="Добавлять фотографии может только назначенный исполнитель!",
+            path="$.body"
+        )
+    if code == -1312:
+        raise UnprocessableEntity(
+            message="Вы не отправили фотографию!",
+            num=1312,
+            description="Вы не отправили фотографию!",
             path="$.body"
         )
     if code != 0:

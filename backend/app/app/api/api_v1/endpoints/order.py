@@ -12,9 +12,9 @@ from app.core.roles import ADMIN, FOREMAN, DISPATCHER, MECHANIC, ENGINEER
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.crud.crud_order import crud_orders
-from app.getters.order import getting_order
 from app.schemas.order import OrderGet, OrderCreate, OrderUpdate
 
+from app.getters.order import getting_order
 
 ROLES_ELIGIBLE = [ADMIN, FOREMAN, DISPATCHER]
 ALL_EMPLOYER = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
@@ -55,7 +55,7 @@ def get_order_by_id(
         order_id: int = Path(..., title='ID order'),
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    obj, code, indexes = crud_orders.getting_order(db=session, order_id=order_id)
+    obj, code, indexes = crud_orders.get_order_by_id(db=session, order_id=order_id)
     get_raise(code=code)
     return SingleEntityResponse(data=getting_order(obj, request))
 

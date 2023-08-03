@@ -3,11 +3,12 @@ from fastapi import APIRouter
 from app.api.api_v1.endpoints import entrance, location, working_specialty, role, universal_user,\
      client, contact_person, division, foreman, admin, company, type_contract, cost_type, contract, organization, \
      type_object, factory_model, object, type_act, act_base, status, act_fact, step, sub_step, fault_category, \
-     reason_fault, order
+     reason_fault, order, order_photo
 
 
 api_router = APIRouter()
 
+api_router.include_router(order_photo.router)
 api_router.include_router(order.router)
 api_router.include_router(reason_fault.router)
 api_router.include_router(fault_category.router)

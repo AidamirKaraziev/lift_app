@@ -22,7 +22,7 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
     not_found = -129
     is_exist = -1291
 
-    def getting_order(self, *, db: Session, order_id: int):
+    def get_order_by_id(self, *, db: Session, order_id: int):
         obj = db.query(Order).filter(Order.id == order_id).first()
         if obj is None:
             return None, self.not_found, None

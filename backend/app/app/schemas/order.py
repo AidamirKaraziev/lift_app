@@ -13,6 +13,8 @@ from app.schemas.reason_fault import ReasonFaultGet
 
 from app.schemas.status import StatusGet
 
+from app.schemas.order_photo import OrderPhotoGet
+
 
 class OrderBase(BaseModel):
     id: int
@@ -31,6 +33,7 @@ class OrderBase(BaseModel):
     done_at: Optional[Timestamp]
 
     status_id: Optional[int]
+    is_viewed: Optional[bool]
 
 
 class OrderCreate(BaseModel):
@@ -44,7 +47,7 @@ class OrderCreate(BaseModel):
     # commentary: Optional[str]
     # reason_fault_id: Optional[int]
 
-    created_at: Optional[Timestamp]
+    created_at: Optional[Timestamp] = None
     # accepted_at: Optional[Date]
     # in_progress_at: Optional[Date]
     # dane_at: Optional[Date]
@@ -71,6 +74,7 @@ class OrderUpdate(BaseModel):
     dane_at: Optional[Date]
 
     status_id: Optional[int]
+    is_viewed: Optional[bool]
 
 
 class OrderGet(BaseModel):
@@ -79,6 +83,7 @@ class OrderGet(BaseModel):
     creator_id: UniversalUserGet
     fault_category_id: Optional[FaultCategoryGet]
     task_text: Optional[str]
+    order_photo: Optional[OrderPhotoGet]
 
     executor_id: UniversalUserGet
     commentary: Optional[str]
@@ -90,3 +95,4 @@ class OrderGet(BaseModel):
     done_at: Optional[str]
 
     status_id: Optional[StatusGet]
+    is_viewed: Optional[bool]

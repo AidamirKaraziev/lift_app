@@ -14,9 +14,10 @@ from app.getters.fault_category import getting_fault_category
 from app.getters.reason_fault import getting_reason_fault
 from app.getters.status import get_statuses
 
+from app.getters.order_photo import getting_order_photo
+
 
 def getting_order(obj: Order, request: Optional[Request], config: Settings = settings) -> Optional[OrderGet]:
-    # возможно потом надо будет переводить в таймстемп
     if obj.created_at is not None:
         obj.created_at = to_timestamp(obj.created_at)
     if obj.accepted_at is not None:
@@ -45,5 +46,7 @@ def getting_order(obj: Order, request: Optional[Request], config: Settings = set
         in_progress_at=obj.in_progress_at,
         done_at=obj.done_at,
 
-        status_id=get_statuses(obj.status)if obj.status is not None else None
+        status_id=get_statuses(obj.status)if obj.status is not None else None,
+        is_viewed=obj.is_viewed,
+        order_photo=getting_order_photo(obj=obj.order_photo, request=request) if obj.order_photo is not None else None
     )
