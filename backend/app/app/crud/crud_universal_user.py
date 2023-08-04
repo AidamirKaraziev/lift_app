@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 
 from app.core.security import verify_password, get_password_hash
@@ -17,6 +19,7 @@ from app.schemas.foreman import ForemanCreate
 from app.crud.base_user import CRUDBaseUser
 from app.core.roles import ADMIN
 
+from app.utils import pagination
 
 ADMIN_LIST = [ADMIN]
 
@@ -96,6 +99,10 @@ class CrudUniversalUser(CRUDBaseUser[UniversalUser, UniversalUserCreate, Univers
         if user is None:
             return None, -130, None
         return user, 0, None
+
+    def get_user_by_role_id(self, *, db: Session, role_id: int, page: Optional[int] = None):
+        objs = db.query(UniversalUser).filter(UniversalUser.role_id == role_id)
+        return pagination.get_page(objs, page)
 
 
 crud_universal_users = CrudUniversalUser(UniversalUser)
