@@ -80,6 +80,8 @@ order_photo_not_found = -131
 order_photo_user_not_is_executor = -1311
 order_photo_file_is_none = -1312
 
+type_object_not_found = -132
+
 
 def get_raise(code: int):
     if code == -100:
@@ -431,6 +433,13 @@ def get_raise(code: int):
             message="Вы не отправили фотографию!",
             num=1312,
             description="Вы не отправили фотографию!",
+            path="$.body"
+        )
+    if code == -132:
+        raise UnfoundEntity(
+            message="Нет такого типа объектов!",
+            num=132,
+            description="Нет такого типа объектов!",
             path="$.body"
         )
     if code != 0:
