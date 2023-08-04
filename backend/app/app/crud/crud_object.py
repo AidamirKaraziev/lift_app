@@ -14,6 +14,8 @@ from app.models import Object, Organization, FactoryModel, Company, ContactPerso
 from app.crud.crud_universal_user import crud_universal_users
 
 from app.models.contract import Contract
+from app.utils import pagination
+
 
 ROLE_RIGHTS = [ADMIN, FOREMAN]
 ROLE_MECHANIC = [MECHANIC]
@@ -197,6 +199,10 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         if obj is None:
             return None, -116, None
         return obj, 0, None
+
+    def get_objects_by_company_id(self, *, db: Session, company_id: int, page: Optional[int] = None):
+        objs = db.query(Object).filter(Object.company_id == company_id)
+        return pagination.get_page(objs, page)
 
 
 crud_objects = CrudObject(Object)
