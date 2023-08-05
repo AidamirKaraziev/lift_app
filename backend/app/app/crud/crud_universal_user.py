@@ -1,23 +1,12 @@
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional, Any, Union, Dict
+from typing import Optional
 
-from fastapi import UploadFile
-from fastapi.encoders import jsonable_encoder
-from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
 
-
-from app.core.security import verify_password
+from app.core.security import verify_password, get_password_hash
 from app.exceptions import UnprocessableEntity
 
 from app.utils.time_stamp import date_from_timestamp
 
-from app.core.security import get_password_hash
-
-from app.exceptions import UnfoundEntity
 
 from app.models import UniversalUser
 from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate, UniversalUserEntrance, \
@@ -28,13 +17,10 @@ from app.models.working_specialty import WorkingSpecialty
 from app.schemas.foreman import ForemanCreate
 
 from app.crud.base_user import CRUDBaseUser
-
-from app.core.templates_raise import get_raise
-from app.schemas.universal_user import UniversalUserDivision
-
 from app.core.roles import ADMIN
 
-# FOLDER_UNIVERSAL_USER_PHOTO = './static/universal_user_photo/'
+from app.utils import pagination
+
 ADMIN_LIST = [ADMIN]
 
 
@@ -107,6 +93,16 @@ class CrudUniversalUser(CRUDBaseUser[UniversalUser, UniversalUserCreate, Univers
 
     def get_by_email(self, db: Session, *, email: str):
         return db.query(UniversalUser).filter(UniversalUser.email == email).first()
+
+    def get_user_by_id(self, db: Session, *, user_id: int):
+        user = db.query(UniversalUser).filter(UniversalUser.id == user_id).first()
+        if user is None:
+            return None, -130, None
+        return user, 0, None
+
+    def get_user_by_role_id(self, *, db: Session, role_id: int, page: Optional[int] = None):
+        objs = db.query(UniversalUser).filter(UniversalUser.role_id == role_id)
+        return pagination.get_page(objs, page)
 
 
 crud_universal_users = CrudUniversalUser(UniversalUser)

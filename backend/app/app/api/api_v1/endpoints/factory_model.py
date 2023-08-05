@@ -18,11 +18,11 @@ from app.schemas.factory_model import FactoryModelCreate, FactoryModelUpdate
 from app.crud.crud_factory_model import crud_factory_models
 from app.getters.factory_model import get_factory_model
 
+from app.crud.crud_type_object import crud_type_object
+
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_FOREMAN = [ADMIN, FOREMAN]
 
-# PATH_MODEL = "organization"
-# PATH_TYPE = "photo"
 router = APIRouter()
 
 
@@ -64,6 +64,29 @@ def get_data(
     obj, code, indexes = crud_factory_models.get_mod(db=session, factory_model_id=factory_model_id)
     get_raise(code=code)
     return SingleEntityResponse(data=get_factory_model(obj))
+
+
+# GET factory_model by type_object_id
+@router.get('/factory-model/sort-by-type-object/{type_object_id}/',
+            response_model=ListOfEntityResponse,
+            name='get_factory_model_by_type_object_id',
+            description='Получение моделей техники по типу объектов',
+            tags=['Админ панель / Модели']
+            )
+def get_factory_model_by_type_object_id(
+        request: Request,
+        type_object_id: int = Path(..., title='ID модели техники'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    obj, code, indexes = crud_type_object.get_type_object_by_id(db=session, type_object_id=type_object_id)
+    get_raise(code=code)
+
+    data, paginator = crud_factory_models.get_factory_model_by_type_obj_id(db=session, page=page, type_object_id=type_object_id)
+
+    return ListOfEntityResponse(data=[get_factory_model(datum) for datum in data],
+                                meta=Meta(paginator=paginator))
 
 
 # CREATE NEW FACTORY_MODEL
@@ -109,77 +132,6 @@ def update_factory_models(
                                                                             factory_model_id=factory_model_id)
     get_raise(code=code)
     return SingleEntityResponse(data=get_factory_model(factory_model))
-
-#
-# # UPDATE PHOTO
-# @router.put("/organization/{organization_id}/photo/",
-#             response_model=SingleEntityResponse[OrganizationGet],
-#             name='Изменить фотографию',
-#             description='Изменить фотографию для организации, если отправить пустой файл сбрасывает фото',
-#             tags=['Админ панель / Организации'],
-#             )
-# def create_upload_file(
-#         request: Request,
-#         file: Optional[UploadFile] = File(None),
-#         current_user=Depends(deps.get_current_universal_user_by_bearer),
-#         organization_id: int = Path(..., title='Id организации'),
-#         session=Depends(deps.get_db),
-#         ):
-#     # проверка на роли
-#     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
-#     get_raise(code=code)
-#
-#     obj, code, indexes = crud_organizations.get_org(db=session, organization_id=organization_id)
-#     get_raise(code=code)
-#     save_path = crud_organizations.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE,
-#                                                db_obj=obj)
-#     if not save_path:
-#         raise UnfoundEntity(message="Не отправлен загружаемый файл",
-#                             num=2,
-#                             description="Попробуйте загрузить файл еще раз",
-#                             path="$.body",
-#                             )
-#     return SingleEntityResponse(data=get_organization(obj, request=request))
-#
-#
-# # АПИ ПО АРХИВАЦИИ ОРГАНИЗАЦИИ
-# @router.delete('/organization/{organization_id}/archive/',
-#                response_model=SingleEntityResponse,
-#                name='Заморозить организацию',
-#                description='Архивация организации',
-#                tags=['Админ панель / Организации'])
-# def archiving_organizations(
-#         request: Request,
-#         organization_id: int = Path(..., title='Id ОРГАНИЗАЦИИ'),
-#         current_user=Depends(deps.get_current_universal_user_by_bearer),
-#         session=Depends(deps.get_db)
-# ):
-#     obj, code, indexes = crud_organizations.archiving_organization(db=session,
-#                                                                    current_user=current_user,
-#                                                                    organization_id=organization_id,
-#                                                                    role_list=ROLES_ELIGIBLE)
-#     get_raise(code=code)
-#     return SingleEntityResponse(data=get_organization(obj, request=request))
-#
-#
-# # АПИ ПО РАЗАРХИВАЦИИ ОРГАНИЗАЦИИ
-# @router.get('/organization/{organization_id}/unzip/',
-#             response_model=SingleEntityResponse,
-#             name='Разморозка Организации',
-#             description='Разархивация Организации, доступ к приложению размораживается',
-#             tags=['Админ панель / Организации'])
-# def unzipping_organizations(
-#         request: Request,
-#         organization_id: int = Path(..., title='Id ОРГАНИЗАЦИИ'),
-#         current_user=Depends(deps.get_current_universal_user_by_bearer),
-#         session=Depends(deps.get_db)
-# ):
-#     obj, code, indexes = crud_organizations.unzipping_organization(db=session,
-#                                                                    current_user=current_user,
-#                                                                    organization_id=organization_id,
-#                                                                    role_list=ROLES_ELIGIBLE)
-#     get_raise(code=code)
-#     return SingleEntityResponse(data=get_organization(obj, request=request))
 
 
 if __name__ == "__main__":

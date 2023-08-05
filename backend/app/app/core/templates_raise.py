@@ -65,6 +65,23 @@ step_name_is_exist = -1251
 sub_step_not_found = -126
 sub_step_name_is_exist = -1261
 
+fault_category_not_found = -127
+fault_category_name_is_exist = -1271
+
+reason_fault_not_found = -128
+reason_fault_name_is_exist = -1281
+
+order_not_found = -129
+order_name_is_exist = -1291
+
+universal_user_nor_found = -130
+
+order_photo_not_found = -131
+order_photo_user_not_is_executor = -1311
+order_photo_file_is_none = -1312
+
+type_object_not_found = -132
+
 
 def get_raise(code: int):
     if code == -100:
@@ -353,6 +370,76 @@ def get_raise(code: int):
             message="Подэтап с таким названием уже есть!",
             num=1261,
             description="Подэтап с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -127:
+        raise UnfoundEntity(
+            message="Такой категории неисправности не существует!",
+            num=127,
+            description="Выберете существующую категорию неисправности!",
+            path="$.body"
+        )
+    if code == -1271:
+        raise UnprocessableEntity(
+            message="Категория неисправности с таким названием уже есть!",
+            num=1271,
+            description="Категория неисправности с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -128:
+        raise UnfoundEntity(
+            message="Такой причина неисправности не существует!",
+            num=128,
+            description="Выберете существующую причину неисправности!",
+            path="$.body"
+        )
+    if code == -1281:
+        raise UnprocessableEntity(
+            message="Причина неисправности с таким названием уже есть!",
+            num=1281,
+            description="Причина неисправности с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -129:
+        raise UnfoundEntity(
+            message="Такого заказа не существует!",
+            num=129,
+            description="Выберете существующий заказ!",
+            path="$.body"
+        )
+    if code == -1291:
+        raise UnprocessableEntity(
+            message="Заказ с таким названием уже есть!",
+            num=1291,
+            description="Заказ с таким названием уже есть!",
+            path="$.body"
+        )
+    if code == -130:
+        raise UnfoundEntity(
+            message="Нет такого пользователя!",
+            num=130,
+            description="Нет такого пользователя!",
+            path="$.body"
+        )
+    if code == -1311:
+        raise UnprocessableEntity(
+            message="Добавлять фотографии может только назначенный исполнитель!",
+            num=1311,
+            description="Добавлять фотографии может только назначенный исполнитель!",
+            path="$.body"
+        )
+    if code == -1312:
+        raise UnprocessableEntity(
+            message="Вы не отправили фотографию!",
+            num=1312,
+            description="Вы не отправили фотографию!",
+            path="$.body"
+        )
+    if code == -132:
+        raise UnfoundEntity(
+            message="Нет такого типа объектов!",
+            num=132,
+            description="Нет такого типа объектов!",
             path="$.body"
         )
     if code != 0:

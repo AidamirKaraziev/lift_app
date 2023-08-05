@@ -3,21 +3,14 @@ import logging
 from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
 from typing import Optional
 
-from app.core.response import ListOfEntityResponse
-
 from app.api import deps
 
-from app.core.response import Meta
-
-from app.core.response import SingleEntityResponse
-from app.exceptions import UnprocessableEntity, UnfoundEntity
+from app.core.response import Meta, SingleEntityResponse, ListOfEntityResponse
+from app.exceptions import UnprocessableEntity, UnfoundEntity, InaccessibleEntity
 
 from app.crud.crud_division import crud_division
-from app.exceptions import InaccessibleEntity
 from app.getters.division import get_division
-from app.schemas.divisions import DivisionCreate
-
-from app.schemas.divisions import DivisionUpdate
+from app.schemas.divisions import DivisionCreate, DivisionUpdate
 
 from app.core.templates_raise import get_raise
 from app.crud.crud_universal_user import crud_universal_users
@@ -158,54 +151,6 @@ def create_upload_file(
                             )
     return SingleEntityResponse(data=get_division(crud_division.get(db=session, id=division_id), request=request))
 
-#
-# # UPDATE PHOTO
-# @router.put("/divisions/{division_id}/photo/",
-#             response_model=SingleEntityResponse,
-#             name='Изменить фотографию',
-#             description='Изменить фотографию в участке',
-#             tags=['Админ панель / Участки'],
-#             )
-# def create_upload_file(
-#         request: Request,
-#         file: Optional[UploadFile] = File(None),
-#         division_id: int = Path(..., title='ID компании'),
-#         current_user=Depends(deps.get_current_universal_user_by_bearer),
-#         session=Depends(deps.get_db),
-#         ):
-#     db_obj, code, index = crud_division.adding_photo(db=session, file=file, obj_id=division_id, user=current_user)
-#     if code == -1:
-#         raise InaccessibleEntity(
-#             message="Вы не обладаете правами администратора или прораба",
-#             num=1,
-#             description="Вы не обладаете правами администратора или прораба!",
-#             path="$.body",
-#         )
-#     return SingleEntityResponse(data=get_division(db_obj, request=request))
-#
-
 
 if __name__ == "__main__":
     logging.info('Running...')
-
-
-#
-# # Апи удаляет город
-# @router.delete('/locations/{location_id}/',
-#                response_model=SingleEntityResponse,
-#                name='Удалить город',
-#                description='Полностью удаляет город',
-#                tags=['Админ панель / Города'])
-# def delete_location(
-#         location_id: int = Path(..., title='Id проекта'),
-#         # current_user=Depends(deps.get_current_user_by_bearer),
-#         session=Depends(deps.get_db)
-# ):
-#     if crud_location.get(db=session, id=location_id) is None:
-#         raise UnfoundEntity(
-#             message="Города с таким id нет!",
-#             num=1,
-#             description="Введите корректный id!",
-#             path="$.body"
-#         )
-#     return SingleEntityResponse(data=crud_location.remove(db=session, id=location_id))

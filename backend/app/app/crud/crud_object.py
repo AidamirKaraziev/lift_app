@@ -3,45 +3,19 @@ import os
 import shutil
 import uuid
 from typing import Optional, Any, Union, Dict
-
-from fastapi import UploadFile
-from fastapi.encoders import jsonable_encoder
 from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
-
-
-from app.core.security import verify_password
-from app.exceptions import UnprocessableEntity
-
 from app.utils.time_stamp import date_from_timestamp
-
-from app.core.security import get_password_hash
-
-from app.exceptions import UnfoundEntity
-
-from app.models import UniversalUser
-from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate, UniversalUserEntrance, \
-    UniversalUserRequest
-
-from app.models import Location, Division
-from app.models.working_specialty import WorkingSpecialty
-from app.schemas.foreman import ForemanCreate
-
-from app.crud.base_user import CRUDBaseUser
-
-from app.core.templates_raise import get_raise
-from app.schemas.universal_user import UniversalUserDivision
 
 from app.core.roles import ADMIN, FOREMAN, MECHANIC
 
-
-from app.models import Object
 from app.schemas.object import ObjectCreate, ObjectUpdate
-
-from app.models import Organization, FactoryModel, Company, ContactPerson
-from app.models.contract import Contract
-
+from app.models import Object, Organization, FactoryModel, Company, ContactPerson, Location, Division, UniversalUser
 from app.crud.crud_universal_user import crud_universal_users
+
+from app.models.contract import Contract
+from app.utils import pagination
+
 
 ROLE_RIGHTS = [ADMIN, FOREMAN]
 ROLE_MECHANIC = [MECHANIC]
@@ -225,6 +199,10 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         if obj is None:
             return None, -116, None
         return obj, 0, None
+
+    def get_objects_by_company_id(self, *, db: Session, company_id: int, page: Optional[int] = None):
+        objs = db.query(Object).filter(Object.company_id == company_id)
+        return pagination.get_page(objs, page)
 
 
 crud_objects = CrudObject(Object)

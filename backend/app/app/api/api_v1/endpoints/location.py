@@ -51,7 +51,7 @@ def create_locations(
         # current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
 ):
-    obj = crud_location.get_by_name(db=session, name=new_data.name)
+    obj = crud_location.get_by_name_old(db=session, name=new_data.name)
     if obj is not None:
         raise UnprocessableEntity(
             message="Такой город уже есть в базе данных",

@@ -1,18 +1,11 @@
-import glob
-import os
-import shutil
-import uuid
 from typing import Optional
-from fastapi import UploadFile
-
-from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
 
-from app.crud.crud_universal_user import crud_universal_users
-from app.models import UniversalUser
+from app.crud.base import CRUDBase
 
 from app.models import FactoryModel
 from app.schemas.factory_model import FactoryModelCreate, FactoryModelUpdate
+from app.utils import pagination
 
 
 class CrudFactoryModel(CRUDBase[FactoryModel, FactoryModelCreate, FactoryModelUpdate]):
@@ -50,37 +43,15 @@ class CrudFactoryModel(CRUDBase[FactoryModel, FactoryModelCreate, FactoryModelUp
         db_obj = super().update(db=db, db_obj=this_model, obj_in=new_data)
         return db_obj, 0, None
 
-    # def archiving_organization(self, db: Session, *, current_user: UniversalUser, organization_id: int, role_list: list):
-    #     # проверить роль
-    #     code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
-    #     if code != 0:
-    #         return None, code, None
-    #     # проверить есть ли такая компания
-    #     obj = super().get(db=db, id=organization_id)
-    #     if obj is None:
-    #         return None, -114, None
-    #     # вызвать архивацию
-    #     obj, code, indexes = super().archiving(db=db, db_obj=obj)
-    #     return obj, code, None
-    #
-    # def unzipping_organization(self, db: Session, *, current_user: UniversalUser, organization_id: int, role_list: list):
-    #     # проверить роль
-    #     code = crud_universal_users.check_role_list(current_user=current_user, role_list=role_list)
-    #     if code != 0:
-    #         return None, code, None
-    #     # проверить есть ли такая компания
-    #     obj = super().get(db=db, id=organization_id)
-    #     if obj is None:
-    #         return None, -114, None
-    #     # вызвать архивацию
-    #     obj, code, indexes = super().unzipping(db=db, db_obj=obj)
-    #     return obj, code, None
-
     def get_mod(self, *, db: Session, factory_model_id: int):
         mod = db.query(FactoryModel).filter(FactoryModel.id == factory_model_id).first()
         if mod is None:
             return None, -115, None
         return mod, 0, None
+
+    def get_factory_model_by_type_obj_id(self, *, db: Session, type_object_id: int, page: Optional[int] = None):
+        objs = db.query(FactoryModel).filter(FactoryModel.type_object_id == type_object_id)
+        return pagination.get_page(objs, page)
 
 
 crud_factory_models = CrudFactoryModel(FactoryModel)

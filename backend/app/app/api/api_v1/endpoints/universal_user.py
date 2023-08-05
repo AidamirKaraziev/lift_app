@@ -25,6 +25,8 @@ from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from app.core.templates_raise import get_raise
 from app.crud.crud_company import crud_company
 
+from app.crud.crud_role import crud_role
+
 PATH_MODEL = "universal_user"
 PATH_TYPE_PHOTO = "photo"
 PATH_TYPE_IDENTITY_CARD = "identity_card"
@@ -65,6 +67,28 @@ def get_data(
     data, paginator = crud_universal_users.get_multi(db=session, page=page)
 
     return ListOfEntityResponse(data=[get_universal_user(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+# GET user by role_id
+@router.get('/universal-user/sort-by-role/{role_id}/',
+            response_model=ListOfEntityResponse,
+            name='get_users_by_role_id',
+            description='Получение пользователей по роли',
+            tags=['Админ панель / Пользователь']
+            )
+def get_users_by_role_id(
+        request: Request,
+        role_id: int = Path(..., title='ID модели техники'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    obj, code, indexes = crud_role.get_role_by_id(db=session, role_id=role_id)
+    get_raise(code=code)
+    data, paginator = crud_universal_users.get_user_by_role_id(db=session, page=page, role_id=role_id)
+
+    return ListOfEntityResponse(data=[get_universal_user(datum, request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 

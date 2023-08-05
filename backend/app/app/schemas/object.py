@@ -3,10 +3,6 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.schemas.location import LocationGet
-from app.schemas.role import RoleGet
-from app.schemas.working_specialty import WorkingSpecialtyGet
-
 from app.schemas.company import CompanyGet
 from app.schemas.divisions import DivisionGet
 
@@ -52,21 +48,6 @@ class ObjectBase(BaseModel):
     act_pto: Optional[str]
     geo: Optional[str]
     is_actual: Optional[bool]
-
-    # name: str
-    # email: str
-    # password: str
-    # contact_phone: Optional[str]
-    # birthday: Optional[Date]
-    # photo: Optional[str]
-    # location_id: Optional[LocationGet]
-    # role_id: Optional[RoleGet]
-    # working_specialty_id: Optional[WorkingSpecialtyGet]
-    # identity_card: Optional[str]
-    # company_id: Optional[CompanyGet]
-    # division_id: Optional[DivisionGet]
-    # qualification_file: Optional[str]
-    # date_of_employment: Optional[Date]
 
 
 # Создание юзера

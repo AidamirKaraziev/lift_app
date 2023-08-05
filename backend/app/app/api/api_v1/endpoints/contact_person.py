@@ -67,6 +67,29 @@ def get_data(
                                 meta=Meta(paginator=paginator))
 
 
+# GET contact_person by company_id
+@router.get('/contact-person/sort-by-company/{company_id}/',
+            response_model=ListOfEntityResponse,
+            name='get_contact_person_by_company_id',
+            description='Получение контактных лиц по компании',
+            tags=['Админ панель / Контактное лицо']
+            )
+def get_contact_person_by_company_id(
+        request: Request,
+        company_id: int = Path(..., title='ID модели техники'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+
+    data, paginator = crud_contact_person.get_contact_person_by_company_id(db=session, page=page, company_id=company_id)
+
+    return ListOfEntityResponse(data=[get_contact_person(datum) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
 # CREATE NEW contact person
 @router.post('/contact-person/',
              response_model=SingleEntityResponse,

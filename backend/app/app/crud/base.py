@@ -97,8 +97,20 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.commit()
         return obj
 
-    def get_by_name(self, db: Session, name: str) -> Optional[ModelType]:
+    def get_by_name_old(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
+
+    def get_by_name(self, db: Session, name: str, is_exist: int) -> Optional[ModelType]:
+        obj = db.query(self.model).filter(self.model.name == name).first()
+        if obj is not None:
+            return None, is_exist, None
+        return obj, 0, None
+
+    def get_by_id(self, db: Session, id: int, not_found: int) -> Optional[ModelType]:
+        obj = db.query(self.model).filter(self.model.id == id).first()
+        if obj is None:
+            return None, not_found, None
+        return obj, 0, None
 
     def adding_file(self, db: Session, *, file: Optional[UploadFile], path_model: str, path_type: str,
                     db_obj: ModelType):

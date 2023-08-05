@@ -2,25 +2,20 @@ import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
 from fastapi.params import Path
 from app.api import deps
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 
-
 from app.core.templates_raise import get_raise
-
-
 from app.crud.crud_object import crud_objects
 from app.getters.object import get_object
 from app.schemas.object import ObjectCreate, ObjectUpdate, ObjectGet
 
 from app.core.roles import ADMIN, FOREMAN
 
-from app.exceptions import UnfoundEntity
+from app.crud.crud_company import crud_company
 
 PATH_MODEL = "objects"
 PATH_TYPE_LETTER_OF_APPOINTMENT = "letter_of_appointment"
@@ -49,6 +44,27 @@ def get_data(
     data, paginator = crud_objects.get_multi(db=session, page=page)
 
     return ListOfEntityResponse(data=[get_object(obj=datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+# GET contact_person by company_id
+@router.get('/object/sort-by-company/{company_id}/',
+            response_model=ListOfEntityResponse,
+            name='get_objects_by_company_id',
+            description='Получение объектов одной компании',
+            tags=['Админ панель / Объекты']
+            )
+def get_objects_by_company_id(
+        request: Request,
+        company_id: int = Path(..., title='ID модели техники'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+    data, paginator = crud_objects.get_objects_by_company_id(db=session, page=page, company_id=company_id)
+    return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 
