@@ -13,7 +13,7 @@ from app.core.config import settings
 # Я не знаю что делает эта часть кода, но вот так проект запускается
 from app.db import session
 from app.db.session import get_session
-from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory
+from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault
 
 
 def init_db(db: Session) -> None:
@@ -390,6 +390,180 @@ def create_fault_category():
     db.close()
 
 
+def check_reason_fault(db: Session):
+    r_f_1 = db.query(ReasonFault).filter(ReasonFault.name == 'Авария главного привода по УКСЛ.', ReasonFault.id == 1).first()
+    r_f_2 = db.query(ReasonFault).filter(ReasonFault.name == 'АБЛ', ReasonFault.id == 2).first()
+    r_f_3 = db.query(ReasonFault).filter(ReasonFault.name == 'Не сработал датчик УБ', ReasonFault.id == 3).first()
+    r_f_4 = db.query(ReasonFault).filter(ReasonFault.name == 'NAV - не готов, очень серьезная ошибка',
+                                         ReasonFault.id == 4).first()
+    r_f_5 = db.query(ReasonFault).filter(ReasonFault.name == '43 - не исправна цепь блокировки.',
+                                         ReasonFault.id == 5).first()
+    r_f_6 = db.query(ReasonFault).filter(ReasonFault.name == '160 - проникновение в шахту.',
+                                         ReasonFault.id == 6).first()
+    r_f_7 = db.query(ReasonFault).filter(ReasonFault.name == '28 - залипание верхних и нижних концевых выключателей.',
+                                         ReasonFault.id == 7).first()
+    r_f_8 = db.query(ReasonFault).filter(ReasonFault.name == '17 - отсутствует сигнал от инвертора.',
+                                         ReasonFault.id == 8).first()
+    r_f_9 = db.query(ReasonFault).filter(ReasonFault.name == '47 - многократный реверс.', ReasonFault.id == 9).first()
+    r_f_10 = db.query(ReasonFault).filter(ReasonFault.name == '41 - разрыв цепи безопасности.',
+                                          ReasonFault.id == 10).first()
+    r_f_11 = db.query(ReasonFault).filter(ReasonFault.name == '72 - разомкнута KV-15 или выключателей ДК.',
+                                          ReasonFault.id == 11).first()
+    r_f_12 = db.query(ReasonFault).filter(ReasonFault.name == 'ТО.', ReasonFault.id == 12).first()
+    r_f_13 = db.query(ReasonFault).filter(ReasonFault.name == '21 - время перемещения превышает заданное время.',
+                                          ReasonFault.id == 13).first()
+    r_f_14 = db.query(ReasonFault).filter(ReasonFault.name == '10 - разрыв цепи аварийной опасности.',
+                                          ReasonFault.id == 14).first()
+    r_f_15 = db.query(ReasonFault).filter(ReasonFault.name == 'Нет Связи.', ReasonFault.id == 15).first()
+    r_f_16 = db.query(ReasonFault).filter(ReasonFault.name == '44 - Охрана шахты.', ReasonFault.id == 16).first()
+    r_f_17 = db.query(ReasonFault).filter(ReasonFault.name == 'Сгорел блок обь.', ReasonFault.id == 17).first()
+    r_f_18 = db.query(ReasonFault).filter(ReasonFault.name == 'Пожарная опасность.', ReasonFault.id == 18).first()
+    r_f_19 = db.query(ReasonFault).filter(ReasonFault.name == '5 - ошибка тормоза.', ReasonFault.id == 19).first()
+    r_f_20 = db.query(ReasonFault).filter(ReasonFault.name == 'Перезапуск в присутствии механика.',
+                                          ReasonFault.id == 20).first()
+    if r_f_1 is not None:
+        r_f_1_is_exist = True
+    else:
+        r_f_1_is_exist = False
+    if r_f_2 is not None:
+        r_f_2_is_exist = True
+    else:
+        r_f_2_is_exist = False
+    if r_f_3 is not None:
+        r_f_3_is_exist = True
+    else:
+        r_f_3_is_exist = False
+
+    if r_f_4 is not None:
+        r_f_4_is_exist = True
+    else:
+        r_f_4_is_exist = False
+    if r_f_5 is not None:
+        r_f_5_is_exist = True
+    else:
+        r_f_5_is_exist = False
+    if r_f_6 is not None:
+        r_f_6_is_exist = True
+    else:
+        r_f_6_is_exist = False
+    if r_f_7 is not None:
+        r_f_7_is_exist = True
+    else:
+        r_f_7_is_exist = False
+    if r_f_8 is not None:
+        r_f_8_is_exist = True
+    else:
+        r_f_8_is_exist = False
+    if r_f_9 is not None:
+        r_f_9_is_exist = True
+    else:
+        r_f_9_is_exist = False
+    if r_f_10 is not None:
+        r_f_10_is_exist = True
+    else:
+        r_f_10_is_exist = False
+    if r_f_11 is not None:
+        r_f_11_is_exist = True
+    else:
+        r_f_11_is_exist = False
+    if r_f_12 is not None:
+        r_f_12_is_exist = True
+    else:
+        r_f_12_is_exist = False
+    if r_f_13 is not None:
+        r_f_13_is_exist = True
+    else:
+        r_f_13_is_exist = False
+
+    if r_f_14 is not None:
+        r_f_14_is_exist = True
+    else:
+        r_f_14_is_exist = False
+    if r_f_15 is not None:
+        r_f_15_is_exist = True
+    else:
+        r_f_15_is_exist = False
+    if r_f_16 is not None:
+        r_f_16_is_exist = True
+    else:
+        r_f_16_is_exist = False
+    if r_f_17 is not None:
+        r_f_17_is_exist = True
+    else:
+        r_f_17_is_exist = False
+    if r_f_18 is not None:
+        r_f_18_is_exist = True
+    else:
+        r_f_18_is_exist = False
+    if r_f_19 is not None:
+        r_f_19_is_exist = True
+    else:
+        r_f_19_is_exist = False
+    if r_f_20 is not None:
+        r_f_20_is_exist = True
+    else:
+        r_f_20_is_exist = False
+
+    return r_f_1_is_exist, r_f_2_is_exist, r_f_3_is_exist, r_f_4_is_exist, r_f_5_is_exist, r_f_6_is_exist, \
+           r_f_7_is_exist, r_f_8_is_exist, r_f_9_is_exist, r_f_10_is_exist, r_f_11_is_exist, r_f_12_is_exist,\
+           r_f_13_is_exist, r_f_14_is_exist, r_f_15_is_exist, r_f_16_is_exist, r_f_17_is_exist, r_f_18_is_exist, \
+           r_f_19_is_exist, r_f_20_is_exist
+
+
+def create_reason_fault():
+    for db in get_session():
+        reasons_faults = []
+    r_f_1_is_exist, r_f_2_is_exist, r_f_3_is_exist, r_f_4_is_exist, r_f_5_is_exist, r_f_6_is_exist, \
+    r_f_7_is_exist, r_f_8_is_exist, r_f_9_is_exist, r_f_10_is_exist, r_f_11_is_exist, r_f_12_is_exist, \
+    r_f_13_is_exist, r_f_14_is_exist, r_f_15_is_exist, r_f_16_is_exist, r_f_17_is_exist, r_f_18_is_exist, \
+    r_f_19_is_exist, r_f_20_is_exist = check_reason_fault(db=db)
+
+    if not r_f_1_is_exist:
+        reasons_faults.append(ReasonFault(id=1, name='Авария главного привода по УКСЛ.'))
+    if not r_f_2_is_exist:
+        reasons_faults.append(ReasonFault(id=2, name='АБЛ'))
+    if not r_f_3_is_exist:
+        reasons_faults.append(ReasonFault(id=3, name='Не сработал датчик УБ'))
+    if not r_f_4_is_exist:
+        reasons_faults.append(ReasonFault(id=4, name='NAV - не готов, очень серьезная ошибка'))
+    if not r_f_5_is_exist:
+        reasons_faults.append(ReasonFault(id=5, name="43 - не исправна цепь блокировки."))
+    if not r_f_6_is_exist:
+        reasons_faults.append(ReasonFault(id=6, name="160 - проникновение в шахту."))
+    if not r_f_7_is_exist:
+        reasons_faults.append(ReasonFault(id=7, name="28 - залипание верхних и нижних концевых выключателей."))
+    if not r_f_8_is_exist:
+        reasons_faults.append(ReasonFault(id=8, name="17 - отсутствует сигнал от инвертора."))
+    if not r_f_9_is_exist:
+        reasons_faults.append(ReasonFault(id=9, name="47 - многократный реверс."))
+    if not r_f_10_is_exist:
+        reasons_faults.append(ReasonFault(id=10, name="41 - разрыв цепи безопасности."))
+    if not r_f_11_is_exist:
+        reasons_faults.append(ReasonFault(id=11, name="72 - разомкнута KV-15 или выключателей ДК."))
+    if not r_f_12_is_exist:
+        reasons_faults.append(ReasonFault(id=12, name="ТО"))
+    if not r_f_13_is_exist:
+        reasons_faults.append(ReasonFault(id=13, name="21 - время перемещения превышает заданное время."))
+    if not r_f_14_is_exist:
+        reasons_faults.append(ReasonFault(id=14, name="10 - разрыв цепи аварийной опасности."))
+    if not r_f_15_is_exist:
+        reasons_faults.append(ReasonFault(id=15, name="Нет Связи."))
+    if not r_f_16_is_exist:
+        reasons_faults.append(ReasonFault(id=16, name="44 - Охрана шахты."))
+    if not r_f_17_is_exist:
+        reasons_faults.append(ReasonFault(id=17, name="Сгорел блок обь."))
+    if not r_f_18_is_exist:
+        reasons_faults.append(ReasonFault(id=18, name="Пожарная опасность."))
+    if not r_f_19_is_exist:
+        reasons_faults.append(ReasonFault(id=19, name="5 - ошибка тормоза."))
+    if not r_f_20_is_exist:
+        reasons_faults.append(ReasonFault(id=20, name="Перезапуск в присутствии механика."))
+
+    [db.add(r_f) for r_f in reasons_faults]
+    db.commit()
+    db.close()
+
+
 def create_initial_data():
     try:
         create_roles()
@@ -415,3 +589,7 @@ def create_initial_data():
         create_fault_category()
     except:
         print("НЕ СОЗДАЛ БАЗУ ДАННЫХ ДЛЯ КАТЕГОРИЙ НЕИСПРАВНОСТИ")
+    try:
+        create_reason_fault()
+    except:
+        print("НЕ СОЗДАЛ БАЗУ ДАННЫХ ДЛЯ ПРИЧИН НЕИСПРАВНОСТИ")
