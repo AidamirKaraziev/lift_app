@@ -28,3 +28,4 @@ from .order import Order
 from .fault_category import FaultCategory
 from .reason_fault import ReasonFault
 from .order_photo import OrderPhoto
+from .planned_to import PlannedTO
