@@ -1,49 +1,23 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
+from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query, Response, Request
 from fastapi.params import Path
-
-# from app.api import deps
-from app.core.response import SingleEntityResponse
-
-from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
-
-from app.getters.universal_user import get_universal_user
-
 from app.api import deps
 
-# from app.schemas.admin import AdminGet
-
-from app.crud.crud_admin import crud_admin
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
-from app.schemas.universal_user import UniversalUserRequest
-
-from app.schemas.universal_user import UniversalUserUpdate
-
-from fastapi import Response, Request
-from mimetypes import guess_type
-
-from os.path import isfile
-
-from app.schemas.universal_user import EmployeeCreate
-from app.schemas.admin import AdminCreate
-from app.schemas.client import ClientCreate
-
+from app.core.response import SingleEntityResponse, ListOfEntityResponse, Meta
 from app.core.templates_raise import get_raise
-
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
 
+from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
+
+from app.crud.crud_universal_user import crud_universal_users
 from app.crud.crud_contract import crud_contracts
+from app.crud.crud_company import crud_company
+
+from app.schemas.contract import ContractGet, ContractCreate, ContractUpdate
 from app.getters.contract import get_contract
-from app.schemas.contract import ContractCreate, ContractUpdate
 
-from app.core.response import ListOfEntityResponse, Meta
-
-from app.schemas.contract import ContractGet
 
 PATH_MODEL = "contract"
 PATH_TYPE = "file"
@@ -78,6 +52,28 @@ def create_contract(
                                                            having_rights=ROLE_ADMIN)
     get_raise(code=code)
     return SingleEntityResponse(data=get_contract(obj=contract, request=request))
+
+
+@router.get('/contract/sort-by-company/{company_id}/',
+            response_model=ListOfEntityResponse,
+            name='get_contract_by_company_id',
+            description='Получение договоров по компании',
+            tags=['Админ панель / Договор']
+            )
+def get_contract_by_company_id(
+        request: Request,
+        company_id: int = Path(..., title='ID модели техники'),
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    get_raise(code=code)
+
+    data, paginator = crud_contracts.get_contract_by_company_id(db=session, page=page, company_id=company_id)
+
+    return ListOfEntityResponse(data=[get_contract(datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
 
 
 # Вывод всех договоров
