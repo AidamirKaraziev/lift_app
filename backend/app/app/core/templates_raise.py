@@ -82,6 +82,9 @@ order_photo_file_is_none = -1312
 
 type_object_not_found = -132
 
+planned_to_not_found = -133
+year_object_uc_is_exist = -1331
+
 
 def get_raise(code: int):
     if code == -100:
@@ -440,6 +443,20 @@ def get_raise(code: int):
             message="Нет такого типа объектов!",
             num=132,
             description="Нет такого типа объектов!",
+            path="$.body"
+        )
+    if code == -133:
+        raise UnfoundEntity(
+            message="Нет такого планового ТО!",
+            num=133,
+            description="Нет такого планового ТО!",
+            path="$.body"
+        )
+    if code == -1331:
+        raise UnprocessableEntity(
+            message="Плановые ТО для этого объекта на этот год уже есть!",
+            num=1331,
+            description="Плановые ТО для этого объекта на этот год уже есть!",
             path="$.body"
         )
     if code != 0:

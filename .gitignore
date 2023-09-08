@@ -3,7 +3,7 @@
 .idea
 пароль.txt
 __pycache__/
-
+block_schemas/
 
 **/__pycache__
 **/logs

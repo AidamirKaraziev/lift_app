@@ -1,26 +1,21 @@
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional, Any, Union, Dict
-
-from fastapi import UploadFile
-
-from app.crud.base import CRUDBase
-
+from typing import Optional, Any, Union, Dict, List, Tuple
 from sqlalchemy.orm import Session
 
+from app.core.response import Paginator
+from app.utils.time_stamp import date_from_timestamp
+from app.utils import pagination
 
 from app.models import UniversalUser
+from app.models.contract import Contract
+
+from app.crud.base import CRUDBase
+from app.crud.base_user import ModelType
 from app.crud.crud_company import crud_company
 from app.crud.crud_cost_type import crud_cost_types
 from app.crud.crud_type_contract import crud_type_contract
 from app.crud.crud_universal_user import crud_universal_users
-from app.models.contract import Contract
-from app.schemas.contract import ContractCreate, ContractUpdate
-from app.utils.time_stamp import date_from_timestamp
 
-from app.crud.base_user import ModelType
+from app.schemas.contract import ContractCreate, ContractUpdate
 
 
 class CrudContract(CRUDBase[Contract, ContractCreate, ContractUpdate]):
@@ -120,6 +115,11 @@ class CrudContract(CRUDBase[Contract, ContractCreate, ContractUpdate]):
         # вызвать архивацию
         obj, code, indexes = super().unzipping(db=db, db_obj=obj)
         return obj, code, None
+
+    def get_contract_by_company_id(self, *, db: Session, company_id: int, page: Optional[int] = None
+                                   ) -> Tuple[List[ModelType], Paginator]:
+        objs = db.query(Contract).filter(Contract.company_id == company_id)
+        return pagination.get_page(objs, page)
 
 
 crud_contracts = CrudContract(Contract)

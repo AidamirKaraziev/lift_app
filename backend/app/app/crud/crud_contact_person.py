@@ -1,27 +1,19 @@
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional
-from fastapi import UploadFile
+from typing import Optional, Tuple, List
 
-
-from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
+from app.core.roles import ADMIN, FOREMAN, CLIENT
+from app.core.response import Paginator
+from app.utils import pagination
 
 from app.models.company import Company
-
-
 from app.models import UniversalUser
 from app.models.contact_person import ContactPerson
-from app.schemas.contact_person import ContactPersonCreate, ContactPersonUpdate
 
-
-from app.core.roles import ADMIN, FOREMAN, CLIENT
-
+from app.crud.base import CRUDBase, ModelType
 from app.crud.crud_universal_user import crud_universal_users
 
-from app.utils import pagination
+from app.schemas.contact_person import ContactPersonCreate, ContactPersonUpdate
+
 
 DATA_FOLDER_CONTACT_PERSON = "./static/photo_contact_person/"
 ADMIN_FOREMAN_LIST = [ADMIN, FOREMAN, CLIENT]
@@ -104,7 +96,8 @@ class CrudContactPerson(CRUDBase[ContactPerson, ContactPersonCreate, ContactPers
         obj, code, indexes = super().unzipping(db=db, db_obj=obj)
         return obj, code, None
 
-    def get_contact_person_by_company_id(self, *, db: Session, company_id: int, page: Optional[int] = None):
+    def get_contact_person_by_company_id(self, *, db: Session, company_id: int, page: Optional[int] = None
+                                         ) -> Tuple[List[ModelType], Paginator]:
         objs = db.query(ContactPerson).filter(ContactPerson.company_id == company_id)
         return pagination.get_page(objs, page)
 

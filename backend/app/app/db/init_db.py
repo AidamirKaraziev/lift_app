@@ -1,19 +1,15 @@
 from sqlalchemy.orm import Session
 
 from app import crud, schemas
-# from app.core.config import
 from app.db import base  # noqa: F401
 
 # make sure all SQL Alchemy models are imported (app.db.base) before initializing DB
 # otherwise, SQL Alchemy might fail to initialize relationships properly
 # for more details: https://github.com/tiangolo/full-stack-fastapi-postgresql/issues/28
 from app.core.config import settings
-
-
-# Я не знаю что делает эта часть кода, но вот так проект запускается
 from app.db import session
 from app.db.session import get_session
-from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault
+from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault, TypeAct
 
 
 def init_db(db: Session) -> None:
@@ -76,8 +72,8 @@ def create_roles():
     for db in get_session():
         roles = []
 
-    admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist, \
-           dispatcher_role_is_exist, client_role_is_exist = check_roles(db=db)
+    admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist,\
+    dispatcher_role_is_exist, client_role_is_exist = check_roles(db=db)
     if not admin_role_is_exist:
         roles.append(Role(id=1, name="admin"))
 
@@ -409,7 +405,7 @@ def check_reason_fault(db: Session):
                                           ReasonFault.id == 10).first()
     r_f_11 = db.query(ReasonFault).filter(ReasonFault.name == '72 - разомкнута KV-15 или выключателей ДК.',
                                           ReasonFault.id == 11).first()
-    r_f_12 = db.query(ReasonFault).filter(ReasonFault.name == 'ТО.', ReasonFault.id == 12).first()
+    r_f_12 = db.query(ReasonFault).filter(ReasonFault.name == 'ТО', ReasonFault.id == 12).first()
     r_f_13 = db.query(ReasonFault).filter(ReasonFault.name == '21 - время перемещения превышает заданное время.',
                                           ReasonFault.id == 13).first()
     r_f_14 = db.query(ReasonFault).filter(ReasonFault.name == '10 - разрыв цепи аварийной опасности.',
@@ -564,6 +560,52 @@ def create_reason_fault():
     db.close()
 
 
+def check_type_acts(db: Session):
+    ta_1 = db.query(TypeAct).filter(TypeAct.name == 'ТО 1', TypeAct.id == 1).first()
+    ta_3 = db.query(TypeAct).filter(TypeAct.name == 'ТО 3', TypeAct.id == 3).first()
+    ta_6 = db.query(TypeAct).filter(TypeAct.name == 'ТО 6', TypeAct.id == 6).first()
+    ta_12 = db.query(TypeAct).filter(TypeAct.name == 'ТО 12', TypeAct.id == 12).first()
+
+    if ta_1 is not None:
+        ta_1_is_exist = True
+    else:
+        ta_1_is_exist = False
+    if ta_3 is not None:
+        ta_3_is_exist = True
+    else:
+        ta_3_is_exist = False
+    if ta_6 is not None:
+        ta_6_is_exist = True
+    else:
+        ta_6_is_exist = False
+
+    if ta_12 is not None:
+        ta_12_is_exist = True
+    else:
+        ta_12_is_exist = False
+
+    return ta_1_is_exist, ta_3_is_exist, ta_6_is_exist, ta_12_is_exist
+
+
+def create_type_act():
+    for db in get_session():
+        type_acts = []
+    ta_1_is_exist, ta_3_is_exist, ta_6_is_exist, ta_12_is_exist = check_type_acts(db=db)
+
+    if not ta_1_is_exist:
+        type_acts.append(TypeAct(id=1, name='ТО 1'))
+    if not ta_3_is_exist:
+        type_acts.append(TypeAct(id=3, name='ТО 3'))
+    if not ta_6_is_exist:
+        type_acts.append(TypeAct(id=6, name='ТО 6'))
+    if not ta_12_is_exist:
+        type_acts.append(TypeAct(id=12, name='ТО 12'))
+
+    [db.add(ta) for ta in type_acts]
+    db.commit()
+    db.close()
+
+
 def create_initial_data():
     try:
         create_roles()
@@ -593,3 +635,7 @@ def create_initial_data():
         create_reason_fault()
     except:
         print("НЕ СОЗДАЛ БАЗУ ДАННЫХ ДЛЯ ПРИЧИН НЕИСПРАВНОСТИ")
+    try:
+        create_type_act()
+    except:
+        print("НЕ СОЗДАЛ БАЗУ ДАННЫХ ДЛЯ ТИПОВ АКТОВ")

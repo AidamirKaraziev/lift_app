@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field
 from app.schemas.location import LocationGet
 from app.schemas.role import RoleGet
 from app.schemas.working_specialty import WorkingSpecialtyGet
-
 from app.schemas.company import CompanyGet
 from app.schemas.divisions import DivisionGet
 
@@ -69,7 +68,7 @@ class UniversalUserCreate(BaseModel):
 # Изменение юзера
 class UniversalUserUpdate(BaseModel):
     # id: int
-    name: str
+    name: Optional[str]
     # email: str
     contact_phone: Optional[str]
     birthday: Optional[int]
@@ -91,7 +90,7 @@ class UniversalUserGet(BaseModel):
     name: str
     email: str
     contact_phone: Optional[str]
-    birthday: Optional[Date]
+    birthday: Optional[int]
     photo: Optional[str]
     location_id: Optional[LocationGet]
     role_id: Optional[RoleGet]
@@ -100,7 +99,7 @@ class UniversalUserGet(BaseModel):
     qualification_file: Optional[str]
     company_id: Optional[CompanyGet]
     division_id: Optional[DivisionGet]
-    date_of_employment: Optional[Date]
+    date_of_employment: Optional[int]
     is_actual: Optional[bool]
 
 
