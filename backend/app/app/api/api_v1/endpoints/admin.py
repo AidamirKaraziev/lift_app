@@ -1,44 +1,29 @@
 import logging
 from typing import Optional
+from os.path import isfile
+from mimetypes import guess_type
 
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
+from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query, Response, Request
 from fastapi.params import Path
-
-# from app.api import deps
-from app.core.response import SingleEntityResponse
-
-from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
-
-from app.getters.universal_user import get_universal_user
 
 from app.api import deps
 
-# from app.schemas.admin import AdminGet
+from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+from app.core.response import SingleEntityResponse
+from app.core.templates_raise import get_raise
 
 from app.crud.crud_admin import crud_admin
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
-from app.schemas.universal_user import UniversalUserRequest
+from app.crud.crud_universal_user import crud_universal_users
 
-from app.schemas.universal_user import UniversalUserUpdate
-
-from fastapi import Response, Request
-from mimetypes import guess_type
-
-from os.path import isfile
-
-from app.schemas.universal_user import EmployeeCreate
 from app.schemas.admin import AdminCreate
 from app.schemas.client import ClientCreate
+from app.schemas.universal_user import EmployeeCreate, UniversalUserUpdate, UniversalUserDivision,\
+    UniversalUserEntrance, UniversalUserGet, UniversalUserCompany
 
-from app.core.templates_raise import get_raise
-from app.schemas.universal_user import UniversalUserDivision
+from app.getters.universal_user import get_universal_user
 
-from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
 
-from app.schemas.universal_user import UniversalUserCompany
 
 PATH_MODEL = "universal_user"
 PATH_TYPE_PHOTO = "photo"
@@ -82,6 +67,7 @@ def create_employee_person(
         session=Depends(deps.get_db),
 ):
     db_obj, code, index = crud_admin.create_user_employee(db=session, current_user=current_user, new_data=new_data)
+    get_raise(code)
     if code == -105:
         raise UnfoundEntity(
             message="Токен не распознан!",
@@ -159,6 +145,7 @@ def create_admin_person(
         session=Depends(deps.get_db),
 ):
     db_obj, code, index = crud_admin.create_user_admin(db=session, current_user=current_user, new_data=new_data)
+    get_raise(code)
     if code == -105:
         raise UnfoundEntity(
             message="Токен не распознан!",

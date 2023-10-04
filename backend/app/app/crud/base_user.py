@@ -23,7 +23,6 @@ from app.schemas.universal_user import UniversalUserEntrance
 from app.core.security import get_password_hash
 from app.models import Location, Role, Division
 from app.models.working_specialty import WorkingSpecialty
-# from app.schemas.foreman import ForemanCreate
 from app.schemas.universal_user import EmployeeCreate
 from app.utils.time_stamp import date_from_timestamp
 
@@ -218,8 +217,6 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # Проверить дату дня рождения
         if new_data.birthday is not None:
             new_data.birthday = date_from_timestamp(new_data.birthday)
-        if new_data.date_of_employment is not None:
-            new_data.date_of_employment = date_from_timestamp(new_data.date_of_employment)
         # проверить город
         if new_data.location_id is not None:
             loc = db.query(Location).filter(Location.id == new_data.location_id).first()
