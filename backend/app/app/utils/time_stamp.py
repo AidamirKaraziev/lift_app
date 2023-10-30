@@ -9,10 +9,15 @@ def to_timestamp(d: Union[None, datetime, date, int]) -> Optional[int]:
         return d
     if isinstance(d, date):
         dt = datetime(year=d.year, month=d.month, day=d.day)
-    else:
+        return int(dt.timestamp())
+    if isinstance(d, datetime):
         dt = d
-    result = int(dt.timestamp())
-    return result
+        result = int(dt.timestamp())
+        return result
+    else:
+        return d
+    #     dt = d
+
 
 
 def date_from_timestamp(ts: Optional[int]) -> Optional[date]:
