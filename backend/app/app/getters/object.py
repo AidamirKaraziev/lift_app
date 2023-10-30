@@ -46,7 +46,7 @@ def get_object(obj: Object, request: Optional[Request],
         id=obj.id,
         name=obj.name,
         # organization_id=get_organization(obj.organization, request=request) if obj.organization is not None else None,
-        organization_id=obj.organization,
+        organization_id=obj.organization_id,
         division_id=get_division(obj.division, request=request) if obj.division is not None else None,
         address=obj.address,
     
