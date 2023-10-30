@@ -1,7 +1,6 @@
 from typing import Optional
 
 from pydantic import BaseModel, Field
-from app.schemas.location import LocationGet
 
 from app.schemas.universal_user import UniversalUserGet
 
