@@ -19,7 +19,7 @@ def get_organization(organization: Organization, request: Optional[Request],
     return OrganizationGet(
         id=organization.id,
         title=organization.title,
-        director_id=get_universal_user(universal_user=organization.director, request=request)
+        director_id=get_universal_user(organization.director, request=request)
         if organization.director is not None else None,
         phone_office=organization.phone_office,
         phone_dispatcher=organization.phone_dispatcher,
