@@ -15,8 +15,6 @@ from app.getters.universal_user import get_universal_user
 from app.models import Object
 from app.schemas.object import ObjectGet
 
-from app.utils.time_stamp import to_timestamp
-
 
 def get_object(obj: Object, request: Optional[Request],
                config: Settings = settings) -> Optional[ObjectGet]:
