@@ -30,6 +30,7 @@ def get_universal_user(universal_user: UniversalUser, request: Optional[Request]
             universal_user.qualification_file = url + str(universal_user.qualification_file)
         else:
             universal_user.qualification_file = None
+    print(type(universal_user.birthday))
     if universal_user.birthday is not None:
         if universal_user.birthday is int:
             print(universal_user.birthday)
