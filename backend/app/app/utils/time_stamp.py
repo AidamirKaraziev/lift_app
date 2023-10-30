@@ -2,10 +2,11 @@ from datetime import datetime, date
 from typing import Optional, Union
 
 
-def to_timestamp(d: Union[None, datetime, date]) -> Optional[int]:
+def to_timestamp(d: Union[None, datetime, date, int]) -> Optional[int]:
     if d is None:
         return None
-
+    if d is int:
+        return d
     if isinstance(d, date):
         dt = datetime(year=d.year, month=d.month, day=d.day)
     else:
