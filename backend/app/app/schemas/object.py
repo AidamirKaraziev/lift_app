@@ -130,7 +130,7 @@ class ObjectUpdate(BaseModel):
 class ObjectGet(BaseModel):
     id: int
     name: Optional[str]
-    organization_id: Optional[OrganizationGet]
+    organization_id: Optional[int]
     division_id: Optional[DivisionGet]
     address: Optional[str]
 
