@@ -75,6 +75,7 @@ order_not_found = -129
 order_name_is_exist = -1291
 
 universal_user_nor_found = -130
+universal_user_is_current_user = -1301
 
 order_photo_not_found = -131
 order_photo_user_not_is_executor = -1311
@@ -422,6 +423,13 @@ def get_raise(code: int):
             message="Нет такого пользователя!",
             num=130,
             description="Нет такого пользователя!",
+            path="$.body"
+        )
+    if code == -1301:
+        raise UnprocessableEntity(
+            message="Нельзя удалить самого себя",
+            num=1301,
+            description="Нельзя удалить самого себя",
             path="$.body"
         )
     if code == -1311:

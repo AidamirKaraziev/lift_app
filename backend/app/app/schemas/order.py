@@ -1,18 +1,12 @@
 from sqlite3 import Date, Timestamp
 from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from app.schemas.object import ObjectGet
-
 from app.schemas.fault_category import FaultCategoryGet
-
 from app.schemas.universal_user import UniversalUserGet
-
 from app.schemas.reason_fault import ReasonFaultGet
-
 from app.schemas.status import StatusGet
-
 from app.schemas.order_photo import OrderPhotoGet
 
 

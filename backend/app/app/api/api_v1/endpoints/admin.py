@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
 from fastapi.params import Path
 
 from app.api import deps
+from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
 
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
 from app.core.response import SingleEntityResponse
@@ -21,8 +22,6 @@ from app.schemas.universal_user import EmployeeCreate, UniversalUserUpdate, Univ
     UniversalUserEntrance, UniversalUserGet, UniversalUserCompany
 
 from app.getters.universal_user import get_universal_user
-
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
 
 
 PATH_MODEL = "universal_user"
@@ -218,60 +217,6 @@ def create_client_person(
 ):
     db_obj, code, index = crud_admin.create_user_client(db=session, current_user=current_user, new_data=new_data)
     get_raise(code=code)
-
-    # if code == -105:
-    #     raise UnfoundEntity(
-    #         message="Токен не распознан!",
-    #         num=105,
-    #         description="Такого пользователя не существует!",
-    #         path="$.body"
-    #     )
-    # if code == -1022:
-    #     raise InaccessibleEntity(
-    #         message="Вы не обладаете правами!",
-    #         num=1022,
-    #         description="Пользователь не обладает правами, к созданию таких пользователей!",
-    #         path="$.body"
-    #     )
-    #
-    # if code == -100:
-    #     raise InaccessibleEntity(
-    #         message="Пользователь с таким email уже есть!",
-    #         num=100,
-    #         description="Укажите другой email, для регистрации",
-    #         path="$.body"
-    #     )
-    #
-    # # проверка локации и зоны ответственности
-    # if code == -101:
-    #     raise UnfoundEntity(
-    #         message="Такого города нет!",
-    #         num=101,
-    #         description="Введен неправильный id города!",
-    #         path="$.body"
-    #     )
-    #
-    # if code == -102:
-    #     raise UnfoundEntity(
-    #         message="Такой Должности нет!",
-    #         num=102,
-    #         description="Выберете существующую должность!",
-    #         path="$.body"
-    #     )
-    # if code == -1021:
-    #     raise InaccessibleEntity(
-    #         message="Неправильно выбрана должность!",
-    #         num=1021,
-    #         description="Пользователь не обладает правами, к созданию таких пользователей!",
-    #         path="$.body"
-    #     )
-    # if code == -106:
-    #     raise UnfoundEntity(
-    #         message="Такой компании нет!",
-    #         num=106,
-    #         description="Выберете существующую Компанию или создайте новую!",
-    #         path="$.body"
-    #     )
 
     return SingleEntityResponse(data=get_universal_user(db_obj, request=request))
 
@@ -498,6 +443,25 @@ def create_upload_file(
                             )
     return SingleEntityResponse(data=get_universal_user(crud_universal_users.get(db=session, id=user_id),
                                                         request=request))
+
+
+@router.delete(
+    path="/cp/admin/universal-user/{user_id}/",
+    response_model=SingleEntityResponse,
+    name='delete_universal_user',
+    description='Удалить пользователя по id',
+    tags=['Админ панель / Администратор'],
+)
+async def delete_universal_user(
+        request: Request,
+        user_id: int,
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+    response, code, indexes = crud_universal_users.delete_user_by_id(db=session, user_id=user_id,
+                                                                     current_user_id=current_user.id)
+    get_raise(code=code)
+    return SingleEntityResponse(data=response)
 
 
 if __name__ == "__main__":
