@@ -10,11 +10,8 @@ from app.schemas.order import OrderUpdate, OrderCreate
 from app.models import Order, UniversalUser
 
 from app.crud.crud_object import crud_objects
-
 from app.crud.crud_fault_category import crud_fault_category
-
 from app.crud.crud_reason_fault import crud_reason_fault
-
 from app.crud.crud_status import crud_status
 
 
