@@ -3,23 +3,21 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.core.security import verify_password, get_password_hash
+from app.core.roles import ADMIN
 from app.exceptions import UnprocessableEntity
 
+from app.utils import pagination
 from app.utils.time_stamp import date_from_timestamp
 
+from app.crud.base_user import CRUDBaseUser
 
-from app.models import UniversalUser
+from app.models import UniversalUser, Location, Division
+from app.models.working_specialty import WorkingSpecialty
+
+from app.schemas.foreman import ForemanCreate
 from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate, UniversalUserEntrance, \
     UniversalUserRequest
 
-from app.models import Location, Division
-from app.models.working_specialty import WorkingSpecialty
-from app.schemas.foreman import ForemanCreate
-
-from app.crud.base_user import CRUDBaseUser
-from app.core.roles import ADMIN
-
-from app.utils import pagination
 
 ADMIN_LIST = [ADMIN]
 
@@ -103,6 +101,15 @@ class CrudUniversalUser(CRUDBaseUser[UniversalUser, UniversalUserCreate, Univers
     def get_user_by_role_id(self, *, db: Session, role_id: int, page: Optional[int] = None):
         objs = db.query(UniversalUser).filter(UniversalUser.role_id == role_id)
         return pagination.get_page(objs, page)
+
+    def delete_user_by_id(self, *, db: Session, user_id: int, current_user_id: int):
+        user, code, indexes = self.get_user_by_id(db=db, user_id=user_id)
+        if code != 0:
+            return None, code, None
+        if user.id == current_user_id:
+            return None, -1301, None
+        self.remove(db=db, id=user_id)
+        return f"Юзер с id {user_id} - удален!", 0, None
 
 
 crud_universal_users = CrudUniversalUser(UniversalUser)
