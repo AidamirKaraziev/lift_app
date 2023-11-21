@@ -77,9 +77,9 @@ class OrderGet(BaseModel):
     creator_id: UniversalUserGet
     fault_category_id: Optional[FaultCategoryGet]
     task_text: Optional[str]
-    order_photo: Optional[OrderPhotoGet]
+    # order_photo: Optional[OrderPhotoGet]
 
-    executor_id: UniversalUserGet
+    executor_id: Optional[UniversalUserGet]
     commentary: Optional[str]
     reason_fault_id: Optional[ReasonFaultGet]
 
