@@ -32,7 +32,8 @@ router = APIRouter()
 def get_orders(
         request: Request,
         session=Depends(deps.get_db),
-        page: int = Query(1, title="Номер страницы")
+        page: int = Query(1, title="Номер страницы"),
+        current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
     logging.info(crud_orders.get_multi(db=session, page=None))
 
@@ -53,7 +54,7 @@ def get_order_by_id(
         request: Request,
         session=Depends(deps.get_db),
         order_id: int = Path(..., title='ID order'),
-        # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+        current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
     obj, code, indexes = crud_orders.get_order_by_id(db=session, order_id=order_id)
     get_raise(code=code)

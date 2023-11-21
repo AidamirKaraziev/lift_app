@@ -83,7 +83,7 @@ class OrderGet(BaseModel):
     commentary: Optional[str]
     reason_fault_id: Optional[ReasonFaultGet]
 
-    created_at: Optional[str]
+    created_at: Optional[int]
     accepted_at: Optional[str]
     in_progress_at: Optional[str]
     done_at: Optional[str]
