@@ -97,68 +97,93 @@ def create_statuses():
 
 
 def check_type_objects(db: Session):
-    type_1 = db.query(TypeObject).filter(TypeObject.name == 'Лифт без МП', TypeObject.id == 1).first()
-    type_2 = db.query(TypeObject).filter(TypeObject.name == 'Лифт с МП', TypeObject.id == 2).first()
-    type_3 = db.query(TypeObject).filter(TypeObject.name == 'Траволатор', TypeObject.id == 3).first()
-    type_4 = db.query(TypeObject).filter(TypeObject.name == 'Эскалатор', TypeObject.id == 4).first()
-    type_5 = db.query(TypeObject).filter(TypeObject.name == 'Грузовой лифт', TypeObject.id == 5).first()
-    type_6 = db.query(TypeObject).filter(TypeObject.name == 'Инвалидный подъемник', TypeObject.id == 6).first()
-
-    if type_1 is not None:
-        type_1_is_exist = True
-    else:
-        type_1_is_exist = False
-
-    if type_2 is not None:
-        type_2_is_exist = True
-    else:
-        type_2_is_exist = False
-
-    if type_3 is not None:
-        type_3_is_exist = True
-    else:
-        type_3_is_exist = False
-
-    if type_4 is not None:
-        type_4_is_exist = True
-    else:
-        type_4_is_exist = False
-
-    if type_5 is not None:
-        type_5_is_exist = True
-    else:
-        type_5_is_exist = False
-
-    if type_6 is not None:
-        type_6_is_exist = True
-    else:
-        type_6_is_exist = False
-
-    return type_6_is_exist, type_5_is_exist, type_4_is_exist, type_3_is_exist, type_2_is_exist, type_1_is_exist
+    check_list = [
+        Status(id=1, name='Лифт без МП'),
+        Status(id=2, name='Лифт с МП'),
+        Status(id=3, name='Траволатор'),
+        Status(id=4, name='Эскалатор'),
+        Status(id=5, name='Грузовой лифт'),
+        Status(id=6, name='Инвалидный подъемник'),
+    ]
+    creation_list = []
+    for obj in check_list:
+        query = db.query(Status).filter(Status.id == obj.id, Status.name == obj.name).first()
+        if query is None:
+            creation_list.append(obj)
+    return creation_list
 
 
 def create_type_objects():
     for db in get_session():
-        type_objects = []
+        creation_list = check_type_objects(db)
+        [db.add(obj) for obj in creation_list]
+        db.commit()
+        db.close()
 
-    type_6_is_exist, type_5_is_exist, type_4_is_exist, type_3_is_exist, type_2_is_exist, type_1_is_exist = \
-        check_type_objects(db=db)
-    if not type_1_is_exist:
-        type_objects.append(TypeObject(id=1, name="Лифт без МП"))
-    if not type_2_is_exist:
-        type_objects.append(TypeObject(id=2, name="Лифт с МП"))
-    if not type_3_is_exist:
-        type_objects.append(TypeObject(id=3, name="Траволатор"))
-    if not type_4_is_exist:
-        type_objects.append(TypeObject(id=4, name="Эскалатор"))
-    if not type_5_is_exist:
-        type_objects.append(TypeObject(id=5, name="Грузовой лифт"))
-    if not type_6_is_exist:
-        type_objects.append(TypeObject(id=6, name="Инвалидный подъемник"))
 
-    [db.add(t_o) for t_o in type_objects]
-    db.commit()
-    db.close()
+# def check_type_objects(db: Session):
+#     type_1 = db.query(TypeObject).filter(TypeObject.name == 'Лифт без МП', TypeObject.id == 1).first()
+#     type_2 = db.query(TypeObject).filter(TypeObject.name == 'Лифт с МП', TypeObject.id == 2).first()
+#     type_3 = db.query(TypeObject).filter(TypeObject.name == 'Траволатор', TypeObject.id == 3).first()
+#     type_4 = db.query(TypeObject).filter(TypeObject.name == 'Эскалатор', TypeObject.id == 4).first()
+#     type_5 = db.query(TypeObject).filter(TypeObject.name == 'Эскалатор', TypeObject.id == 5).first()
+#     type_6 = db.query(TypeObject).filter(TypeObject.name == 'Инвалидный подъемник', TypeObject.id == 6).first()
+#
+#     if type_1 is not None:
+#         type_1_is_exist = True
+#     else:
+#         type_1_is_exist = False
+#
+#     if type_2 is not None:
+#         type_2_is_exist = True
+#     else:
+#         type_2_is_exist = False
+#
+#     if type_3 is not None:
+#         type_3_is_exist = True
+#     else:
+#         type_3_is_exist = False
+#
+#     if type_4 is not None:
+#         type_4_is_exist = True
+#     else:
+#         type_4_is_exist = False
+#
+#     if type_5 is not None:
+#         type_5_is_exist = True
+#     else:
+#         type_5_is_exist = False
+#
+#     if type_6 is not None:
+#         type_6_is_exist = True
+#     else:
+#         type_6_is_exist = False
+#
+#     return type_6_is_exist, type_5_is_exist, type_4_is_exist, type_3_is_exist, type_2_is_exist, type_1_is_exist
+#
+#
+# def create_type_objects():
+#     for db in get_session():
+#         type_objects = []
+#
+#     type_6_is_exist, type_5_is_exist, type_4_is_exist, type_3_is_exist, type_2_is_exist, type_1_is_exist = \
+#         check_type_objects(db=db)
+#     if not type_1_is_exist:
+#         type_objects.append(TypeObject(id=1, name="Лифт без МП"))
+#     if not type_2_is_exist:
+#         type_objects.append(TypeObject(id=2, name="Лифт с МП"))
+#     if not type_3_is_exist:
+#         type_objects.append(TypeObject(id=3, name="Траволатор"))
+#     if not type_4_is_exist:
+#         type_objects.append(TypeObject(id=4, name="Эскалатор"))
+#     if not type_5_is_exist:
+#         type_objects.append(TypeObject(id=5, name="Грузовой лифт"))
+#     if not type_6_is_exist:
+#         type_objects.append(TypeObject(id=6, name="Инвалидный подъемник"))
+#
+#     [db.add(t_o) for t_o in type_objects]
+#     db.commit()
+#     db.close()
 
 
 def check_type_contracts(db: Session):
