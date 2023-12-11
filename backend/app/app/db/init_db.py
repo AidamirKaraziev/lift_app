@@ -72,136 +72,28 @@ def create_roles():
         db.close()
 
 
-# def check_roles(db: Session):
-#     admin = db.query(Role).filter(Role.name == 'admin', Role.id == 1).first()
-#     foreman = db.query(Role).filter(Role.name == 'foreman', Role.id == 2).first()
-#     mechanic = db.query(Role).filter(Role.name == 'mechanic', Role.id == 3).first()
-#     engineer = db.query(Role).filter(Role.name == 'engineer', Role.id == 4).first()
-#     dispatcher = db.query(Role).filter(Role.name == 'dispatcher', Role.id == 5).first()
-#     client = db.query(Role).filter(Role.name == 'client', Role.id == 6).first()
-#     if admin is not None:
-#         admin_role_is_exist = True
-#     else:
-#         admin_role_is_exist = False
-#
-#     if foreman is not None:
-#         foreman_role_is_exist = True
-#     else:
-#         foreman_role_is_exist = False
-#
-#     if mechanic is not None:
-#         mechanic_role_is_exist = True
-#     else:
-#         mechanic_role_is_exist = False
-#
-#     if engineer is not None:
-#         engineer_role_is_exist = True
-#     else:
-#         engineer_role_is_exist = False
-#
-#     if dispatcher is not None:
-#         dispatcher_role_is_exist = True
-#     else:
-#         dispatcher_role_is_exist = False
-#
-#     if client is not None:
-#         client_role_is_exist = True
-#     else:
-#         client_role_is_exist = False
-#
-#     return admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist, \
-#            dispatcher_role_is_exist, client_role_is_exist
-#
-#
-# def create_roles():
-#
-#     for db in get_session():
-#         roles = []
-#
-#     admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist,\
-#     dispatcher_role_is_exist, client_role_is_exist = check_roles(db=db)
-#     if not admin_role_is_exist:
-#         roles.append(Role(id=1, name="admin"))
-#
-#     if not foreman_role_is_exist:
-#         roles.append(Role(id=2, name="foreman"))
-#
-#     if not mechanic_role_is_exist:
-#         roles.append(Role(id=3, name="mechanic"))
-#
-#     if not engineer_role_is_exist:
-#         roles.append(Role(id=4, name="engineer"))
-#
-#     if not dispatcher_role_is_exist:
-#         roles.append(Role(id=5, name="dispatcher"))
-#
-#     if not client_role_is_exist:
-#         roles.append(Role(id=6, name="client"))
-#
-#     [db.add(role) for role in roles]
-#     db.commit()
-#     db.close()
-
-
 def check_statuses(db: Session):
-    status_1 = db.query(Status).filter(Status.name == 'Создано', Status.id == 1).first()
-    status_2 = db.query(Status).filter(Status.name == 'Принято', Status.id == 2).first()
-    status_3 = db.query(Status).filter(Status.name == 'В процессе', Status.id == 3).first()
-    status_4 = db.query(Status).filter(Status.name == 'Выполнено', Status.id == 4).first()
-    status_5 = db.query(Status).filter(Status.name == 'Проблема', Status.id == 5).first()
-
-    if status_1 is not None:
-        status_1_is_exist = True
-    else:
-        status_1_is_exist = False
-
-    if status_2 is not None:
-        status_2_is_exist = True
-    else:
-        status_2_is_exist = False
-
-    if status_3 is not None:
-        status_3_is_exist = True
-    else:
-        status_3_is_exist = False
-
-    if status_4 is not None:
-        status_4_is_exist = True
-    else:
-        status_4_is_exist = False
-
-    if status_5 is not None:
-        status_5_is_exist = True
-    else:
-        status_5_is_exist = False
-
-    return status_5_is_exist, status_4_is_exist, status_3_is_exist, status_2_is_exist, status_1_is_exist
+    check_list = [
+        Status(id=1, name='Создано'),
+        Status(id=2, name='Принято'),
+        Status(id=3, name='В процессе'),
+        Status(id=4, name='Выполнено'),
+        Status(id=5, name='Проблема')
+    ]
+    creation_list = []
+    for obj in check_list:
+        query = db.query(Status).filter(Status.id == obj.id, Status.name == obj.name).first()
+        if query is None:
+            creation_list.append(obj)
+    return creation_list
 
 
 def create_statuses():
-
     for db in get_session():
-        statuses = []
-
-    status_5_is_exist, status_4_is_exist, status_3_is_exist, status_2_is_exist, status_1_is_exist = check_statuses(db=db)
-    if not status_1_is_exist:
-        statuses.append(Status(id=1, name="Создано"))
-
-    if not status_2_is_exist:
-        statuses.append(Status(id=2, name="Принято"))
-
-    if not status_3_is_exist:
-        statuses.append(Status(id=3, name="В процессе"))
-
-    if not status_4_is_exist:
-        statuses.append(Status(id=4, name="Выполнено"))
-
-    if not status_5_is_exist:
-        statuses.append(Status(id=5, name="Проблема"))
-
-    [db.add(status) for status in statuses]
-    db.commit()
-    db.close()
+        creation_list = check_statuses(db)
+        [db.add(obj) for obj in creation_list]
+        db.commit()
+        db.close()
 
 
 def check_type_objects(db: Session):
