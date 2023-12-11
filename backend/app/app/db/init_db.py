@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from app import crud, schemas
 from app.db import base  # noqa: F401
@@ -9,7 +10,7 @@ from app.db import base  # noqa: F401
 from app.core.config import settings
 from app.db import session
 from app.db.session import get_session
-from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault, TypeAct
+from app.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault, TypeAct, CostType
 
 
 def init_db(db: Session) -> None:
@@ -26,75 +27,120 @@ def init_db(db: Session) -> None:
         user = crud.user.create(db, obj_in=user_in)  # noqa: F841
 
 
+def check_cost_type(db: Session):
+    check_list = [
+        CostType(id=1, name='С НДС'),
+        CostType(id=2, name='Без НДС')]
+    creation_list = []
+    for obj in check_list:
+        query = db.query(CostType).filter(CostType.id == obj.id, CostType.name == obj.name).first()
+        if query is None:
+            creation_list.append(obj)
+    return creation_list
+
+
+def create_cost_type():
+    for db in get_session():
+        creation_list = check_cost_type(db)
+        [db.add(obj) for obj in creation_list]
+        db.commit()
+        db.close()
+
+
 def check_roles(db: Session):
-    admin = db.query(Role).filter(Role.name == 'admin', Role.id == 1).first()
-    foreman = db.query(Role).filter(Role.name == 'foreman', Role.id == 2).first()
-    mechanic = db.query(Role).filter(Role.name == 'mechanic', Role.id == 3).first()
-    engineer = db.query(Role).filter(Role.name == 'engineer', Role.id == 4).first()
-    dispatcher = db.query(Role).filter(Role.name == 'dispatcher', Role.id == 5).first()
-    client = db.query(Role).filter(Role.name == 'client', Role.id == 6).first()
-    if admin is not None:
-        admin_role_is_exist = True
-    else:
-        admin_role_is_exist = False
-
-    if foreman is not None:
-        foreman_role_is_exist = True
-    else:
-        foreman_role_is_exist = False
-
-    if mechanic is not None:
-        mechanic_role_is_exist = True
-    else:
-        mechanic_role_is_exist = False
-
-    if engineer is not None:
-        engineer_role_is_exist = True
-    else:
-        engineer_role_is_exist = False
-
-    if dispatcher is not None:
-        dispatcher_role_is_exist = True
-    else:
-        dispatcher_role_is_exist = False
-
-    if client is not None:
-        client_role_is_exist = True
-    else:
-        client_role_is_exist = False
-
-    return admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist, \
-           dispatcher_role_is_exist, client_role_is_exist
+    check_list = [
+        Role(id=1, name='Админ'),
+        Role(id=2, name='Прораб'),
+        Role(id=3, name='Механик'),
+        Role(id=4, name='Инженер наладчик'),
+        Role(id=5, name='Диспетчер'),
+        Role(id=6, name='Клиент')
+    ]
+    creation_list = []
+    for obj in check_list:
+        query = db.query(Role).filter(Role.id == obj.id, Role.name == obj.name).first()
+        if query is None:
+            creation_list.append(obj)
+    return creation_list
 
 
 def create_roles():
-
     for db in get_session():
-        roles = []
+        creation_list = check_roles(db)
+        [db.add(obj) for obj in creation_list]
+        db.commit()
+        db.close()
 
-    admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist,\
-    dispatcher_role_is_exist, client_role_is_exist = check_roles(db=db)
-    if not admin_role_is_exist:
-        roles.append(Role(id=1, name="admin"))
 
-    if not foreman_role_is_exist:
-        roles.append(Role(id=2, name="foreman"))
-
-    if not mechanic_role_is_exist:
-        roles.append(Role(id=3, name="mechanic"))
-
-    if not engineer_role_is_exist:
-        roles.append(Role(id=4, name="engineer"))
-
-    if not dispatcher_role_is_exist:
-        roles.append(Role(id=5, name="dispatcher"))
-
-    if not client_role_is_exist:
-        roles.append(Role(id=6, name="client"))
-
-    [db.add(role) for role in roles]
-    db.commit()
-    db.close()
+# def check_roles(db: Session):
+#     admin = db.query(Role).filter(Role.name == 'admin', Role.id == 1).first()
+#     foreman = db.query(Role).filter(Role.name == 'foreman', Role.id == 2).first()
+#     mechanic = db.query(Role).filter(Role.name == 'mechanic', Role.id == 3).first()
+#     engineer = db.query(Role).filter(Role.name == 'engineer', Role.id == 4).first()
+#     dispatcher = db.query(Role).filter(Role.name == 'dispatcher', Role.id == 5).first()
+#     client = db.query(Role).filter(Role.name == 'client', Role.id == 6).first()
+#     if admin is not None:
+#         admin_role_is_exist = True
+#     else:
+#         admin_role_is_exist = False
+#
+#     if foreman is not None:
+#         foreman_role_is_exist = True
+#     else:
+#         foreman_role_is_exist = False
+#
+#     if mechanic is not None:
+#         mechanic_role_is_exist = True
+#     else:
+#         mechanic_role_is_exist = False
+#
+#     if engineer is not None:
+#         engineer_role_is_exist = True
+#     else:
+#         engineer_role_is_exist = False
+#
+#     if dispatcher is not None:
+#         dispatcher_role_is_exist = True
+#     else:
+#         dispatcher_role_is_exist = False
+#
+#     if client is not None:
+#         client_role_is_exist = True
+#     else:
+#         client_role_is_exist = False
+#
+#     return admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist, \
+#            dispatcher_role_is_exist, client_role_is_exist
+#
+#
+# def create_roles():
+#
+#     for db in get_session():
+#         roles = []
+#
+#     admin_role_is_exist, foreman_role_is_exist, mechanic_role_is_exist, engineer_role_is_exist,\
+#     dispatcher_role_is_exist, client_role_is_exist = check_roles(db=db)
+#     if not admin_role_is_exist:
+#         roles.append(Role(id=1, name="admin"))
+#
+#     if not foreman_role_is_exist:
+#         roles.append(Role(id=2, name="foreman"))
+#
+#     if not mechanic_role_is_exist:
+#         roles.append(Role(id=3, name="mechanic"))
+#
+#     if not engineer_role_is_exist:
+#         roles.append(Role(id=4, name="engineer"))
+#
+#     if not dispatcher_role_is_exist:
+#         roles.append(Role(id=5, name="dispatcher"))
+#
+#     if not client_role_is_exist:
+#         roles.append(Role(id=6, name="client"))
+#
+#     [db.add(role) for role in roles]
+#     db.commit()
+#     db.close()
 
 
 def check_statuses(db: Session):
@@ -639,3 +685,7 @@ def create_initial_data():
         create_type_act()
     except:
         print("НЕ СОЗДАЛ БАЗУ ДАННЫХ ДЛЯ ТИПОВ АКТОВ")
+    try:
+        create_cost_type()
+    except:
+        print("НЕ СОЗДАЛ В БАЗЕ ДАННЫХ ТИПЫ ЦЕН")
