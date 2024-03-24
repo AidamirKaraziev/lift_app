@@ -1,22 +1,17 @@
 import logging
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, Query, Path, Request
 
 from app.api import deps
-
 from app.core.response import ListOfEntityResponse, SingleEntityResponse,Meta
-
+from app.core.templates_raise import get_raise
+from app.core.roles import ADMIN, FOREMAN
 
 from app.crud.crud_act_base import crud_acts_bases
 from app.getters.act_base import get_acts_bases
 
-from app.core.templates_raise import get_raise
-
-from app.core.roles import ADMIN, FOREMAN
-
 from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.act_base import ActBaseCreate
+from app.schemas.act_base import ActBaseUpdate, ActBaseCreate
 
-from app.schemas.act_base import ActBaseUpdate
 
 ROLES_ELIGIBLE = [ADMIN, FOREMAN]
 
