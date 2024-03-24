@@ -1,20 +1,17 @@
 import logging
-from typing import Optional
-
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
+from fastapi import APIRouter, Depends, Request, Query
 from fastapi.params import Path
 
 from app.api import deps
-
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from app.core.templates_raise import get_raise
 from app.core.roles import ADMIN, FOREMAN, DISPATCHER, MECHANIC, ENGINEER
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.crud.crud_order import crud_orders
+from app.getters.order import getting_order
 from app.schemas.order import OrderGet, OrderCreate, OrderUpdate
 
-from app.getters.order import getting_order
 
 ROLES_ELIGIBLE = [ADMIN, FOREMAN, DISPATCHER]
 ALL_EMPLOYER = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]

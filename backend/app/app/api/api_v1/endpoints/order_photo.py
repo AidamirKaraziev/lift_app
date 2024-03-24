@@ -1,19 +1,18 @@
 import logging
 from typing import Optional
-
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
+from fastapi import APIRouter, Depends, Request, UploadFile, File, Query
 from fastapi.params import Path
 
-from app.api import deps
 
+from app.api import deps
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from app.core.templates_raise import get_raise
 from app.core.roles import ADMIN, FOREMAN, DISPATCHER, MECHANIC, ENGINEER
 
 from app.crud.crud_order_photo import crud_order_photo
 from app.getters.order_photo import getting_order_photo
-
 from app.schemas.order_photo import OrderPhotoGet
+
 
 ROLES_ELIGIBLE = [ADMIN, FOREMAN, DISPATCHER]
 ALL_EMPLOYER = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]

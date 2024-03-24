@@ -1,21 +1,20 @@
 import logging
 
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 from typing import Optional
 
 from app.api import deps
 
 from app.core.response import Meta, SingleEntityResponse, ListOfEntityResponse
+from app.core.roles import ADMIN, FOREMAN
+from app.core.templates_raise import get_raise
 from app.exceptions import UnprocessableEntity, UnfoundEntity, InaccessibleEntity
 
 from app.crud.crud_division import crud_division
+from app.crud.crud_universal_user import crud_universal_users
 from app.getters.division import get_division
 from app.schemas.divisions import DivisionCreate, DivisionUpdate
 
-from app.core.templates_raise import get_raise
-from app.crud.crud_universal_user import crud_universal_users
-
-from app.core.roles import ADMIN, FOREMAN
 
 PATH_MODEL = "division"
 PATH_TYPE = "photo"

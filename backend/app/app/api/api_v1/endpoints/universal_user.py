@@ -1,31 +1,22 @@
 import logging
 from typing import Optional
-
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
+from fastapi import APIRouter, Depends, Request, UploadFile, File, Query
 from fastapi.params import Path
-
-from app.schemas.token import TokenBase
-
-from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
-
-from app.getters.universal_user import get_universal_user
 
 from app.api import deps
 
-from app.core.security import create_token_universal_user
-
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
-from app.schemas.universal_user import UniversalUserUpdate
-
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-
 from app.core.templates_raise import get_raise
-from app.crud.crud_company import crud_company
+from app.core.security import create_token_universal_user
+from app.exceptions import UnfoundEntity
 
+from app.crud.crud_universal_user import crud_universal_users
+from app.crud.crud_company import crud_company
 from app.crud.crud_role import crud_role
+from app.getters.universal_user import get_universal_user
+from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet, UniversalUserUpdate
+from app.schemas.token import TokenBase
+
 
 PATH_MODEL = "universal_user"
 PATH_TYPE_PHOTO = "photo"

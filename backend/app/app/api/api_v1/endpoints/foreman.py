@@ -1,43 +1,24 @@
 import logging
 from typing import Optional
-
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
-# from fastapi.params import Path, Form
-
+from fastapi import APIRouter, Depends, Request, UploadFile, File
 from fastapi.params import Path
 
-# from app.api import deps
+from app.api import deps
 from app.core.response import SingleEntityResponse
+from app.core.templates_raise import get_raise
+from app.core.roles import MECHANIC, ENGINEER, DISPATCHER, FOREMAN
+from app.exceptions import UnfoundEntity
 
 from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.universal_user import UniversalUserEntrance, UniversalUserGet
-
 from app.getters.universal_user import get_universal_user
-
-from app.api import deps
-
-# from app.schemas.admin import AdminGet
+from app.schemas.universal_user import UniversalUserGet
 
 from app.crud.crud_admin import crud_admin
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
-from app.schemas.universal_user import UniversalUserRequest
-
-from app.schemas.universal_user import UniversalUserUpdate
-
-from fastapi import Response, Request
-from mimetypes import guess_type
-
-from os.path import isfile
-
-from app.schemas.universal_user import EmployeeCreate
-
 from app.crud.crud_foreman import crud_foreman
 
-from app.schemas.universal_user import UniversalUserDivision
+from app.schemas.universal_user import UniversalUserUpdate, UniversalUserDivision, EmployeeCreate
 
-from app.core.templates_raise import get_raise
 
-from app.core.roles import MECHANIC, ENGINEER, DISPATCHER, FOREMAN
 PATH_MODEL = "universal_user"
 PATH_TYPE_PHOTO = "photo"
 PATH_TYPE_IDENTITY_CARD = "identity_card"
@@ -289,5 +270,3 @@ def create_upload_file(
 
 if __name__ == "__main__":
     logging.info('Running...')
-
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNjY4MTU5MTYyLCJpYXQiOjE2Njc0Njc5NjIsIm5iZiI6MTY2NzQ2Nzk2MiwianRpIjoiYWVjZThmM2UtNWY2Mi00YmIyLWJmODUtZDE3ZDY0Yzk0NzM2In0.LpFRCTtI7q2mtubooNjLRTymlQv2CjUxKe87cbhT7u4

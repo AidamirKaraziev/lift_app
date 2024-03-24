@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.api_v1.endpoints import entrance, location, working_specialty, role, universal_user,\
+from app.api.api_v1.endpoints import location, working_specialty, role, universal_user,\
      client, contact_person, division, foreman, admin, company, type_contract, cost_type, contract, organization, \
      type_object, factory_model, object, type_act, act_base, status, act_fact, step, sub_step, fault_category, \
      reason_fault, order, order_photo, planned_to

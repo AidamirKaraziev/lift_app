@@ -1,22 +1,15 @@
 import logging
-
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path
-
-from app.core.response import ListOfEntityResponse
-from app.crud.crud_location import crud_location
+from fastapi import APIRouter, Depends, Query, Path
 
 from app.api import deps
-
-from app.core.response import Meta
-from app.getters.location import get_location
-
+from app.core.response import ListOfEntityResponse, Meta
 from app.core.response import SingleEntityResponse
-from app.exceptions import UnprocessableEntity
-from app.schemas.location import LocationCreate
+from app.exceptions import UnprocessableEntity, UnfoundEntity
 
-from app.schemas.location import LocationUpdate
+from app.crud.crud_location import crud_location
+from app.getters.location import get_location
+from app.schemas.location import LocationCreate, LocationUpdate
 
-from app.exceptions import UnfoundEntity
 
 router = APIRouter()
 

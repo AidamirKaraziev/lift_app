@@ -1,11 +1,9 @@
 import logging
-
-from fastapi import APIRouter, Depends, Header, Body, File, UploadFile
-
+from fastapi import APIRouter, Depends
 
 from app.core.greensms import verif_code
-from app.schemas.verif_code import VerifCodeCreate, VerifCodeSaveOnBase, VerifCodeGet
 from app.core.response import SingleEntityResponse
+from app.schemas.verif_code import VerifCodeCreate, VerifCodeSaveOnBase, VerifCodeGet
 from app.crud.crud_verif_code import verif_codes_service as service
 
 from app.api import deps

@@ -1,21 +1,12 @@
 import logging
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, Query, Path, Request
 
 from app.api import deps
-
-from app.core.response import ListOfEntityResponse
-from app.core.response import Meta
-
-
-from app.core.response import SingleEntityResponse
-
+from app.core.response import ListOfEntityResponse, Meta, SingleEntityResponse
 from app.core.roles import ADMIN, FOREMAN
-from app.crud.crud_universal_user import crud_universal_users
-
-
 from app.core.templates_raise import get_raise
 
-
+from app.crud.crud_universal_user import crud_universal_users
 from app.crud.crud_sub_step import crud_sub_step
 from app.getters.sub_step import get_sub_step
 from app.schemas.sub_step import SubStepCreate, SubStepUpdate
