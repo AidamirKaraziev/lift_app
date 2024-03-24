@@ -7,32 +7,22 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Tup
 from fastapi import UploadFile
 
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.db.base_class import Base
 
 from app.core.response import Paginator
-from app.utils import pagination
-
-from app.core.security import verify_password
+from app.core.security import verify_password, get_password_hash
 from app.exceptions import UnprocessableEntity, UnfoundEntity
-from app.models import UniversalUser
-from app.schemas.universal_user import UniversalUserEntrance
-
-from app.core.security import get_password_hash
-from app.models import Location, Role, Division
-from app.models.working_specialty import WorkingSpecialty
-from app.schemas.universal_user import EmployeeCreate
+from app.utils import pagination
 from app.utils.time_stamp import date_from_timestamp
 
-from app.schemas.admin import AdminCreate
-
-from app.models import Company
-from app.schemas.client import ClientCreate
-
 from app.crud.crud_location import crud_location
-from app.schemas.universal_user import UniversalUserUpdate, UniversalUserDivision
+from app.models import Location, Role, Division, UniversalUser, Company, WorkingSpecialty
+from app.schemas.admin import AdminCreate
+from app.schemas.client import ClientCreate
+from app.schemas.universal_user import UniversalUserUpdate, UniversalUserDivision, UniversalUserEntrance, EmployeeCreate
 
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -161,10 +151,6 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def get_by_name_old(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
-
-    # def get_clients_list(self, *, db: Session, company_id: int):
-    #     clients = db.query(self.model).filter(self.model.company_id == company_id)
-    #     return clients
 
     def create_employee(self, db: Session, new_data: EmployeeCreate):
         email = db.query(UniversalUser).filter(UniversalUser.email == new_data.email).first()
@@ -471,10 +457,4 @@ class CRUDBaseUser(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             return None, -1024, None
 
         save_file = self.adding_file(db=db, file=file, path_model=path_model, path_type=path_type, db_obj=user)
-        # if code != 0:
-        #     return None, code, None
-        # сохранить чувака
-        # self.update(db=db, db_obj=user, obj_in=new_data)
         return save_file, 0, None
-
-

@@ -1,9 +1,6 @@
-from traceback import extract_tb, format_list
-
 from fastapi.exceptions import RequestValidationError
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from fastapi.exception_handlers import http_exception_handler
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.response import Error, SingleEntityResponse
@@ -12,9 +9,6 @@ from .exceptions import EntityError, ListOfEntityError
 
 from .main import app
 
-# добавил я сам, возможно надо убрать!!!!!!
-from .core.celery_app import celery_app
-from .core.config import settings
 
 default_error_description = {
     400: 'Невалидные данные',
@@ -26,14 +20,14 @@ default_error_description = {
 }
 
 
-@app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request, exc: StarletteHTTPException):
-
-    if exc.status_code in settings.ERROR_NOTIFIER_CODES:
-        error_desc = '\n'.join(format_list(extract_tb(exc.__traceback__)))
-        celery_app.send_task("app.worker.test_celery", args=["error"])
-        celery_app.send_task("app.worker.error_notify", args=[error_desc])
-    return await http_exception_handler(request, exc)
+# @app.exception_handler(StarletteHTTPException)
+# async def custom_http_exception_handler(request, exc: StarletteHTTPException):
+#
+#     if exc.status_code in settings.ERROR_NOTIFIER_CODES:
+#         error_desc = '\n'.join(format_list(extract_tb(exc.__traceback__)))
+#         celery_app.send_task("app.worker.test_celery", args=["error"])
+#         celery_app.send_task("app.worker.error_notify", args=[error_desc])
+#     return await http_exception_handler(request, exc)
 
 
 @app.exception_handler(RequestValidationError)
