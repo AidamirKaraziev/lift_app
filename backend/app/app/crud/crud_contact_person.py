@@ -3,15 +3,11 @@ from typing import Optional, Tuple, List
 from sqlalchemy.orm import Session
 from app.core.roles import ADMIN, FOREMAN, CLIENT
 from app.core.response import Paginator
+from app.crud.base import CRUDBase, ModelType
 from app.utils import pagination
 
-from app.models.company import Company
-from app.models import UniversalUser
-from app.models.contact_person import ContactPerson
-
-from app.crud.base import CRUDBase, ModelType
 from app.crud.crud_universal_user import crud_universal_users
-
+from app.models import UniversalUser, Company, ContactPerson
 from app.schemas.contact_person import ContactPersonCreate, ContactPersonUpdate
 
 
@@ -24,9 +20,6 @@ class CrudContactPerson(CRUDBase[ContactPerson, ContactPersonCreate, ContactPers
         # проверка ролей юзера
         if user.role_id not in ADMIN_FOREMAN_LIST:
             return None, -1, None
-
-        # if user.role_id != 1 and user.role_id != 2:
-        #     return None, -1, None
 
         # проверить есть ли такой персонаж
         if db.query(ContactPerson).filter(ContactPerson.phone == new_data.phone).first() is not None:

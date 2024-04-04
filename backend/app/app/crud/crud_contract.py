@@ -1,4 +1,4 @@
-from typing import Optional, Any, Union, Dict, List, Tuple
+from typing import Optional, Any, List, Tuple
 from sqlalchemy.orm import Session
 
 from app.core.response import Paginator
@@ -14,7 +14,6 @@ from app.crud.crud_company import crud_company
 from app.crud.crud_cost_type import crud_cost_types
 from app.crud.crud_type_contract import crud_type_contract
 from app.crud.crud_universal_user import crud_universal_users
-
 from app.schemas.contract import ContractCreate, ContractUpdate
 
 
@@ -64,10 +63,7 @@ class CrudContract(CRUDBase[Contract, ContractCreate, ContractUpdate]):
         this_contract = (db.query(Contract).filter(Contract.id == contract_id).first())
         if this_contract is None:
             return None, -1121, None
-        # title: Optional[str]
-        # validity_period: Optional[int]
-        # type_contract_id: Optional[int]
-        # cost_type_id: Optional[int]
+
         # Check title
         if new_data.title is not None:
             if this_contract.title != Contract.title:

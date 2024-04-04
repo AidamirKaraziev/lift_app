@@ -1,46 +1,12 @@
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional, Any, Union, Dict
-
-from app.crud.base import CRUDBase
-from fastapi import UploadFile
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from app.core.security import get_password_hash
+from app.core.roles import FOREMAN
 
-from app.utils.time_stamp import date_from_timestamp
-
-from app.models import UniversalUser
-
-from app.schemas.universal_user import UniversalUserRequest
-
-from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate
-
-from app.models import Location, Role
-from app.models.company import Company
-from app.models.working_specialty import WorkingSpecialty
-
-from app.crud.crud_company import crud_company
-from app.crud.crud_location import crud_location
-from app.crud.crud_role import crud_role
-from app.crud.crud_universal_user import crud_universal_users
-from app.crud.crud_working_specialty import crud_working_specialty
-
-from app.exceptions import UnfoundEntity
-
-from app.schemas.universal_user import EmployeeCreate
 from app.crud.base_user import CRUDBaseUser
-
-from app.models import Division
-from app.schemas.universal_user import UniversalUserDivision
-
-from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER
+from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate, EmployeeCreate, UniversalUserDivision
+from app.models import Division, UniversalUser
 
 ROLE_FOREMAN = [FOREMAN]
-# EMPLOYEE_LIST = [MECHANIC, ENGINEER, DISPATCHER]
 
 
 class CrudForeman(CRUDBaseUser[UniversalUser, UniversalUserCreate, UniversalUserUpdate]):

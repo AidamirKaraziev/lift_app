@@ -1,20 +1,14 @@
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional, Any, Union, Dict
-from app.crud.base import CRUDBase
+from typing import Optional
 from sqlalchemy.orm import Session
-from app.utils.time_stamp import date_from_timestamp
 
 from app.core.roles import ADMIN, FOREMAN, MECHANIC
-
-from app.schemas.object import ObjectCreate, ObjectUpdate
-from app.models import Object, Organization, FactoryModel, Company, ContactPerson, Location, Division, UniversalUser
-from app.crud.crud_universal_user import crud_universal_users
-
-from app.models.contract import Contract
+from app.crud.base import CRUDBase
+from app.utils.time_stamp import date_from_timestamp
 from app.utils import pagination
+
+from app.crud.crud_universal_user import crud_universal_users
+from app.schemas.object import ObjectCreate, ObjectUpdate
+from app.models import Object, Organization, FactoryModel, Company, ContactPerson, Division, UniversalUser, Contract
 
 
 ROLE_RIGHTS = [ADMIN, FOREMAN]

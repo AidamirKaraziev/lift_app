@@ -1,9 +1,9 @@
 from typing import Optional
+from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
-from app.models.location import Location
 from app.schemas.location import LocationUpdate, LocationCreate
-from sqlalchemy.orm import Session
+from app.models import Location
 
 
 class CrudLocation(CRUDBase[Location, LocationCreate, LocationUpdate]):

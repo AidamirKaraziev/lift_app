@@ -1,21 +1,9 @@
 from sqlite3 import Date
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-from app.schemas.location import LocationGet
-from app.schemas.role import RoleGet
-from app.schemas.working_specialty import WorkingSpecialtyGet
-
-from app.schemas.company import CompanyGet
-from app.schemas.divisions import DivisionGet
-
-from app.schemas.contact_person import ContactPersonGet
-from app.schemas.contract import ContractGet
-from app.schemas.factory_model import FactoryModelGet
-from app.schemas.organization import OrganizationGet
 from app.schemas.universal_user import UniversalUserGet
-
 from app.schemas.act_base import ActBaseGet
 from app.schemas.object import ObjectGet
 from app.schemas.status import StatusGet

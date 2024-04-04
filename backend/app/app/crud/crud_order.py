@@ -1,18 +1,15 @@
 import datetime
-import glob
-import os
-import shutil
-import uuid
-from typing import Optional, Any, Union, Dict
-from app.crud.base import CRUDBase
+from typing import Optional
 from sqlalchemy.orm import Session
-from app.schemas.order import OrderUpdate, OrderCreate
-from app.models import Order, UniversalUser
+
+from app.crud.base import CRUDBase
 
 from app.crud.crud_object import crud_objects
 from app.crud.crud_fault_category import crud_fault_category
 from app.crud.crud_reason_fault import crud_reason_fault
 from app.crud.crud_status import crud_status
+from app.schemas.order import OrderUpdate, OrderCreate
+from app.models import Order, UniversalUser
 
 
 class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):

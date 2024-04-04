@@ -1,6 +1,5 @@
 from sqlite3 import Date
 from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from app.schemas.location import LocationGet
@@ -50,14 +49,6 @@ class DataToCreateUser(BaseModel):
     tel: str
 
 
-# class UserBasicData(BaseModel):
-#     id: int
-#     tel: str
-#     first_name: str = Field(..., title="Имя ")
-#     last_name: str = Field(..., title="Фамилия ")
-#     location: str = Field(..., title="Город ")
-
-
 class UserBasicUpdate(BaseModel):
 
     first_name: Optional[str] = Field(None, title="Имя ")
@@ -78,27 +69,6 @@ class PhotoUser(BaseModel):
 
 class UserUpdateTel(BaseModel):
     tel: str = Field(..., title="Телефон")
-
-
-# данные из базового фуллстака
-
-from typing import Optional
-
-from pydantic import BaseModel, EmailStr
-
-
-# Shared properties
-# class UserBase(BaseModel):
-#     email: Optional[EmailStr] = None
-#     is_active: Optional[bool] = True
-#     is_superuser: bool = False
-#     full_name: Optional[str] = None
-
-
-# Properties to receive via API on creation
-# class UserCreate(UserBase):
-#     email: EmailStr
-#     password: str
 
 
 # Properties to receive via API on update

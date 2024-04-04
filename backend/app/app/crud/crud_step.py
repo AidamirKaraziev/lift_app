@@ -9,12 +9,15 @@ from typing import Optional
 class CrudStep(CRUDBase[Step, StepCreate, StepUpdate]):
     def create_steps(self, db: Session, *, new_data: Optional[StepCreate]):
         # проверка уникальности трех полей
-        if db.query(Step).filter(Step.name == new_data.name).first() is not None:
+        if db.query(Step).filter(
+                Step.name == new_data.name).first() is not None:
             return None, -1251, None
         db_obj = super().create(db=db, obj_in=new_data)
         return db_obj, 0, None
 
-    def update_steps(self, db: Session, *, new_data: Optional[StepUpdate], step_id: int):
+    def update_steps(
+            self, db: Session, *, new_data: Optional[StepUpdate],
+            step_id: int):
         # проверить есть ли model с таким id
         this_obj = (db.query(Step).filter(Step.id == step_id).first())
         if this_obj is None:
