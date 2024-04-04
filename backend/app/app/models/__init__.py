@@ -29,3 +29,5 @@ from .fault_category import FaultCategory
 from .reason_fault import ReasonFault
 from .order_photo import OrderPhoto
 from .planned_to import PlannedTO
+from .working_specialty import WorkingSpecialty
+from .contract import Contract

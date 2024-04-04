@@ -1,23 +1,15 @@
 import logging
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, Query, Path, Request
 
 from app.api import deps
-
-from app.core.response import ListOfEntityResponse
-from app.core.response import Meta
-
-from app.crud.crud_step import crud_step
-from app.getters.step import get_step
-
-from app.core.response import SingleEntityResponse
-
+from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from app.core.roles import ADMIN, FOREMAN
-from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.step import StepCreate
-
 from app.core.templates_raise import get_raise
 
-from app.schemas.step import StepUpdate
+from app.crud.crud_step import crud_step
+from app.crud.crud_universal_user import crud_universal_users
+from app.getters.step import get_step
+from app.schemas.step import StepUpdate, StepCreate
 
 router = APIRouter()
 ROLES_ELIGIBLE_ADMIN_FOREMAN = [ADMIN, FOREMAN]

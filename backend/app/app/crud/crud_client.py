@@ -9,22 +9,13 @@ from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-
-from app.core.security import get_password_hash
-
 from app.utils.time_stamp import date_from_timestamp
-
 from app.models import UniversalUser
-
 from app.schemas.universal_user import UniversalUserRequest
-
-
 from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate
-
 from app.models import Location, Role
 from app.models.company import Company
 from app.models.working_specialty import WorkingSpecialty
-
 from app.crud.crud_company import crud_company
 from app.crud.crud_location import crud_location
 from app.crud.crud_role import crud_role

@@ -2,20 +2,14 @@ import glob
 import os
 import shutil
 import uuid
-from typing import Optional, Any, Union, Dict
-
+from typing import Optional
 from fastapi import UploadFile
 
+from sqlalchemy.orm import Session
 from app.crud.base import CRUDBase
 
-from sqlalchemy.orm import Session
-
-from app.models import Division
 from app.schemas.divisions import DivisionCreate, DivisionUpdate
-
-from app.models import UniversalUser
-
-from app.exceptions import UnfoundEntity
+from app.models import UniversalUser, Division
 
 FOLDER_DIVISIONS_PHOTO = './static/divisions_photo/'
 
@@ -77,15 +71,6 @@ class CrudDivision(CRUDBase[Division, DivisionCreate, DivisionUpdate]):
 
         db.query(Division).filter(Division.id == obj_id).update({f'photo': path_for_db})
         db.commit()
-        # if not file:
-        #     raise UnfoundEntity(
-        #         message="Не отправлен загружаемый файл",
-        #         num=2,
-        #         description="Попробуйте загрузить файл еще раз",
-        #         path="$.body",
-        #     )
-        # else:
-        #     return {"photo": path_for_db}
         db_obj = super().get(db=db, id=obj_id)
         return db_obj, 0, None
 

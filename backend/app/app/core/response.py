@@ -33,7 +33,7 @@ Entity = TypeVar('Entity')
 
 
 class OkResponse(BaseResponse):
-    data: None = None
+    data: bool = None
 
 
 class SingleEntityResponse(GenericModel, Generic[Entity], BaseResponse):

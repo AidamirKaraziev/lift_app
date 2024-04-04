@@ -3,14 +3,13 @@ import shutil
 import uuid
 from typing import Optional
 from fastapi import UploadFile
+from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
-from app.models.order_photo import OrderPhoto
-from sqlalchemy.orm import Session
-from app.schemas.order_photo import OrderPhotoCreate, OrderPhotoUpdate
-
 from app.crud.crud_order import crud_orders
 from app.crud.crud_universal_user import crud_universal_users
+from app.schemas.order_photo import OrderPhotoCreate, OrderPhotoUpdate
+from app.models import OrderPhoto
 
 
 class CrudOrderPhoto(CRUDBase[OrderPhoto, OrderPhotoCreate, OrderPhotoUpdate]):

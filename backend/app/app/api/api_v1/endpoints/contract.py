@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query, Response, Request
+from fastapi import APIRouter, Depends, UploadFile, File, Query, Request
 from fastapi.params import Path
 from app.api import deps
 
@@ -9,7 +9,7 @@ from app.core.response import SingleEntityResponse, ListOfEntityResponse, Meta
 from app.core.templates_raise import get_raise
 from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
 
-from app.exceptions import UnfoundEntity, InaccessibleEntity, UnprocessableEntity
+from app.exceptions import UnfoundEntity
 
 from app.crud.crud_universal_user import crud_universal_users
 from app.crud.crud_contract import crud_contracts

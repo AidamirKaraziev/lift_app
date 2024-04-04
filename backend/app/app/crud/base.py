@@ -6,7 +6,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Tup
 
 from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.db.base_class import Base

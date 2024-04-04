@@ -1,23 +1,17 @@
 import logging
 from typing import Optional
-
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 
 from app.api import deps
 
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-
-from app.getters.company import get_company
-
-from app.exceptions import UnfoundEntity, UnprocessableEntity
-from app.schemas.company import CompanyUpdate, CompanyGet, CompanyCreate
-from app.crud.crud_company import crud_company
-
-from app.crud.crud_universal_user import crud_universal_users
-
 from app.core.roles import ADMIN, CLIENT
 from app.core.templates_raise import get_raise
 
+from app.crud.crud_company import crud_company
+from app.crud.crud_universal_user import crud_universal_users
+from app.getters.company import get_company
+from app.schemas.company import CompanyUpdate, CompanyGet, CompanyCreate
 
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]
@@ -154,10 +148,6 @@ def archiving_companies(
                                                         company_id=company_id,
                                                         role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
-    # получение списка клиентов этой компании
-    # users = crud_universal_users.get_clients_list(db=session, company_id=company_id)
-    # print("@"*100)
-    # print(users)
 
     return SingleEntityResponse(data=get_company(obj, request=request))
 

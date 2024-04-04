@@ -1,22 +1,11 @@
-import glob
-import os
-import shutil
-import uuid
 from typing import Optional
-from fastapi import UploadFile
-
 
 from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
 
-from app.exceptions import UnfoundEntity
-from app.models.company import Company
 from app.schemas.company import CompanyCreate, CompanyUpdate
-
-from app.models import Location
-
 from app.crud.crud_universal_user import crud_universal_users
-from app.models import UniversalUser
+from app.models import UniversalUser, Location, Company
 
 DATA_FOLDER_COMPANY = "./static/photo_company/"
 

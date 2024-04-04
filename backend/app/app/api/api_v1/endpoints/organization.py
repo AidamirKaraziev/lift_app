@@ -1,25 +1,18 @@
 import logging
 from typing import Optional
-
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 
 from app.api import deps
-
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-
-
 from app.core.roles import ADMIN, CLIENT
 from app.core.templates_raise import get_raise
-
-from app.getters.organization import get_organization
-
-from app.crud.crud_universal_user import crud_universal_users
-from app.schemas.organization import OrganizationCreate, OrganizationUpdate
+from app.exceptions import UnfoundEntity
 
 from app.crud.crud_organization import crud_organizations
+from app.crud.crud_universal_user import crud_universal_users
+from app.getters.organization import get_organization
+from app.schemas.organization import OrganizationCreate, OrganizationUpdate, OrganizationGet
 
-from app.exceptions import UnfoundEntity
-from app.schemas.organization import OrganizationGet
 
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]

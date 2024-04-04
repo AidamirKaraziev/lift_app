@@ -95,7 +95,6 @@ def create_employee_person(
             description="Укажите другой email, для регистрации",
             path="$.body"
         )
-
     # проверка локации и зоны ответственности
     if code == -101:
         raise UnfoundEntity(
@@ -104,7 +103,6 @@ def create_employee_person(
             description="Введен неправильный id города!",
             path="$.body"
         )
-
     if code == -102:
         raise UnfoundEntity(
             message="Такой Должности нет!",

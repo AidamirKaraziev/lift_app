@@ -1,18 +1,11 @@
-import glob
-import os
-import shutil
-import uuid
 from typing import Optional
-from fastapi import UploadFile
-
-from app.crud.base import CRUDBase
 from sqlalchemy.orm import Session
 
-from app.crud.crud_universal_user import crud_universal_users
-from app.models import UniversalUser
+from app.crud.base import CRUDBase
 
-from app.models import Organization
+from app.crud.crud_universal_user import crud_universal_users
 from app.schemas.organization import OrganizationCreate, OrganizationUpdate
+from app.models import Organization, UniversalUser
 
 
 class CrudOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):

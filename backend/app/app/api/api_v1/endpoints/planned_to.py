@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, Header, Request, UploadFile, File, Query
+from fastapi import APIRouter, Depends, Request, Query
 from fastapi.params import Path
 from app.api import deps
 from app.crud.crud_universal_user import crud_universal_users

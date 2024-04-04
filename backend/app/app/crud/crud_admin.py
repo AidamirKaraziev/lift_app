@@ -1,14 +1,13 @@
 from sqlalchemy.orm import Session
 
-from app.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN
+from app.core.roles import ADMIN
+from app.crud.base_user import CRUDBaseUser
 
 from app.models import UniversalUser, Company
-
 from app.schemas.universal_user import UniversalUserCreate, UniversalUserUpdate, EmployeeCreate, UniversalUserCompany
 from app.schemas.admin import AdminCreate
 from app.schemas.client import ClientCreate
 
-from app.crud.base_user import CRUDBaseUser
 ROLE_LIST = [ADMIN]
 
 

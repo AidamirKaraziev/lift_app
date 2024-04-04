@@ -1,11 +1,8 @@
 import logging
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path
+from fastapi import APIRouter, Depends, Query
 
 from app.api import deps
-
-from app.core.response import ListOfEntityResponse
-from app.core.response import Meta
-
+from app.core.response import ListOfEntityResponse, Meta
 
 from app.crud.crud_type_contract import crud_type_contract
 from app.getters.type_contract import get_type_contracts

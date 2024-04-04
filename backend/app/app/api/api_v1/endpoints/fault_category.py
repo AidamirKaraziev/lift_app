@@ -1,19 +1,16 @@
 import logging
-from typing import Optional
-
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
-from app.exceptions import UnprocessableEntity, InaccessibleEntity, UnfoundEntity
+from fastapi import APIRouter, Depends, Query, Path, Request
 
 from app.api import deps
 
 from app.core.response import Meta, SingleEntityResponse, ListOfEntityResponse
 from app.core.templates_raise import get_raise
+from app.core.roles import ADMIN, FOREMAN
 
 from app.crud.crud_fault_category import crud_fault_category
+from app.crud.crud_universal_user import crud_universal_users
 from app.getters.fault_category import getting_fault_category
 from app.schemas.fault_category import FaultCategoryCreate, FaultCategoryUpdate
-from app.crud.crud_universal_user import crud_universal_users
-from app.core.roles import ADMIN, FOREMAN
 
 
 ROLE_ADMIN_FOREMAN = [ADMIN, FOREMAN]

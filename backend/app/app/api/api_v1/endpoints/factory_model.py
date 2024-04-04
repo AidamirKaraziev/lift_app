@@ -1,24 +1,19 @@
 import logging
-from typing import Optional
-
-from fastapi import APIRouter, Header, Depends, UploadFile, File, HTTPException, Query, Path, Request
+from fastapi import APIRouter, Depends, Query, Path, Request
 
 from app.api import deps
 
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-
-
-from app.core.roles import ADMIN, CLIENT, FOREMAN
+from app.core.roles import ADMIN, FOREMAN
 from app.core.templates_raise import get_raise
 
-
 from app.crud.crud_universal_user import crud_universal_users
+from app.crud.crud_type_object import crud_type_object
+from app.crud.crud_factory_model import crud_factory_models
+
+from app.getters.factory_model import get_factory_model
 from app.schemas.factory_model import FactoryModelCreate, FactoryModelUpdate
 
-from app.crud.crud_factory_model import crud_factory_models
-from app.getters.factory_model import get_factory_model
-
-from app.crud.crud_type_object import crud_type_object
 
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_FOREMAN = [ADMIN, FOREMAN]
