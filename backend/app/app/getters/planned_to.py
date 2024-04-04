@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import Request
 from app.core.config import Settings, settings
-from app.models import Object, PlannedTO
+from app.models import PlannedTO
 from app.schemas.planned_to import PlannedTOGet
 from app.getters.object import get_object
 from app.getters.act_fact import get_acts_facts

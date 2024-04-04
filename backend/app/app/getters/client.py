@@ -2,9 +2,6 @@ from typing import Optional
 from fastapi import Request
 
 from app.core.config import Settings, settings
-
-
-# from app.schemas.super_users import SuperUserGet
 from app.utils.time_stamp import to_timestamp
 
 from app.getters.location import get_location

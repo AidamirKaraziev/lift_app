@@ -8,7 +8,6 @@ from app.getters.cost_type import get_cost_types
 from app.getters.type_contract import get_type_contracts
 from app.models.contract import Contract
 from app.schemas.contract import ContractGet
-from app.utils.time_stamp import to_timestamp
 
 
 def get_contract(obj: Contract, request: Optional[Request],
@@ -17,11 +16,7 @@ def get_contract(obj: Contract, request: Optional[Request],
         url = request.url.hostname + config.API_V1_STR + "/static/"
         if obj.file is not None:
             obj.file = url + str(obj.file)
-        # else:
-        #     obj.file = None
 
-    # ВОТ ЭТО НАХУЙ НЕ НАДО ВСЕ ЛОМАЕТ
-    # obj.validity_period = to_timestamp(obj.validity_period)
     return ContractGet(
         id=obj.id,
         company_id=get_company(company=obj.company, request=request)

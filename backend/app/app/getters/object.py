@@ -3,14 +3,11 @@ from fastapi import Request
 
 from app.core.config import Settings, settings
 
-from app.getters.company import get_company
-
 from app.getters.division import get_division
-
+from app.getters.company import get_company
 from app.getters.contact_person import get_contact_person
 from app.getters.contract import get_contract
 from app.getters.factory_model import get_factory_model
-from app.getters.organization import get_organization
 from app.getters.universal_user import get_universal_user
 from app.models import Object
 from app.schemas.object import ObjectGet
@@ -34,13 +31,6 @@ def get_object(obj: Object, request: Optional[Request],
             obj.act_pto = url + str(obj.act_pto)
         else:
             obj.act_pto = None
-
-    # ВОТ ЭТО НАХУЙ НЕ НАДО ВСЕ ЛОМАЕТ
-    # возможно потом надо будет переводить в  таймстемп
-    # if obj.birthday is not None:
-    # obj.birthday = to_timestamp(obj.birthday)
-    # obj.date_inspection = to_timestamp(obj.date_inspection)
-    # obj.date_inspection = to_timestamp(obj.date_inspection)
 
     return ObjectGet(
         id=obj.id,

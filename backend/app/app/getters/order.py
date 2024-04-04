@@ -14,8 +14,6 @@ from app.getters.fault_category import getting_fault_category
 from app.getters.reason_fault import getting_reason_fault
 from app.getters.status import get_statuses
 
-# from app.getters.order_photo import getting_order_photo
-
 
 def getting_order(obj: Order, request: Optional[Request], config: Settings = settings) -> Optional[OrderGet]:
     if obj.created_at is not None:
@@ -26,9 +24,6 @@ def getting_order(obj: Order, request: Optional[Request], config: Settings = set
         obj.in_progress_at = to_timestamp(obj.in_progress_at)
     if obj.done_at is not None:
         obj.done_at = to_timestamp(obj.done_at)
-
-    # obj.date_inspection = to_timestamp(obj.date_inspection)
-    # obj.date_inspection = to_timestamp(obj.date_inspection)
 
     return OrderGet(
         id=obj.id,

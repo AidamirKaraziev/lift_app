@@ -2,6 +2,7 @@ from typing import Optional
 from fastapi import Request
 
 from app.core.config import Settings, settings
+from app.schemas.universal_user import UniversalUserGet
 from app.utils.time_stamp import to_timestamp
 
 from app.getters.location import get_location
@@ -9,11 +10,11 @@ from app.getters.role import get_roles
 from app.getters.working_specialty import get_working_specialty
 
 from app.models import UniversalUser
-from app.schemas.admin import AdminGet
+
 
 
 def get_admin(admin: UniversalUser, request: Optional[Request],
-              config: Settings = settings) -> Optional[AdminGet]:
+              config: Settings = settings) -> Optional[UniversalUserGet]:
     if request is not None:
         url = request.url.hostname + config.API_V1_STR + "/static/"
         if admin.photo is not None:
@@ -21,7 +22,7 @@ def get_admin(admin: UniversalUser, request: Optional[Request],
         else:
             admin.photo = None
     admin.birthday = to_timestamp(admin.birthday)
-    return AdminGet(
+    return UniversalUserGet(
         id=admin.id,
         name=admin.name,
         email=admin.email,

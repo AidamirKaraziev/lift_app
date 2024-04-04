@@ -4,8 +4,8 @@ from app.core.config import Settings, settings
 from app.schemas.order_photo import OrderPhotoGet
 
 
-def getting_order_photo(obj: OrderPhotoGet, request: Optional[Request], config: Settings = settings) -> \
-        Optional[OrderPhotoGet]:
+def getting_order_photo(
+        obj: OrderPhotoGet, request: Optional[Request], config: Settings = settings) -> Optional[OrderPhotoGet]:
     if request is not None:
         url = request.url.hostname + config.API_V1_STR + "/static/"
         if obj.photo is not None:

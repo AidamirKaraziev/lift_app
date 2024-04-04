@@ -3,12 +3,7 @@ from fastapi import Request
 
 from app.core.config import Settings, settings
 
-
 from app.getters.universal_user import get_universal_user
-from app.models import Object
-from app.schemas.object import ObjectGet
-
-from app.utils.time_stamp import to_timestamp
 
 from app.getters.act_base import get_acts_bases
 from app.getters.object import get_object
@@ -18,7 +13,7 @@ from app.schemas.act_fact import ActFactGet
 
 
 def get_acts_facts(obj: ActFact, request: Optional[Request],
-                   config: Settings = settings) -> Optional[ObjectGet]:
+                   config: Settings = settings) -> ActFactGet:
     if request is not None:
         url = request.url.hostname + config.API_V1_STR + "/static/"
         if obj.file is not None:
