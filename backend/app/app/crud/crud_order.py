@@ -77,5 +77,15 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
         db_obj = super().update(db=db, db_obj=order, obj_in=new_data)
         return db_obj, 0, None
 
+    def get_my_orders(self, *, db: Session, creator_id: int):
+        my_orders = db.query(self.model).filter(
+            self.model.creator_id == creator_id)
+        return my_orders, 0, None
+
+    def get_orders_for_me(self, *, db: Session, executor_id: int):
+        orders = db.query(self.model).filter(
+            self.model.executor_id == executor_id)
+        return orders, 0, None
+
 
 crud_orders = CrudOrder(Order)

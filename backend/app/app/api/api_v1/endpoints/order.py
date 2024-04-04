@@ -1,6 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends, Request, Query
 from fastapi.params import Path
+from sqlalchemy.sql.functions import current_user
 
 from app.api import deps
 from app.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
@@ -30,13 +31,14 @@ def get_orders(
         request: Request,
         session=Depends(deps.get_db),
         page: int = Query(1, title="Номер страницы"),
-        current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+        # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
     logging.info(crud_orders.get_multi(db=session, page=None))
 
     data, paginator = crud_orders.get_multi(db=session, page=page)
 
-    return ListOfEntityResponse(data=[getting_order(obj=datum, request=request) for datum in data],
+    return ListOfEntityResponse(data=[
+        getting_order(obj=datum, request=request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 
@@ -53,7 +55,8 @@ def get_order_by_id(
         order_id: int = Path(..., title='ID order'),
         current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    obj, code, indexes = crud_orders.get_order_by_id(db=session, order_id=order_id)
+    obj, code, indexes = crud_orders.get_order_by_id(
+        db=session, order_id=order_id)
     get_raise(code=code)
     return SingleEntityResponse(data=getting_order(obj, request))
 
@@ -72,10 +75,12 @@ def create_order(
         session=Depends(deps.get_db),
 ):
     # сделать проверку на роль Администратора и Прораба
-    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
+    code = crud_universal_users.check_role_list(
+        current_user=current_user, role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
-    obj, code, index = crud_orders.create_order(db=session, new_data=new_data, current_user=current_user)
+    obj, code, index = crud_orders.create_order(
+        db=session, new_data=new_data, current_user=current_user)
     get_raise(code=code)
     return SingleEntityResponse(data=getting_order(obj, request))
 
@@ -94,13 +99,52 @@ def update_order(
         session=Depends(deps.get_db)
 ):
     # проверка на роли
-    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ALL_EMPLOYER)
+    code = crud_universal_users.check_role_list(
+        current_user=current_user, role_list=ALL_EMPLOYER)
     get_raise(code=code)
 
-    obj, code, indexes = crud_orders.update_order(db=session, new_data=new_data, order_id=order_id)
+    obj, code, indexes = crud_orders.update_order(
+        db=session, new_data=new_data, order_id=order_id)
     get_raise(code=code)
 
     return SingleEntityResponse(data=getting_order(obj, request=request))
+
+
+@router.get('/order/for-me',
+            response_model=ListOfEntityResponse,
+            name='get_orders',
+            description='Получение списка всех задач',
+            tags=['Админ панель / Задачи']
+            )
+def get_orders_for_me(
+        request: Request,
+        session=Depends(deps.get_db),
+        current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+):
+    data, code, indexes = crud_orders.get_orders_for_me(
+        db=session, executor_id=current_universal_user.id)
+    get_raise(code=code)
+    return ListOfEntityResponse(data=[
+        getting_order(obj=datum, request=request) for datum in data])
+
+
+@router.get('/order/my',
+            response_model=ListOfEntityResponse,
+            name='get_orders',
+            description='Получение списка всех задач',
+            tags=['Админ панель / Задачи']
+            )
+def get_my_orders(
+        request: Request,
+        session=Depends(deps.get_db),
+        current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+):
+    data, code, indexes = crud_orders.get_my_orders(
+        db=session, creator_id=current_universal_user.id)
+    get_raise(code=code)
+
+    return ListOfEntityResponse(data=[
+        getting_order(obj=datum, request=request) for datum in data])
 
 
 if __name__ == "__main__":
