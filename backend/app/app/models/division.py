@@ -1,6 +1,5 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String
 from app.db.base_class import Base
-# from sqlalchemy.orm import relationship
 
 
 class Division(Base):

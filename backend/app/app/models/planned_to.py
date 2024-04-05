@@ -1,8 +1,8 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
-from app.models import ActFact, Object
+from app.models import Object
 
 
 class PlannedTO(Base):

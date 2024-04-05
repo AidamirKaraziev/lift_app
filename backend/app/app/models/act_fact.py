@@ -1,5 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, UniqueConstraint
-# List append in sqlalchemy
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 
 from sqlalchemy.orm import relationship
 
@@ -20,7 +19,6 @@ class ActFact(Base):
     date_finish = Column(Date)
     foreman_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL"))
     main_mechanic_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL"))
-    # list_mechanic_id = Column(List)  # это под вопросом так ли надо?
     file = Column(String)
     status_id = Column(Integer, ForeignKey('statuses.id', ondelete="SET NULL"))
 

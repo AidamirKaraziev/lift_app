@@ -1,10 +1,8 @@
-from .user import User
-from .verif_code import VerifCode
+# from .user import User
+# from .verif_code import VerifCode
+# from .device import Device
+
 from .location import Location
-from .firebase_token import FirebaseToken
-from .device import Device
-
-
 from .role import Role
 from .universal_user import UniversalUser
 from .division import Division
@@ -29,6 +27,6 @@ from .fault_category import FaultCategory
 from .reason_fault import ReasonFault
 from .order_photo import OrderPhoto
 from .planned_to import PlannedTO
-from .working_specialty import WorkingSpecialty
 from .contract import Contract
+from .working_specialty import WorkingSpecialty
 

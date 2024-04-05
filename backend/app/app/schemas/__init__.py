@@ -23,7 +23,7 @@
 # from .status import *
 # from .step import *
 # from .sub_step import *
-# from .token import *
+from .token import *
 # from .type_act import *
 # from .type_object import *
 # from .type_contract import *
@@ -31,6 +31,3 @@
 # from .universal_user import *
 # from .verif_code import *
 # from .working_specialty import WorkingSpecialtyGet, WorkingSpecialtyCreate, WorkingSpecialtyUpdate
-#
-# from .super_users import *
-# from .moderator import *

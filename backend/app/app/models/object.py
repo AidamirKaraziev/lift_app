@@ -31,7 +31,6 @@ class Object(Base):
     load_capacity = Column(Integer)
     width = Column(Integer)
 
-    # эта часть под вопросом
     cost_nds = Column(Integer)  # цены не особенно нужны потому что это цены объекта получаются
     cost_no_nds = Column(Integer)
 

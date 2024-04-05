@@ -7,7 +7,6 @@ engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# открывает и после работы закрывает БД, добавил я своими кривыми ручками
 def get_session() -> SessionLocal:
     session = SessionLocal()
     try:

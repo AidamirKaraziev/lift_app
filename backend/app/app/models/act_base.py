@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from app.db.base_class import Base
 from sqlalchemy.orm import relationship
 
@@ -11,8 +11,6 @@ class ActBase(Base):
     factory_model_id = Column(Integer, ForeignKey("factories_models.id", ondelete="SET NULL"))
     type_act_id = Column(Integer, ForeignKey("types_acts.id", ondelete="SET NULL"))
     step_list = Column(String)
-
-    # is_actual = Column(Boolean, default=True)
 
     factory_model = relationship(FactoryModel)
     type_act = relationship(TypeAct)

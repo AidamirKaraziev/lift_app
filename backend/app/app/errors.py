@@ -20,16 +20,6 @@ default_error_description = {
 }
 
 
-# @app.exception_handler(StarletteHTTPException)
-# async def custom_http_exception_handler(request, exc: StarletteHTTPException):
-#
-#     if exc.status_code in settings.ERROR_NOTIFIER_CODES:
-#         error_desc = '\n'.join(format_list(extract_tb(exc.__traceback__)))
-#         celery_app.send_task("app.worker.test_celery", args=["error"])
-#         celery_app.send_task("app.worker.error_notify", args=[error_desc])
-#     return await http_exception_handler(request, exc)
-
-
 @app.exception_handler(RequestValidationError)
 def validation_exception_handler(request, exc: RequestValidationError):
     errors = []

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, Table, UniqueConstraint
+from sqlalchemy import Column, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from .act_fact import ActFact
