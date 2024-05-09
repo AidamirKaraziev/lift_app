@@ -1,7 +1,6 @@
 import logging
 
 from app.db.session import SessionLocal
-
 from app.db.init_db import create_initial_data
 
 logging.basicConfig(level=logging.INFO)
