@@ -63,7 +63,7 @@ def get_data(
         act_fact_id: int = Path(..., title='ID object'),
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    obj, code, indexes = crud_acts_fact.getting_act_fact(db=session, act_fact_id=act_fact_id)
+    obj, code, indexes = crud_acts_fact.get_act_fact_by_id(db=session, id=act_fact_id)
     get_raise(code=code)
     return SingleEntityResponse(data=get_acts_facts(obj, request))
 
