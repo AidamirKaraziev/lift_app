@@ -1,3 +1,5 @@
+from typing import Any
+from fastapi import HTTPException
 from app.exceptions import UnprocessableEntity, InaccessibleEntity, UnfoundEntity
 
 
@@ -87,7 +89,12 @@ planned_to_not_found = -133
 year_object_uc_is_exist = -1331
 
 
-def get_raise(code: int):
+def get_raise(code: Any):
+    if type(code) is not int:
+        raise HTTPException(
+            status_code=code["status_code"],
+            detail=code["detail"]
+        )
     if code == -100:
         raise InaccessibleEntity(
             message="Пользователь с таким email уже есть!",
