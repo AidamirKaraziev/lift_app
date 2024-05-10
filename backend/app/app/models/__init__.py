@@ -1,3 +1,4 @@
+# Старые модели баз данных, которые можно удалить в будущем
 # from .user import User
 # from .verif_code import VerifCode
 # from .device import Device
@@ -18,7 +19,6 @@ from .type_act import TypeAct
 from .act_base import ActBase
 from .status import Status
 from .act_fact import ActFact
-from .act_fact_of_mechanic import ActFactOfMechanic
 from .step import Step
 from .sub_step import SubStep
 
@@ -30,3 +30,5 @@ from .planned_to import PlannedTO
 from .contract import Contract
 from .working_specialty import WorkingSpecialty
 
+# удалил модель базы данных, потому что не понимаю зачем она
+# from .act_fact_of_mechanic import ActFactOfMechanic
