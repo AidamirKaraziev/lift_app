@@ -1,10 +1,12 @@
 from typing import Optional
-from app.crud.base import CRUDBase
+from starlette import status
 from sqlalchemy.orm import Session
+from app.crud.base import CRUDBase
 
+from app.crud.crud_act_base import crud_acts_bases
+from app.crud.crud_object import crud_objects
 from app.utils.time_stamp import date_from_timestamp
 from app.core.roles import ADMIN, FOREMAN, MECHANIC
-from app.schemas.object import ObjectCreate, ObjectUpdate
 from app.schemas.act_fact import ActFactCreate, ActFactUpdate
 
 from app.models import (
@@ -28,17 +30,29 @@ ROLE_FOREMAN = [FOREMAN]
 
 
 class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
-    def create_act_fact(self, db: Session, *, new_data: ObjectCreate):
+    obj_name = "Фактические акты"
+    not_found_id = {
+        "status_code": status.HTTP_404_NOT_FOUND,
+        "detail": f"{obj_name}: не найден с таким id"
+    }
+
+    def get_act_fact_by_id(self, db: Session, id: int):
+        act_fact = super().get(db=db, id=id)
+        if not act_fact:
+            return None, self.not_found_id, None
+        return act_fact, 0, None
+
+    def create_act_fact(self, db: Session, *, new_data: ActFactCreate):
         # проверка объекта
-        if new_data.object_id is not None:
-            obj = db.query(Object).filter(Object.id == new_data.object_id).first()
+        if new_data.object_id:
+            obj, code, indexes = crud_objects.getting_object(db=db, obj_in=new_data.object_id)
             if obj is None:
-                return None, -116, None  # нет объекта
+                return None, code, None
         # проверка базовый акт
         if new_data.act_base_id is not None:
-            a_b = db.query(ActBase).filter(ActBase.id == new_data.act_base_id).first()
-            if a_b is None:
-                return None, -121, None  # нет базовый акт
+            act_base, code, indexes = crud_acts_bases.getting_act_base(db=db, act_base_id=new_data.act_base_id)
+            if act_base is None:
+                return None, code, None
         # перевод дат в нужный формат
         if new_data.date_create is not None:
             new_data.date_create = date_from_timestamp(new_data.date_create)
@@ -72,7 +86,7 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
         db_obj = super().create(db=db, obj_in=new_data)
         return db_obj, 0, None
 
-    def update_act_fact(self, db: Session, *, new_data: Optional[ObjectUpdate], act_fact_id: int):
+    def update_act_fact(self, db: Session, *, new_data: Optional[ActFactUpdate], act_fact_id: int):
         # проверить есть ли объект с таким id
         this_act_fact = (db.query(ActFact).filter(ActFact.id == act_fact_id).first())
         if this_act_fact is None:
@@ -153,8 +167,9 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
             if mech.role_id not in ROLE_MECHANIC:
                 return None, -120, None
         # обновление данных
-        db_obj = super().update(db=db, db_obj=this_object, obj_in=new_data)
-        return db_obj, 0, None
+        # db_obj = super().update(db=db, db_obj=this_object, obj_in=new_data)
+        # return db_obj, 0, None
+        return None, 0, None
 
     def getting_act_fact(self, *, db: Session, act_fact_id: int):
         obj = db.query(ActFact).filter(ActFact.id == act_fact_id).first()
