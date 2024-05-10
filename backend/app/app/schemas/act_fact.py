@@ -1,6 +1,5 @@
 from sqlite3 import Date
 from typing import Optional
-
 from pydantic import BaseModel
 
 from app.schemas.universal_user import UniversalUserGet
@@ -28,19 +27,16 @@ class ActFactBase(BaseModel):
 
 # Создание юзера
 class ActFactCreate(BaseModel):
-    # id: int
     object_id: Optional[int]
     act_base_id: Optional[int]
     step_list_fact: Optional[str]
 
-    date_create: Optional[int]
+    # date_create: Optional[int]
     date_start: Optional[int]
     date_finish: Optional[int]
 
     foreman_id: Optional[int]
     main_mechanic_id: Optional[int]
-
-    # file: Optional[str]
     status_id: Optional[int]
 
 
