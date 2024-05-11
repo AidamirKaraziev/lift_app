@@ -1,5 +1,5 @@
-from datetime import date
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -12,13 +12,13 @@ class ActFact(Base):
     object_id = Column(Integer, ForeignKey('objects.id', ondelete="SET NULL", onupdate="CASCADE"))
     act_base_id = Column(Integer, ForeignKey('acts_bases.id', ondelete="SET NULL", onupdate="CASCADE"))
     step_list_fact = Column(String)
-    date_create = Column(Date, default=date.today)
-    date_start = Column(Date)
-    date_finish = Column(Date)
+    created_at = Column(DateTime, default=datetime.now)
+    started_at = Column(DateTime)
+    finished_at = Column(DateTime)
     foreman_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL", onupdate="CASCADE"))
     main_mechanic_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL", onupdate="CASCADE"))
     file = Column(String)
-    status_id = Column(Integer, ForeignKey('statuses.id', ondelete="SET NULL", onupdate="CASCADE"))
+    status_id = Column(Integer, ForeignKey('statuses.id', ondelete="SET NULL", onupdate="CASCADE"), default=1)
 
     object = relationship(Object)
     act_base = relationship(ActBase)
