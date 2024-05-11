@@ -68,11 +68,13 @@ def get_data(
     return SingleEntityResponse(data=get_acts_facts(obj, request))
 
 
-# CREATE NEW ACT FACT
 @router.post('/act-fact/',
              response_model=SingleEntityResponse,
-             name='Добавить акт факт',
-             description='Добавить один акт факт в базу данных ',
+             summary='Создает фактический акт',
+             description='''
+Добавить один акт факт в БД.
+Который в последствии будет выполнять механик, заполняя данными о ходе выполнения работ.
+''',
              tags=['Админ панель / Фактические Акты']
              )
 def create_act_fact(
@@ -90,52 +92,52 @@ def create_act_fact(
     return SingleEntityResponse(data=get_acts_facts(obj, request))
 
 
-# UPDATE
-@router.put('/act-fact/{act_fact_id}/',
-            response_model=SingleEntityResponse,
-            name='Изменить данные фактического акта',
-            description='Изменяет изменяет данные фактического акта',
-            tags=['Админ панель / Фактические Акты'])
-def update_act_fact(
-        request: Request,
-        new_data: ActFactUpdate,
-        current_user=Depends(deps.get_current_universal_user_by_bearer),
-        act_fact_id: int = Path(..., title='Id фактического акта'),
-        session=Depends(deps.get_db)
-):
-    # проверка на роли
-    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
-    get_raise(code=code)
-
-    obj, code, indexes = crud_acts_fact.update_act_fact(db=session, new_data=new_data, act_fact_id=act_fact_id)
-    get_raise(code=code)
-
-    return SingleEntityResponse(data=get_acts_facts(obj, request=request))
-
-
-# UPDATE FILE
-@router.put("/act-fact/{act_fact_id}/file/",
-            response_model=SingleEntityResponse[ActFactGet],
-            name='Изменить файл',
-            description='Изменить файл для фактического акта, если отправить пустой файл сбрасывается',
-            tags=['Админ панель / Фактические Акты'],
-            )
-def create_upload_file(
-        request: Request,
-        file: Optional[UploadFile] = File(None),
-        current_user=Depends(deps.get_current_universal_user_by_bearer),
-        act_fact_id: int = Path(..., title='Id фактический акт'),
-        session=Depends(deps.get_db),
-        ):
-    # проверка на роли
-    code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
-    get_raise(code=code)
-
-    obj, code, indexes = crud_acts_fact.getting_act_fact(db=session, act_fact_id=act_fact_id)
-    get_raise(code=code)
-    crud_acts_fact.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE, db_obj=obj)
-
-    return SingleEntityResponse(data=get_acts_facts(crud_acts_fact.get(db=session, id=act_fact_id), request=request))
+# # UPDATE
+# @router.put('/act-fact/{act_fact_id}/',
+#             response_model=SingleEntityResponse,
+#             name='Изменить данные фактического акта',
+#             description='Изменяет изменяет данные фактического акта',
+#             tags=['Админ панель / Фактические Акты'])
+# def update_act_fact(
+#         request: Request,
+#         new_data: ActFactUpdate,
+#         current_user=Depends(deps.get_current_universal_user_by_bearer),
+#         act_fact_id: int = Path(..., title='Id фактического акта'),
+#         session=Depends(deps.get_db)
+# ):
+#     # проверка на роли
+#     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
+#     get_raise(code=code)
+#
+#     obj, code, indexes = crud_acts_fact.update_act_fact(db=session, new_data=new_data, act_fact_id=act_fact_id)
+#     get_raise(code=code)
+#
+#     return SingleEntityResponse(data=get_acts_facts(obj, request=request))
+#
+#
+# # UPDATE FILE
+# @router.put("/act-fact/{act_fact_id}/file/",
+#             response_model=SingleEntityResponse[ActFactGet],
+#             name='Изменить файл',
+#             description='Изменить файл для фактического акта, если отправить пустой файл сбрасывается',
+#             tags=['Админ панель / Фактические Акты'],
+#             )
+# def create_upload_file(
+#         request: Request,
+#         file: Optional[UploadFile] = File(None),
+#         current_user=Depends(deps.get_current_universal_user_by_bearer),
+#         act_fact_id: int = Path(..., title='Id фактический акт'),
+#         session=Depends(deps.get_db),
+#         ):
+#     # проверка на роли
+#     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
+#     get_raise(code=code)
+#
+#     obj, code, indexes = crud_acts_fact.getting_act_fact(db=session, act_fact_id=act_fact_id)
+#     get_raise(code=code)
+#     crud_acts_fact.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE, db_obj=obj)
+#
+#     return SingleEntityResponse(data=get_acts_facts(crud_acts_fact.get(db=session, id=act_fact_id), request=request))
 
 
 if __name__ == "__main__":
