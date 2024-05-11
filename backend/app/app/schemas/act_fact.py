@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlite3 import Date
 from typing import Optional
 from pydantic import BaseModel
@@ -25,49 +26,36 @@ class ActFactBase(BaseModel):
     status_id: Optional[int]
 
 
-# Создание юзера
 class ActFactCreate(BaseModel):
-    object_id: Optional[int]
-    act_base_id: Optional[int]
-    step_list_fact: Optional[str]
-
-    # date_create: Optional[int]
-    date_start: Optional[int]
-    date_finish: Optional[int]
-
-    foreman_id: Optional[int]
-    main_mechanic_id: Optional[int]
-    status_id: Optional[int]
+    object_id: int
+    act_base_id: int
+    foreman_id: int
+    main_mechanic_id: int
 
 
-# изменение фактического акта
 class ActFactUpdate(BaseModel):
-    # id: int
     object_id: Optional[int]
     act_base_id: Optional[int]
     step_list_fact: Optional[str]
 
-    date_create: Optional[int]
-    date_start: Optional[int]
-    date_finish: Optional[int]
+    started_at: Optional[int]
+    finished_at: Optional[int]
 
     foreman_id: Optional[int]
     main_mechanic_id: Optional[int]
 
-    # file: Optional[str]
     status_id: Optional[int]
 
 
-# вывод юзера
 class ActFactGet(BaseModel):
     id: int
     object_id: Optional[ObjectGet]
     act_base_id: Optional[ActBaseGet]
     step_list_fact: Optional[str]
 
-    date_create: Optional[Date]
-    date_start: Optional[Date]
-    date_finish: Optional[Date]
+    created_at: Optional[datetime]
+    started_at: Optional[datetime]
+    finished_at: Optional[datetime]
 
     foreman_id: Optional[UniversalUserGet]
     main_mechanic_id: Optional[UniversalUserGet]
