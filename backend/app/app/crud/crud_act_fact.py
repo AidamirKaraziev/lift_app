@@ -1,8 +1,9 @@
 from typing import Optional
 from starlette import status
 from sqlalchemy.orm import Session
-from app.crud.base import CRUDBase
 
+from app.crud.base import CRUDBase
+from app.crud.crud_status import crud_status
 from app.crud.crud_act_base import crud_acts_bases
 from app.crud.crud_object import crud_objects
 from app.utils.time_stamp import date_from_timestamp
@@ -35,6 +36,14 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
         "status_code": status.HTTP_404_NOT_FOUND,
         "detail": f"{obj_name}: не найден с таким id"
     }
+    not_found_foreman = {
+        "status_code": status.HTTP_403_FORBIDDEN,
+        "detail": "Не найден прораб с таким id"
+    }
+    not_found_mechanic = {
+        "status_code": status.HTTP_403_FORBIDDEN,
+        "detail": "Не найден механик с таким id"
+    }
 
     def get_act_fact_by_id(self, db: Session, id: int):
         act_fact = super().get(db=db, id=id)
@@ -44,138 +53,68 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
 
     def create_act_fact(self, db: Session, *, new_data: ActFactCreate):
         # проверка объекта
-        if new_data.object_id:
-            obj, code, indexes = crud_objects.getting_object(db=db, obj_in=new_data.object_id)
-            if obj is None:
-                return None, code, None
+        obj, code, indexes = crud_objects.getting_object(db=db, object_id=new_data.object_id)
+        if code != 0:
+            return None, code, None
         # проверка базовый акт
-        if new_data.act_base_id is not None:
-            act_base, code, indexes = crud_acts_bases.getting_act_base(db=db, act_base_id=new_data.act_base_id)
-            if act_base is None:
-                return None, code, None
-        # перевод дат в нужный формат
-        if new_data.date_create is not None:
-            new_data.date_create = date_from_timestamp(new_data.date_create)
-        if new_data.date_start is not None:
-            new_data.date_start = date_from_timestamp(new_data.date_start)
-        if new_data.date_finish is not None:
-            new_data.date_finish = date_from_timestamp(new_data.date_finish)
+        act_base, code, indexes = crud_acts_bases.getting_act_base(db=db, act_base_id=new_data.act_base_id)
+        if code != 0:
+            return None, code, None
         # проверка на ответственный прораб
-        if new_data.foreman_id is not None:
-            foreman = db.query(UniversalUser).filter(UniversalUser.id == new_data.foreman_id).first()
-            if foreman is None:
-                return None, -105, None  # нет пользователя
-            # проверка на роли прораба
-            if foreman.role_id not in ROLE_FOREMAN:
-                return None, -119, None
-
+        foreman = db.query(UniversalUser).filter(UniversalUser.id == new_data.foreman_id, UniversalUser.role_id == FOREMAN).first()
+        if foreman is None:
+            return None, self.not_found_foreman, None
         # проверка на ответственный механик
-        if new_data.main_mechanic_id is not None:
-            mech = db.query(UniversalUser).filter(UniversalUser.id == new_data.main_mechanic_id).first()
-            if mech is None:
-                return None, -105, None  # нет пользователя
-        #     проверка на роль механика
-            if mech.role_id not in ROLE_MECHANIC:
-                return None, -120, None
-
-        # проверка статуса
-        if new_data.status_id is not None:
-            st = db.query(Status).filter(Status.id == new_data.status_id).first()
-            if st is None:
-                return None, -124, None  # нет status
+        mechanic = db.query(UniversalUser).filter(
+            UniversalUser.id == new_data.main_mechanic_id,
+            UniversalUser.role_id == MECHANIC).first()
+        if mechanic is None:
+            return None, self.not_found_mechanic, None
         db_obj = super().create(db=db, obj_in=new_data)
         return db_obj, 0, None
 
-    def update_act_fact(self, db: Session, *, new_data: Optional[ActFactUpdate], act_fact_id: int):
+    def update_act_fact(self, db: Session, *, update_data: Optional[ActFactUpdate], act_fact_id: int):
         # проверить есть ли объект с таким id
-        this_act_fact = (db.query(ActFact).filter(ActFact.id == act_fact_id).first())
-        if this_act_fact is None:
-            return None, -123, None
+        this_act_fact, code, indexes = self.get_act_fact_by_id(db=db, id=act_fact_id)
+        if code != 0:
+            return None, code, None
         # проверка объекта
-        if new_data.object_id is not None:
-            obj = db.query(Object).filter(Object.id == new_data.object_id).first()
-            if obj is None:
-                return None, -116, None  # нет объекта
+        obj, code, indexes = crud_objects.getting_object(db=db, object_id=update_data.object_id)
+        if code != 0:
+            return None, code, None
         # проверка базовый акт
-        if new_data.act_base_id is not None:
-            a_b = db.query(ActBase).filter(ActBase.id == new_data.act_base_id).first()
-            if a_b is None:
-                return None, -121, None  # нет базовый акт
-        # проверка на организацию
-        if new_data.organization_id is not None:
-            org = db.query(Organization).filter(Organization.id == new_data.organization_id).first()
-            if org is None:
-                return None, -114, None  # нет организации
-        # проверка на участок
-        if new_data.division_id is not None:
-            div = db.query(Division).filter(Division.id == new_data.division_id).first()
-            if div is None:
-                return None, -104, None  # нет участка
-        # проверка на модель техники
-        if new_data.factory_model_id is not None:
-            fac = db.query(FactoryModel).filter(FactoryModel.id == new_data.factory_model_id).first()
-            if fac is None:
-                return None, -115, None  # нет Модели техники
-        # проверка на заводской номер
-        if new_data.factory_number is not None:
-            fac_num = db.query(Object).filter(Object.factory_number == new_data.factory_number).first()
-            if fac_num is not None:
-                return None, -1151, None  # номер техники уже существует
-        # проверка на регистрационный номер
-        if new_data.registration_number is not None:
-            reg = db.query(Object).filter(Object.registration_number == new_data.registration_number).first()
-            if reg is not None:
-                return None, -118, None  # регистрационный номер уже есть
-        # проверка на компанию
-        if new_data.company_id is not None:
-            com = db.query(Company).filter(Company.id == new_data.company_id).first()
-            if com is None:
-                return None, -106, None  # нет компании
-        # проверка на контактное лицо
-        if new_data.contact_person_id is not None:
-            pers = db.query(ContactPerson).filter(ContactPerson.id == new_data.contact_person_id).first()
-            if pers is None:
-                return None, -113, None  # нет контактное лицо
-        # проверка на контракт
-        if new_data.contract_id is not None:
-            con = db.query(Contract).filter(Contract.id == new_data.contract_id).first()
-            if con is None:
-                return None, -1121, None  # нет компании
+        act_base, code, indexes = crud_acts_bases.getting_act_base(db=db, act_base_id=update_data.act_base_id)
+        if code != 0:
+            return None, code, None
+
         # перевод дат в нужный формат
-        if new_data.date_inspection is not None:
-            new_data.date_inspection = date_from_timestamp(new_data.date_inspection)
-        if new_data.planned_inspection is not None:
-            new_data.planned_inspection = date_from_timestamp(new_data.planned_inspection)
-        if new_data.period_inspection is not None:
-            new_data.period_inspection = date_from_timestamp(new_data.period_inspection)
+        if update_data.started_at:
+            update_data.started_at = date_from_timestamp(update_data.started_at)
+        if update_data.finished_at:
+            update_data.finished_at = date_from_timestamp(update_data.finished_at)
 
         # проверка на ответственный прораб
-        if new_data.foreman_id is not None:
-            foreman = db.query(UniversalUser).filter(UniversalUser.id == new_data.foreman_id).first()
+        if update_data.foreman_id:
+            foreman = db.query(UniversalUser).filter(
+                UniversalUser.id == update_data.foreman_id,
+                UniversalUser.role_id == FOREMAN).first()
             if foreman is None:
-                return None, -105, None  # нет пользователя
-            # проверка на роли прораба
-            if foreman.role_id not in ROLE_FOREMAN:
-                return None, -119, None
-
+                return None, self.not_found_foreman, None
         # проверка на ответственный механик
-        if new_data.mechanic_id is not None:
-            mech = db.query(UniversalUser).filter(UniversalUser.id == new_data.mechanic_id).first()
-            if mech is None:
-                return None, -105, None  # нет пользователя
-            #     проверка на роль механика
-            if mech.role_id not in ROLE_MECHANIC:
-                return None, -120, None
+        if update_data.main_mechanic_id:
+            mechanic = db.query(UniversalUser).filter(
+                UniversalUser.id == update_data.main_mechanic_id,
+                UniversalUser.role_id == MECHANIC).first()
+            if mechanic is None:
+                return None, self.not_found_mechanic, None
+        # проверка статуса
+        if update_data.status_id:
+            status, code, indexes = crud_status.getting_status(db=db, object_id=update_data.status_id)
+            if code != 0:
+                return None, code, None
         # обновление данных
-        # db_obj = super().update(db=db, db_obj=this_object, obj_in=new_data)
-        # return db_obj, 0, None
-        return None, 0, None
-
-    def getting_act_fact(self, *, db: Session, act_fact_id: int):
-        obj = db.query(ActFact).filter(ActFact.id == act_fact_id).first()
-        if obj is None:
-            return None, -123, None
-        return obj, 0, None
+        db_obj = super().update(db=db, db_obj=this_act_fact, obj_in=update_data)
+        return db_obj, 0, None
 
 
 crud_acts_fact = CrudActFact(ActFact)
