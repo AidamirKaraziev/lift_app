@@ -18,7 +18,7 @@ class ActFact(Base):
     foreman_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL", onupdate="CASCADE"))
     main_mechanic_id = Column(Integer, ForeignKey("universal_users.id", ondelete="SET NULL", onupdate="CASCADE"))
     file = Column(String)
-    status_id = Column(Integer, ForeignKey('statuses.id', ondelete="SET NULL", onupdate="CASCADE"), default=1)
+    status_id = Column(Integer, ForeignKey('statuses.id', ondelete="CASCADE", onupdate="CASCADE"), default=1)
 
     object = relationship(Object)
     act_base = relationship(ActBase)
