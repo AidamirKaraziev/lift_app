@@ -25,7 +25,7 @@ class Order(Base):
     in_progress_at = Column(DateTime)
     done_at = Column(DateTime)
 
-    status_id = Column(Integer, ForeignKey(Status.id, ondelete="SET NULL"), default=1)
+    status_id = Column(Integer, ForeignKey(Status.id, ondelete="CASCADE"), default=1)
     is_viewed = Column(Boolean, default=False)
 
     object = relationship(Object)
