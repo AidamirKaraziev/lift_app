@@ -6,7 +6,8 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
-from app.db.base_class import Base
+# Assuming 'db' is located in 'app' directory
+# from app.db.base_class import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -22,7 +23,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 
-# from app.db.base import Base  # noqa
+from app.db.base import Base  # noqa
 
 target_metadata = Base.metadata
 
@@ -60,7 +61,6 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
-
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -81,7 +81,6 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()
