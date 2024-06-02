@@ -78,21 +78,14 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
         this_act_fact, code, indexes = self.get_act_fact_by_id(db=db, id=act_fact_id)
         if code != 0:
             return None, code, None
-        # проверка объекта
-        obj, code, indexes = crud_objects.getting_object(db=db, object_id=update_data.object_id)
-        if code != 0:
-            return None, code, None
-        # проверка базовый акт
-        act_base, code, indexes = crud_acts_bases.getting_act_base(db=db, act_base_id=update_data.act_base_id)
-        if code != 0:
-            return None, code, None
-
+        # обновление выполненных шагов
+        if update_data.step_list_fact:
+            update_data.step_list_fact = update_data.step_list_fact
         # перевод дат в нужный формат
-        if update_data.started_at:
+        if update_data.started_at is not None:
             update_data.started_at = date_from_timestamp(update_data.started_at)
-        if update_data.finished_at:
+        if update_data.finished_at is not None:
             update_data.finished_at = date_from_timestamp(update_data.finished_at)
-
         # проверка на ответственный прораб
         if update_data.foreman_id:
             foreman = db.query(UniversalUser).filter(
@@ -109,7 +102,7 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
                 return None, self.not_found_mechanic, None
         # проверка статуса
         if update_data.status_id:
-            status, code, indexes = crud_status.getting_status(db=db, object_id=update_data.status_id)
+            status, code, indexes = crud_status.getting_status(db=db, status_id=update_data.status_id)
             if code != 0:
                 return None, code, None
         # обновление данных
