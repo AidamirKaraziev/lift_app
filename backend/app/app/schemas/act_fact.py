@@ -34,16 +34,11 @@ class ActFactCreate(BaseModel):
 
 
 class ActFactUpdate(BaseModel):
-    object_id: Optional[int]
-    act_base_id: Optional[int]
     step_list_fact: Optional[str]
-
     started_at: Optional[int]
     finished_at: Optional[int]
-
     foreman_id: Optional[int]
     main_mechanic_id: Optional[int]
-
     status_id: Optional[int]
 
 
