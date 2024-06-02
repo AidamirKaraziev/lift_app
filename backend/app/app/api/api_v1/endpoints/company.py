@@ -12,6 +12,7 @@ from app.crud.crud_company import crud_company
 from app.crud.crud_universal_user import crud_universal_users
 from app.getters.company import get_company
 from app.schemas.company import CompanyUpdate, CompanyGet, CompanyCreate
+from app.getters.universal_user import get_universal_user
 
 ROLES_ELIGIBLE = [ADMIN]
 ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]
@@ -170,6 +171,29 @@ def unzipping_companies(
                                                         role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
     return SingleEntityResponse(data=get_company(obj, request=request))
+
+
+@router.get(
+    path='/company/clients/{company_id}/',
+    response_model=ListOfEntityResponse,
+    summary='Получить список клиентов для компании.',
+    description="""
+
+""",
+    tags=['Админ панель / Компании']
+)
+def get_clients_by_company_id(
+        request: Request,
+        company_id: int,
+        current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+):
+    logging.info(crud_universal_users.get_clients_by_company_id(db=session, company_id=company_id))
+    data, code, indexes = crud_universal_users.get_clients_by_company_id(db=session, company_id=company_id)
+    get_raise(code=code)
+
+    return ListOfEntityResponse(
+        data=[get_universal_user(datum, request=request) for datum in data])
 
 
 if __name__ == "__main__":
