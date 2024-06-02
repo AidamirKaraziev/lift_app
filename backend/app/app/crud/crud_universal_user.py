@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.core.security import verify_password, get_password_hash
-from app.core.roles import ADMIN
+from app.core.roles import ADMIN, CLIENT
 from app.exceptions import UnprocessableEntity
 
 from app.utils import pagination
@@ -120,6 +120,17 @@ class CrudUniversalUser(CRUDBaseUser[
             return None, -1301, None
         self.remove(db=db, id=user_id)
         return f"Юзер с id {user_id} - удален!", 0, None
+
+    def get_clients_by_company_id(self, *, db: Session, company_id: int):
+        from app.crud.crud_company import crud_company
+        # проверка на компанию
+        company, code, indexes = crud_company.get_company(db=db, company_id=company_id)
+        if code != 0:
+            return None, code, None
+        clients = db.query(UniversalUser).filter(
+            UniversalUser.company_id == company_id, UniversalUser.role_id == CLIENT
+        ).order_by(UniversalUser.id).all()
+        return clients, 0, None
 
 
 crud_universal_users = CrudUniversalUser(UniversalUser)
