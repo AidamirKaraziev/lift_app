@@ -49,16 +49,16 @@ class ActFactUpdate(BaseModel):
 
 class ActFactGet(BaseModel):
     id: int
-    object_id: Optional[ObjectGet]
-    act_base_id: Optional[ActBaseGet]
+    object_id: Optional[int]
+    act_base_id: Optional[int]
     step_list_fact: Optional[str]
 
     created_at: Optional[datetime]
     started_at: Optional[datetime]
     finished_at: Optional[datetime]
 
-    foreman_id: Optional[UniversalUserGet]
-    main_mechanic_id: Optional[UniversalUserGet]
+    foreman_id: Optional[int]
+    main_mechanic_id: Optional[int]
 
     file: Optional[str]
     status_id: Optional[StatusGet]
