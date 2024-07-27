@@ -2,7 +2,7 @@ FROM python:3.8
 
 WORKDIR /app/
 
-RUN pip3 install --upgrade pip
+RUN pip3 install pip==23.0
 # Копирование файлов из директории ./app в контейнер
 COPY ./app /app
 
