@@ -10,7 +10,7 @@ from dotenv import dotenv_values
 from src.models import SuperUser
 import jwt
 
-config_credentials = dotenv_values(".env")
+config_credentials = dotenv_values(".env.local")
 
 conf = ConnectionConfig(
     MAIL_USERNAME=config_credentials["EMAIL"],

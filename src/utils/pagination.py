@@ -20,3 +20,4 @@ def get_page(query, page: Optional[int]) -> Tuple[List, Optional[Paginator]]:
         has_next=page < total
     )
     return page_obj.items, paginator
+

@@ -2,15 +2,16 @@ import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
+from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, root_validator, validator
 
 
 def get_url():
-    user = os.getenv("DB_USER", "postgres")
-    password = os.getenv("DB_PASSWORD", "")
-    host = os.getenv("DB_HOST", "localhost")  # Используйте "localhost" для локального тестирования
-    port = os.getenv("DB_PORT", "5435")
-    db_name = os.getenv("DB_NAME", "postgres")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT")
+    db_name = os.getenv("DB_NAME")
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
 
@@ -82,7 +83,10 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
-        env_file = ".env"
+        env_file = ".env.local"
 
+
+env_file = ".env.local.local" if os.getenv("ENV") == "local" else ".env.local.docker"
+load_dotenv(env_file)
 
 settings = Settings()
