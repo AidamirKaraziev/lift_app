@@ -14,4 +14,4 @@ block_schemas/
 **/static
 задачи.txt
 venv
-/.env.docker
+/.env
