@@ -21,6 +21,5 @@ WORKDIR /app
 COPY prestart.sh /prestart.sh
 RUN chmod +x /prestart.sh
 
-
-# Запустите приложение с использованием переменных окружения
-CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port 8000 ${UVICORN_RELOAD}"]
+# Запустите скрипт prestart.sh и затем приложение
+CMD ["sh", "-c", "/prestart.sh && uvicorn src.main:app --host 0.0.0.0 --port 8000 ${UVICORN_RELOAD}"]
