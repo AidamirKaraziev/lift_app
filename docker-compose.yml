@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env.docker
+      - .env
 
   backend:
     build:
@@ -23,10 +23,10 @@ services:
     environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: postgres
+      DB_HOST: ${DB_HOST}  # Устанавливаем хост напрямую
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
-      SQLALCHEMY_DATABASE_URI: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}
+#      SQLALCHEMY_DATABASE_URI: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}
       UVICORN_RELOAD: ${UVICORN_RELOAD}  # Добавьте эту строку для режима разработки
     depends_on:
       - postgres
@@ -35,7 +35,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env.docker
+      - .env
 
 volumes:
   postgres_data:
