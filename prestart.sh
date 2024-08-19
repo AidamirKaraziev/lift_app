@@ -1,10 +1,8 @@
 #! /usr/bin/env bash
 
-# Let the DB start
-python /app/app/backend_pre_start.py
+# Установите рабочий каталог для alembic и выполнения миграций
+# shellcheck disable=SC2164
+cd /app/src
 
 # Run migrations
 alembic upgrade head
-
-# Create initial data in DB
-python /app/initial_data.py
