@@ -1,10 +1,9 @@
 from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from src.core.db.base_class import Base
 
+from src.session import Base
 from src.models.company import Company
 from src.models.type_contract import TypeContract
-
 from src.models.cost_type import CostType
 
 

@@ -9,7 +9,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.core.db.base_class import Base
+from src.session import Base
 
 from src.core.response import Paginator
 from src.utils import pagination

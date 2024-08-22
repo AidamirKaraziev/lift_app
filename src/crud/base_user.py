@@ -10,7 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.core.db.base_class import Base
+from src.session import Base
 
 from src.core.response import Paginator
 from src.core.security import verify_password, get_password_hash

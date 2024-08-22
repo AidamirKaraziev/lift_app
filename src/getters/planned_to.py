@@ -1,6 +1,6 @@
 from typing import Optional
 from fastapi import Request
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 from src.models import PlannedTO
 from src.schemas.planned_to import PlannedTOGet
 from src.getters.object import get_object

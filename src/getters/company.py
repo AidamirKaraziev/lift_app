@@ -1,7 +1,7 @@
 from fastapi import Request
 from typing import Optional
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.getters.location import get_location
 from src.models.company import Company

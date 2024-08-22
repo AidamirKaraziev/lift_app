@@ -2,9 +2,7 @@ from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, Uniqu
 
 from sqlalchemy.orm import relationship
 
-from src.core.db.base_class import Base
-
-
+from src.session import Base
 from src.models.contact_person import ContactPerson
 from src.models.contract import Contract
 from src.models.factory_model import FactoryModel

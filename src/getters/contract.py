@@ -1,7 +1,7 @@
 from fastapi import Request
 from typing import Optional
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.getters.company import get_company
 from src.getters.cost_type import get_cost_types

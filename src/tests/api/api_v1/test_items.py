@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from src.core.config import settings
+from src.config import settings
 from src.tests.utils.item import create_random_item
 
 

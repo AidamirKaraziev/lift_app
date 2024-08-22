@@ -1,7 +1,7 @@
 from fastapi import Request
 from typing import Optional
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.getters.factory_model import get_factory_model
 from src.getters.type_act import get_type_acts

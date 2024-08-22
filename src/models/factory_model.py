@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
-from src.core.db.base_class import Base
 from sqlalchemy.orm import relationship
+
+from src.session import Base
 from src.models import TypeObject
 
 

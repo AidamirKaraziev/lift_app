@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Any, Union, Dict, List, Optional
 from passlib.context import CryptContext
 
-from src.core.config import settings, Settings
+from src.config import settings, Settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

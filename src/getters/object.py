@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import Request
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.getters.division import get_division
 from src.getters.company import get_company

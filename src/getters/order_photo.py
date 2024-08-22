@@ -1,6 +1,6 @@
 from typing import Optional
 from fastapi import Request
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 from src.schemas.order_photo import OrderPhotoGet
 
 
