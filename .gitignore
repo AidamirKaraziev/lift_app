@@ -14,3 +14,5 @@ block_schemas/
 задачи.txt
 venv
 .env
+/envs/.env.docker
+/envs/.env.local
