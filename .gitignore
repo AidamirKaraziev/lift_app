@@ -1,5 +1,4 @@
 сделано за сегодня
-.env.local
 .idea
 пароль.txt
 __pycache__/
@@ -14,4 +13,4 @@ block_schemas/
 **/static
 задачи.txt
 venv
-/.env
+.env

@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from src.core.db.base_class import Base
+from src.session import Base
 from src.models import Object, ActBase, Status
 
 

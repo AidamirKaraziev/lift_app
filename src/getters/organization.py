@@ -1,7 +1,7 @@
 from fastapi import Request
 from typing import Optional
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.getters.universal_user import get_universal_user
 from src.models import Organization

@@ -1,6 +1,6 @@
 import logging
 
-from core.db.session import SessionLocal
+from src.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

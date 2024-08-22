@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import Request
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
 from src.utils.time_stamp import to_timestamp
 

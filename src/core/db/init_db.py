@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.core.security import get_password_hash
 from src.crud.users import crud_universal_user
 from src.schemas.universal_user import UniversalUserCreate
-from src.core.db.session import get_session
+from src.session import get_session
 from src.models import Role, Status, TypeObject, TypeContract, Location, FaultCategory, ReasonFault, TypeAct, CostType
 
 

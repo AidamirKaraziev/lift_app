@@ -1,12 +1,8 @@
 from typing import Optional
 from fastapi import Request
 
-from src.core.config import Settings, settings
+from src.config import Settings, settings
 
-from src.getters.universal_user import get_universal_user
-
-from src.getters.act_base import get_acts_bases
-from src.getters.object import get_object
 from src.models import ActFact
 from src.getters.status import get_statuses
 from src.schemas.act_fact import ActFactGet

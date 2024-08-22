@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from src.api.api_v1.api import api_router
-from src.core.config import settings
-from src.core.db.session import SessionLocal
+from src.config import settings
+from src.session import SessionLocal
 from src.core.db.init_db import create_initial_data
 import logging
 
@@ -22,10 +22,6 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-
-
-# Это очень важно, не удалять!
-from . import errors
 
 
 # Функция для создания начальных данных
@@ -48,3 +44,5 @@ async def startup_event() -> None:
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
+    # Это очень важно, не удалять!
+

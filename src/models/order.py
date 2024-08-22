@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from src.core.db.base_class import Base
 
+from src.session import Base
 from src.models import Object, UniversalUser
 from src.models.fault_category import FaultCategory
 from src.models.reason_fault import ReasonFault

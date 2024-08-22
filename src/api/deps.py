@@ -8,8 +8,8 @@ from sqlalchemy.orm import Session
 
 from src import models, schemas
 from src.core import security
-from src.core.config import settings
-from src.core.db.session import SessionLocal
+from src.config import settings
+from src.session import SessionLocal
 
 
 from src.crud.users.crud_universal_user import crud_universal_users

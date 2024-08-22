@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from src.core.db.base_class import Base
+
+from src.session import Base
 
 
 class Division(Base):

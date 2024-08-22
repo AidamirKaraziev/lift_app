@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, root_validator, validator
 
 
+load_dotenv(".env")
+
+
 def get_url():
     user = os.getenv("DB_USER")
     password = os.getenv("DB_PASSWORD")
@@ -23,8 +26,8 @@ class Settings(BaseSettings):
     TOKEN_CLAIMS_EXTRA_FIELDS = ["exp", "nbf", "iat", "jti"]
     TOKEN_CHECKS = ["nbf"]
 
-    SERVER_NAME: str = "default_server_name"  # Установите значение по умолчанию
-    SERVER_HOST: AnyHttpUrl = "http://localhost"  # Установите значение по умолчанию
+    SERVER_NAME: str = "default_server_name"
+    SERVER_HOST: AnyHttpUrl = "http://localhost"
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
@@ -35,7 +38,7 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str = "ELS 🔥"  # Установите значение по умолчанию
+    PROJECT_NAME: str = "ELS 🔥"
     SENTRY_DSN: Optional[HttpUrl] = None
 
     @validator("SENTRY_DSN", pre=True)
@@ -44,12 +47,14 @@ class Settings(BaseSettings):
             return None
         return v
 
-    POSTGRES_SERVER: str = "localhost"  # Установите значение по умолчанию
-    POSTGRES_USER: str = "user"  # Установите значение по умолчанию
-    POSTGRES_PASSWORD: str = "password"  # Установите значение по умолчанию
-    POSTGRES_DB: str = "database"  # Установите значение по умолчанию
-    SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = get_url()
-
+    # Используем Pydantic для работы с PostgresDsn и загрузки переменных
+    # POSTGRES_SERVER: str = os.getenv("DB_HOST")
+    # POSTGRES_USER: str = os.getenv("DB_USER")
+    # POSTGRES_PASSWORD: str = os.getenv("DB_PASSWORD")
+    # POSTGRES_DB: str = os.getenv("DB_NAME")
+    # POSTGRES_PORT: str = os.getenv("DB_PORT")  # Порт по умолчанию 5432
+    # SQLALCHEMY_DATABASE_URI: PostgresDsn = get_url()
+    # print("sssssss", SQLALCHEMY_DATABASE_URI)
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None
     SMTP_HOST: Optional[str] = None
@@ -77,16 +82,16 @@ class Settings(BaseSettings):
         )
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
-    FIRST_SUPERUSER: EmailStr = "users@example.com"  # Установите значение по умолчанию
-    FIRST_SUPERUSER_PASSWORD: str = "supersecretpassword"  # Установите значение по умолчанию
+    FIRST_SUPERUSER: EmailStr = "users@example.com"
+    FIRST_SUPERUSER_PASSWORD: str = "supersecretpassword"
     USERS_OPEN_REGISTRATION: bool = False
 
     class Config:
         case_sensitive = True
-        env_file = ".env.local"
+        env_file = ".env"
 
 
-env_file = ".env.local.local" if os.getenv("ENV") == "local" else ".env.local.docker"
-load_dotenv(env_file)
-
+# Инициализация настроек
 settings = Settings()
+
+# print(settings.SQLALCHEMY_DATABASE_URI)  # Вывод строки подключения для проверки

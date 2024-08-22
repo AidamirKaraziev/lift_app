@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from src.core.db.base_class import Base
+from src.session import Base
 from src.models import Location
 from src.models.role import Role
 from src.models.working_specialty import WorkingSpecialty
