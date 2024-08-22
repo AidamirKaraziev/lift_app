@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.core.roles import ADMIN, FOREMAN, CLIENT
 
 from src.exceptions import UnprocessableEntity, UnfoundEntity, InaccessibleEntity

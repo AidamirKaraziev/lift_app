@@ -11,7 +11,7 @@ from src.exceptions import UnfoundEntity, InaccessibleEntity
 
 from src.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
 from src.core.response import SingleEntityResponse
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 
 from src.crud.crud_admin import crud_admin
 from src.crud.users.crud_universal_user import crud_universal_users

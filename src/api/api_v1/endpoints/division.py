@@ -7,7 +7,7 @@ from src.api import deps
 
 from src.core.response import Meta, SingleEntityResponse, ListOfEntityResponse
 from src.core.roles import ADMIN, FOREMAN
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.exceptions import UnprocessableEntity, UnfoundEntity, InaccessibleEntity
 
 from src.crud.crud_division import crud_division

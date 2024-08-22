@@ -6,7 +6,7 @@ from fastapi.params import Path
 from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.core.security import create_token_universal_user
 from src.exceptions import UnfoundEntity
 

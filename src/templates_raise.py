@@ -1,5 +1,6 @@
 from typing import Any
 from fastapi import HTTPException
+
 from src.exceptions import UnprocessableEntity, InaccessibleEntity, UnfoundEntity
 
 

@@ -5,7 +5,7 @@ from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from src.core.roles import ADMIN, FOREMAN
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 
 from src.crud.users.crud_universal_user import crud_universal_users
 from src.crud.crud_type_object import crud_type_object

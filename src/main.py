@@ -44,5 +44,6 @@ async def startup_event() -> None:
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
-    # Это очень важно, не удалять!
 
+# Это очень важно, не удалять!
+from .errors import *
