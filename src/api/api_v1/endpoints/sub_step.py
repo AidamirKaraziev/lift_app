@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, Path, Request
 from src.api import deps
 from src.core.response import ListOfEntityResponse, Meta, SingleEntityResponse
 from src.core.roles import ADMIN, FOREMAN
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 
 from src.crud.users.crud_universal_user import crud_universal_users
 from src.crud.crud_sub_step import crud_sub_step

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 from src.api import deps
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 from src.core.roles import ADMIN, CLIENT
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.exceptions import UnfoundEntity
 
 from src.crud.crud_organization import crud_organizations

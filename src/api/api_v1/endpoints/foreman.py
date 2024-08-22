@@ -5,7 +5,7 @@ from fastapi.params import Path
 
 from src.api import deps
 from src.core.response import SingleEntityResponse
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.core.roles import MECHANIC, ENGINEER, DISPATCHER, FOREMAN
 from src.exceptions import UnfoundEntity
 

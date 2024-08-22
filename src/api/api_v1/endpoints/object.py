@@ -6,7 +6,7 @@ from fastapi.params import Path
 from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 
 from src.crud.crud_object import crud_objects
 from src.crud.users.crud_universal_user import crud_universal_users

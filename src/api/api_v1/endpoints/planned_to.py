@@ -5,7 +5,7 @@ from src.api import deps
 from src.crud.users.crud_universal_user import crud_universal_users
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
 
-from src.core.templates_raise import get_raise
+from src.templates_raise import get_raise
 from src.core.roles import ADMIN, FOREMAN
 from src.crud.crud_planned_to import crud_planned_to
 from src.getters.planned_to import get_planned_to
@@ -15,8 +15,7 @@ ROLES_ELIGIBLE = [ADMIN, FOREMAN]
 router = APIRouter()
 
 
-# GET-MULTY
-@router.get('/all-planned-to/',
+@router.get(path='/all-planned-to/',
             response_model=ListOfEntityResponse,
             name='get_all_planned_to',
             description='Получение списка всех Плановых ТО',
@@ -35,26 +34,42 @@ def get_all_planned_to(
                                 meta=Meta(paginator=paginator))
 
 
-# GET BY ID
-@router.get('/planned-to/{planned_to_id}/',
-            response_model=SingleEntityResponse[PlannedTOGet],
-            name='get_planned_to_by_id',
-            description='Получение данных планового ТО по id',
-            tags=['Админ панель / Плановые ТО']
-            )
+@router.get(
+        path='/planned-to/{planned_to_id}/',
+        response_model=SingleEntityResponse[PlannedTOGet],
+        name='get_planned_to_by_id',
+        description='Получение данных планового ТО по id',
+        tags=['Админ панель / Плановые ТО']
+        )
 def get_planned_to_by_id(
         request: Request,
         session=Depends(deps.get_db),
         planned_to_id: int = Path(..., title='ID planned TO'),
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    obj, code, indexes = crud_planned_to.getting_planned_to(db=session, planned_to_id=planned_to_id)
+    obj, code, indexes = crud_planned_to.get_planed_to_by_id(db=session, planned_to_id=planned_to_id)
     get_raise(code=code)
     return SingleEntityResponse(data=get_planned_to(obj, request))
 
 
-# CREATE NEW ACT FACT
-@router.post('/planned-to/',
+@router.get(path='/planned-to/by-object/{object_id}/',
+            response_model=ListOfEntityResponse[PlannedTOGet],
+            summary="Получить список плановых ТО по id объекта",
+            description='Получить список плановых ТО по id объекта',
+            tags=['Админ панель / Плановые ТО']
+            )
+def get_planned_to_by_obj_id(
+        request: Request,
+        session=Depends(deps.get_db),
+        object_id: int = Path(..., title='ID объекта'),
+        # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+):
+    objs, code, indexes = crud_planned_to.get_planed_to_by_object_id(db=session, object_id=object_id)
+    get_raise(code=code)
+    return ListOfEntityResponse(data=[get_planned_to(obj=datum, request=request) for datum in objs])
+
+
+@router.post(path='/planned-to/',
              response_model=SingleEntityResponse,
              name='create_planned_to',
              description='Добавить плановое ТО в базу данных',
@@ -76,7 +91,7 @@ def create_planned_to(
 
 
 # UPDATE
-@router.put('/planned-to/{planned_to_id}/',
+@router.put(path='/planned-to/{planned_to_id}/',
             response_model=SingleEntityResponse,
             name='update_planned_to',
             description='Изменяет плановое ТО',

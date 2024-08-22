@@ -77,16 +77,15 @@ class OrderGet(BaseModel):
     creator_id: UniversalUserGet
     fault_category_id: Optional[FaultCategoryGet]
     task_text: Optional[str]
-    # order_photo: Optional[OrderPhotoGet]
 
     executor_id: Optional[UniversalUserGet]
     commentary: Optional[str]
     reason_fault_id: Optional[ReasonFaultGet]
 
     created_at: Optional[int]
-    accepted_at: Optional[str]
-    in_progress_at: Optional[str]
-    done_at: Optional[str]
+    accepted_at: Optional[int]
+    in_progress_at: Optional[int]
+    done_at: Optional[int]
 
     status_id: Optional[StatusGet]
     is_viewed: Optional[bool]
