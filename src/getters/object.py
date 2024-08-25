@@ -11,10 +11,10 @@ from src.getters.factory_model import get_factory_model
 from src.getters.universal_user import get_universal_user
 from src.models import Object
 from src.schemas.object import ObjectGet
+from src.utils.time_stamp import to_timestamp
 
 
-def get_object(obj: Object, request: Optional[Request],
-               config: Settings = settings) -> Optional[ObjectGet]:
+def get_object(obj: Object, request: Optional[Request], config: Settings = settings) -> Optional[ObjectGet]:
     if request is not None:
         url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if obj.letter_of_appointment is not None:
@@ -32,10 +32,16 @@ def get_object(obj: Object, request: Optional[Request],
         else:
             obj.act_pto = None
 
+    if obj.date_inspection:
+        obj.date_inspection = to_timestamp(obj.date_inspection)
+    if obj.planned_inspection:
+        obj.planned_inspection = to_timestamp(obj.planned_inspection)
+    if obj.period_inspection:
+        obj.period_inspection = to_timestamp(obj.period_inspection)
+
     return ObjectGet(
         id=obj.id,
         name=obj.name,
-        # organization_id=get_organization(obj.organization, request=request) if obj.organization is not None else None,
         organization_id=obj.organization_id,
         division_id=get_division(obj.division, request=request) if obj.division is not None else None,
         address=obj.address,
