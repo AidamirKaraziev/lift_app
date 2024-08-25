@@ -6,11 +6,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-# def init() -> None:
-#     db = SessionLocal()
-#     init_db(db)
-
-
 def main() -> None:
     logger.info("Creating initial data")
     create_initial_data()
