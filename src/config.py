@@ -86,5 +86,3 @@ class Settings(BaseSettings):
 
 # Инициализация настроек
 settings = Settings()
-
-# print(settings.SQLALCHEMY_DATABASE_URI)  # Вывод строки подключения для проверки
