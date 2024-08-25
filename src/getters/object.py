@@ -16,7 +16,7 @@ from src.schemas.object import ObjectGet
 def get_object(obj: Object, request: Optional[Request],
                config: Settings = settings) -> Optional[ObjectGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if obj.letter_of_appointment is not None:
             obj.letter_of_appointment = url + str(obj.letter_of_appointment)
         else:

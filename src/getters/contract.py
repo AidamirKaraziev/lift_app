@@ -13,7 +13,7 @@ from src.schemas.contract import ContractGet
 def get_contract(obj: Contract, request: Optional[Request],
                  config: Settings = settings) -> Optional[ContractGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if obj.file is not None:
             obj.file = url + str(obj.file)
 

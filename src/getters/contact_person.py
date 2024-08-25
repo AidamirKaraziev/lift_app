@@ -11,7 +11,7 @@ from src.schemas.contact_person import ContactPersonGet
 def get_contact_person(contact_person: ContactPerson, request: Optional[Request],
                        config: Settings = settings) -> Optional[ContactPersonGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if contact_person.photo is not None:
             contact_person.photo = url + str(contact_person.photo)
         else:

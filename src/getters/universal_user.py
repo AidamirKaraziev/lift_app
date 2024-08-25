@@ -17,7 +17,7 @@ from src.getters.division import get_division
 def get_universal_user(universal_user: UniversalUser, request: Optional[Request],
                        config: Settings = settings) -> Optional[UniversalUserGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if universal_user.photo is not None:
             universal_user.photo = url + str(universal_user.photo)
         else:

@@ -11,7 +11,7 @@ from src.schemas.organization import OrganizationGet
 def get_organization(organization: Organization, request: Optional[Request],
                      config: Settings = settings) -> Optional[OrganizationGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if organization.photo is not None:
             organization.photo = url + str(organization.photo)
         else:

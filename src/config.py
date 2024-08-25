@@ -20,6 +20,7 @@ def get_url():
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
+    APP_PORT: str = os.getenv("APP_PORT")
     SECRET_KEY: str = secrets.token_urlsafe(32)
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8

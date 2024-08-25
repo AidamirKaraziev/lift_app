@@ -17,7 +17,7 @@ from src.schemas.client import ClientGet
 def get_client(client: UniversalUser, request: Optional[Request],
                config: Settings = settings) -> Optional[ClientGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if client.photo is not None:
             client.photo = url + str(client.photo)
         else:
