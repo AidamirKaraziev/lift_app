@@ -11,7 +11,7 @@ from src.schemas.company import CompanyGet
 def get_company(company: Company, request: Optional[Request],
                 config: Settings = settings) -> Optional[CompanyGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if company.photo is not None:
             company.photo = url + str(company.photo)
         else:

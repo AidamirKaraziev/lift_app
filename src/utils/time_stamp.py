@@ -16,8 +16,6 @@ def to_timestamp(d: Union[None, datetime, date, int]) -> Optional[int]:
         return result
     else:
         return d
-    #     dt = d
-
 
 
 def date_from_timestamp(ts: Optional[int]) -> Optional[date]:

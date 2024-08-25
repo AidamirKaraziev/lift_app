@@ -16,7 +16,7 @@ from src.models import UniversalUser
 def get_admin(admin: UniversalUser, request: Optional[Request],
               config: Settings = settings) -> Optional[UniversalUserGet]:
     if request is not None:
-        url = request.url.hostname + config.API_V1_STR + "/static/"
+        url = request.url.hostname + ":" + str(settings.APP_PORT) + config.API_V1_STR + "/static/"
         if admin.photo is not None:
             admin.photo = url + str(admin.photo)
         else:

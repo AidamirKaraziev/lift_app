@@ -20,6 +20,7 @@ def get_url():
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
+    APP_PORT: str = os.getenv("APP_PORT", "8000")
     SECRET_KEY: str = secrets.token_urlsafe(32)
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -47,14 +48,6 @@ class Settings(BaseSettings):
             return None
         return v
 
-    # Используем Pydantic для работы с PostgresDsn и загрузки переменных
-    # POSTGRES_SERVER: str = os.getenv("DB_HOST")
-    # POSTGRES_USER: str = os.getenv("DB_USER")
-    # POSTGRES_PASSWORD: str = os.getenv("DB_PASSWORD")
-    # POSTGRES_DB: str = os.getenv("DB_NAME")
-    # POSTGRES_PORT: str = os.getenv("DB_PORT")  # Порт по умолчанию 5432
-    # SQLALCHEMY_DATABASE_URI: PostgresDsn = get_url()
-    # print("sssssss", SQLALCHEMY_DATABASE_URI)
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None
     SMTP_HOST: Optional[str] = None
@@ -93,5 +86,3 @@ class Settings(BaseSettings):
 
 # Инициализация настроек
 settings = Settings()
-
-# print(settings.SQLALCHEMY_DATABASE_URI)  # Вывод строки подключения для проверки
