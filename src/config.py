@@ -48,14 +48,6 @@ class Settings(BaseSettings):
             return None
         return v
 
-    # Используем Pydantic для работы с PostgresDsn и загрузки переменных
-    # POSTGRES_SERVER: str = os.getenv("DB_HOST")
-    # POSTGRES_USER: str = os.getenv("DB_USER")
-    # POSTGRES_PASSWORD: str = os.getenv("DB_PASSWORD")
-    # POSTGRES_DB: str = os.getenv("DB_NAME")
-    # POSTGRES_PORT: str = os.getenv("DB_PORT")  # Порт по умолчанию 5432
-    # SQLALCHEMY_DATABASE_URI: PostgresDsn = get_url()
-    # print("sssssss", SQLALCHEMY_DATABASE_URI)
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None
     SMTP_HOST: Optional[str] = None
