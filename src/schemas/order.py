@@ -50,23 +50,16 @@ class OrderCreate(BaseModel):
 
 
 class OrderUpdate(BaseModel):
-    # id: int
     object_id: Optional[int]
-
-    # creator_id: Optional[int]
-
     fault_category_id: Optional[int]
     task_text: Optional[str]
-
     executor_id: Optional[int]
     commentary: Optional[str]
     reason_fault_id: Optional[int]
-
     created_at: Optional[Date]
     accepted_at: Optional[Date]
     in_progress_at: Optional[Date]
     dane_at: Optional[Date]
-
     status_id: Optional[int]
     is_viewed: Optional[bool]
 
