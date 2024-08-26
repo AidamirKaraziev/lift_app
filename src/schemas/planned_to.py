@@ -25,7 +25,6 @@ class PlannedTOBase(BaseModel):
 
 
 class PlannedTOCreate(BaseModel):
-    # id: int
     year: str
     object_id: int
 

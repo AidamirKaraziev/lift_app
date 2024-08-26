@@ -1,6 +1,8 @@
 import logging
 from fastapi import APIRouter, Depends, Request, Query
 from fastapi.params import Path
+
+from src.crud.crud_object import crud_objects
 from src.api import deps
 from src.crud.users.crud_universal_user import crud_universal_users
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
@@ -62,11 +64,17 @@ def get_planned_to_by_obj_id(
         request: Request,
         session=Depends(deps.get_db),
         object_id: int = Path(..., title='ID объекта'),
+        page: int = Query(1, title="Номер страницы")
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    objs, code, indexes = crud_planned_to.get_planed_to_by_object_id(db=session, object_id=object_id)
-    get_raise(code=code)
-    return ListOfEntityResponse(data=[get_planned_to(obj=datum, request=request) for datum in objs])
+    cur_object, object_code, indexes = crud_objects.get_object_by_id(db=session, object_id=object_id)
+    get_raise(code=object_code)
+
+    logging.info(crud_planned_to.get_planed_to_by_object_id(db=session, page=None, object_id=object_id))
+    data, paginator = crud_planned_to.get_planed_to_by_object_id(db=session, page=page, object_id=object_id)
+
+    return ListOfEntityResponse(data=[get_planned_to(obj=datum, request=request) for datum in data],
+                                meta=Meta(paginator=paginator))
 
 
 @router.post(path='/planned-to/',
