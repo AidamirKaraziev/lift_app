@@ -43,10 +43,6 @@ class PlannedTOCreate(BaseModel):
 
 
 class PlannedTOUpdate(BaseModel):
-    # id: int
-    year: Optional[str]
-    object_id: Optional[int]
-
     january_to_id: Optional[int]
     february_to_id: Optional[int]
     march_to_id: Optional[int]
