@@ -1,12 +1,14 @@
-from typing import Optional
+from typing import Optional, List, Tuple
 from sqlalchemy.orm import Session
 
-from src.crud.crud_object import crud_objects
+from src.core.response import Paginator
+from src.crud.base_user import ModelType
 from src.crud.base import CRUDBase
 
 from src.schemas.planned_to import PlannedTOCreate, PlannedTOUpdate
 from src.crud.crud_act_fact import crud_acts_fact
 from src.models import PlannedTO, Object
+from src.utils import pagination
 
 
 class CrudPlannedTO(CRUDBase[PlannedTO, PlannedTOCreate, PlannedTOUpdate]):
@@ -74,12 +76,14 @@ class CrudPlannedTO(CRUDBase[PlannedTO, PlannedTOCreate, PlannedTOUpdate]):
         db_obj = super().update(db=db, db_obj=this_planned_to, obj_in=new_data)
         return db_obj, 0, None
 
-    def get_planed_to_by_object_id(self, *, db: Session, object_id: int):
-        cur_object, object_code, indexes = crud_objects.get_object_by_id(db=db, object_id=object_id)
-        if object_code is not None:
-            return None, object_code, None
-        planned_to = db.query(self.model).filter(self.model.object_id == object_id).all()
-        return planned_to, 0, None
+    def get_planed_to_by_object_id(
+            self, *,
+            db: Session,
+            object_id: int,
+            page: Optional[int] = None,
+    ) -> Tuple[List[ModelType], Paginator]:
+        query = db.query(self.model).filter(self.model.object_id == object_id)
+        return pagination.get_page(query, page)
 
 
 crud_planned_to = CrudPlannedTO(PlannedTO)
