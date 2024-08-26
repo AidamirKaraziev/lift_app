@@ -53,7 +53,7 @@ class CrudActFact(CRUDBase[ActFact, ActFactCreate, ActFactUpdate]):
 
     def create_act_fact(self, db: Session, *, new_data: ActFactCreate):
         # проверка объекта
-        obj, code, indexes = crud_objects.getting_object(db=db, object_id=new_data.object_id)
+        obj, code, indexes = crud_objects.get_object_by_id(db=db, object_id=new_data.object_id)
         if code != 0:
             return None, code, None
         # проверка базовый акт

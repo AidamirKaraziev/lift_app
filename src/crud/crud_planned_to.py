@@ -75,7 +75,7 @@ class CrudPlannedTO(CRUDBase[PlannedTO, PlannedTOCreate, PlannedTOUpdate]):
         return db_obj, 0, None
 
     def get_planed_to_by_object_id(self, *, db: Session, object_id: int):
-        cur_object, object_code, indexes = crud_objects.getting_object(db=db, object_id=object_id)
+        cur_object, object_code, indexes = crud_objects.get_object_by_id(db=db, object_id=object_id)
         if object_code is not None:
             return None, object_code, None
         planned_to = db.query(self.model).filter(self.model.object_id == object_id).all()
