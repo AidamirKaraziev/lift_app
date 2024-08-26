@@ -34,6 +34,66 @@ class CrudPlannedTO(CRUDBase[PlannedTO, PlannedTOCreate, PlannedTOUpdate]):
                 PlannedTO.object_id == new_data.object_id).first()
             if constrain is not None:
                 return None, self.year_object_uc_is_exist, None
+        if new_data.january_to_id:
+            january_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.january_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " january_to"
+                return None, code, None
+        if new_data.february_to_id:
+            february_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.february_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " february_to"
+                return None, code, None
+        if new_data.march_to_id:
+            march_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.march_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " march_to"
+                return None, code, None
+        if new_data.april_to_id:
+            april_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.april_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " april_to"
+                return None, code, None
+        if new_data.may_to_id:
+            may_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.may_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " may_to"
+                return None, code, None
+        if new_data.june_to_id:
+            june_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.june_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " june_to"
+                return None, code, None
+        if new_data.july_to_id:
+            july_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.july_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " july_to"
+                return None, code, None
+        if new_data.august_to_id:
+            august_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.august_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " august_to"
+                return None, code, None
+        if new_data.september_to_id:
+            september_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.september_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " september_to"
+                return None, code, None
+        if new_data.october_to_id:
+            october_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.october_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " october_to"
+                return None, code, None
+        if new_data.november_to_id:
+            november_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.november_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " november_to"
+                return None, code, None
+        if new_data.december_to_id:
+            december_to, code, indexes = crud_acts_fact.get_act_fact_by_id(db=db, id=new_data.december_to_id)
+            if code != 0:
+                code["detail"] = code["detail"] + " december_to"
+                return None, code, None
         db_obj = super().create(db=db, obj_in=new_data)
         return db_obj, 0, None
 
