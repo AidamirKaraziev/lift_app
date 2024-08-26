@@ -81,7 +81,7 @@ def get_data(
         object_id: int = Path(..., title='ID object'),
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
-    obj, code, indexes = crud_objects.getting_object(db=session, object_id=object_id)
+    obj, code, indexes = crud_objects.get_object_by_id(db=session, object_id=object_id)
     get_raise(code=code)
     return SingleEntityResponse(data=get_object(obj, request))
 
@@ -149,7 +149,7 @@ def create_letter_of_appointment_file(
     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
-    obj, code, indexes = crud_objects.getting_object(db=session, object_id=object_id)
+    obj, code, indexes = crud_objects.get_object_by_id(db=session, object_id=object_id)
     get_raise(code=code)
 
     crud_objects.adding_file(db=session, file=file, path_model=PATH_MODEL,
@@ -175,7 +175,7 @@ def create_acceptance_certificate_file(
     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
-    obj, code, indexes = crud_objects.getting_object(db=session, object_id=object_id)
+    obj, code, indexes = crud_objects.get_object_by_id(db=session, object_id=object_id)
     get_raise(code=code)
 
     crud_objects.adding_file(db=session, file=file, path_model=PATH_MODEL,
@@ -201,7 +201,7 @@ def create_act_pto_file(
     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
-    obj, code, indexes = crud_objects.getting_object(db=session, object_id=object_id)
+    obj, code, indexes = crud_objects.get_object_by_id(db=session, object_id=object_id)
     get_raise(code=code)
 
     crud_objects.adding_file(db=session, file=file, path_model=PATH_MODEL,
