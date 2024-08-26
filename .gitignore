@@ -16,3 +16,4 @@ venv
 .env
 /envs/.env.docker
 /envs/.env.local
+/envs/.env.prod
