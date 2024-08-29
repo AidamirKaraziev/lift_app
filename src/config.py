@@ -29,7 +29,7 @@ class Settings(BaseSettings):
 
     SERVER_NAME: str = "default_server_name"
     SERVER_HOST: AnyHttpUrl = "http://localhost"
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["*"]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["*", "http://els23.ru/"]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
