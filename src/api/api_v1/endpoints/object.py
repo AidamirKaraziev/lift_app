@@ -28,7 +28,7 @@ router = APIRouter()
 
 
 # GET-MULTY
-@router.get('/all-objects/',
+@router.get(path='/all-objects/',
             response_model=ListOfEntityResponse,
             name='Список объектов',
             description='Получение списка всех объектов',
@@ -47,7 +47,26 @@ def get_data(
                                 meta=Meta(paginator=paginator))
 
 
-# GET contact_person by company_id
+@router.get(path='/object/by-foreman/',
+            response_model=ListOfEntityResponse,
+            summary="Получение списка объектов по id прораба",
+            description='',
+            tags=['Админ панель / Объекты']
+            )
+def get_objects_by_company_id(
+        request: Request,
+        foreman_id: int,
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    user, code, indexes = crud_universal_users.get_user_by_id(db=session, user_id=foreman_id)
+    get_raise(code=code)
+    data, paginator = crud_objects.get_objects_by_foreman_id(db=session, page=page, user_id=foreman_id)
+    return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
 @router.get('/object/sort-by-company/{company_id}/',
             response_model=ListOfEntityResponse,
             name='get_objects_by_company_id',
