@@ -198,5 +198,9 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         objs = db.query(Object).filter(Object.company_id == company_id)
         return pagination.get_page(objs, page)
 
+    def get_objects_by_foreman_id(self, *, db: Session, user_id: int, page: Optional[int] = None):
+        objs = db.query(Object).filter(Object.foreman_id == user_id)
+        return pagination.get_page(objs, page)
+
 
 crud_objects = CrudObject(Object)
