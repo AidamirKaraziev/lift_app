@@ -61,7 +61,7 @@ def get_order_by_id(
 
 
 # CREATE NEW OBJECT
-@router.post('/order/',
+@router.post(path='/order/',
              response_model=SingleEntityResponse,
              name='create_order',
              description='Создать задачу',
