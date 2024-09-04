@@ -198,8 +198,12 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         objs = db.query(Object).filter(Object.company_id == company_id)
         return pagination.get_page(objs, page)
 
-    def get_objects_by_foreman_id(self, *, db: Session, user_id: int, page: Optional[int] = None):
-        objs = db.query(Object).filter(Object.foreman_id == user_id)
+    def get_objects_by_foreman_id(self, *, db: Session, foreman_id: int, page: Optional[int] = None):
+        objs = db.query(Object).filter(Object.foreman_id == foreman_id)
+        return pagination.get_page(objs, page)
+
+    def get_objects_by_mechanic_id(self, *, db: Session, mechanic_id: int, page: Optional[int] = None):
+        objs = db.query(Object).filter(Object.mechanic_id == mechanic_id)
         return pagination.get_page(objs, page)
 
 

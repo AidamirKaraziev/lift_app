@@ -50,10 +50,12 @@ def get_data(
 @router.get(path='/object/by-foreman/',
             response_model=ListOfEntityResponse,
             summary="Получение списка объектов по id прораба",
-            description='',
+            description="""🔧 Получение списка объектов, связанных с конкретным прорабом по его ID.
+Используйте этот эндпоинт, чтобы получить постраничный список объектов, которыми управляет выбранный прораб.
+Полезно для администраторов, чтобы отслеживать деятельность прорабов в системе. 📄""",
             tags=['Админ панель / Объекты']
             )
-def get_objects_by_company_id(
+def get_objects_by_foreman(
         request: Request,
         foreman_id: int,
         # current_user=Depends(deps.get_current_universal_user_by_bearer),
@@ -62,12 +64,36 @@ def get_objects_by_company_id(
 ):
     user, code, indexes = crud_universal_users.get_user_by_id(db=session, user_id=foreman_id)
     get_raise(code=code)
-    data, paginator = crud_objects.get_objects_by_foreman_id(db=session, page=page, user_id=foreman_id)
+    data, paginator = crud_objects.get_objects_by_foreman_id(db=session, page=page, foreman_id=foreman_id)
     return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 
-@router.get('/object/sort-by-company/{company_id}/',
+@router.get(path='/object/by-mechanic/',
+            response_model=ListOfEntityResponse,
+            summary="Получение списка объектов по id механика",
+            description="""
+🔧 Получение списка объектов, связанных с конкретным механиком по его ID.
+Используйте этот эндпоинт, чтобы получить постраничный список объектов, которыми управляет выбранный механик.
+Полезно для администраторов, чтобы отслеживать деятельность механиков в системе. 📄
+""",
+            tags=['Админ панель / Объекты']
+            )
+def get_objects_by_mechanic(
+        request: Request,
+        mechanic_id: int,
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(1, title="Номер страницы")
+):
+    user, code, indexes = crud_universal_users.get_user_by_id(db=session, user_id=mechanic_id)
+    get_raise(code=code)
+    data, paginator = crud_objects.get_objects_by_mechanic_id(db=session, page=page, mechanic_id=mechanic_id)
+    return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
+@router.get(path='/object/sort-by-company/{company_id}/',
             response_model=ListOfEntityResponse,
             name='get_objects_by_company_id',
             description='Получение объектов одной компании',
@@ -88,7 +114,7 @@ def get_objects_by_company_id(
 
 
 # GET BY ID
-@router.get('/object/{object_id}/',
+@router.get(path='/object/{object_id}/',
             response_model=SingleEntityResponse[ObjectGet],
             name='Получить данные объекта по id ',
             description='Получение данных объекта по id',
@@ -106,7 +132,7 @@ def get_data(
 
 
 # CREATE NEW OBJECT
-@router.post('/object/',
+@router.post(path='/object/',
              response_model=SingleEntityResponse,
              name='Добавить объект',
              description='Добавить один объект в базу данных ',
@@ -128,7 +154,7 @@ def create_object(
 
 
 # UPDATE
-@router.put('/object/{object_id}/',
+@router.put(path='/object/{object_id}/',
             response_model=SingleEntityResponse,
             name='Изменить данные объекта',
             description='Изменяет изменяет данные объекта',
@@ -151,7 +177,7 @@ def update_object(
 
 
 # UPDATE letter_of_appointment
-@router.put("/object/{object_id}/letter_of_appointment/",
+@router.put(path="/object/{object_id}/letter_of_appointment/",
             response_model=SingleEntityResponse[ObjectGet],
             name='Изменить Письмо о назначение',
             description='Изменить Письмо о назначение для объектов, если отправить пустой файл - сбрасывает',
@@ -177,7 +203,7 @@ def create_letter_of_appointment_file(
 
 
 # UPDATE acceptance_certificate
-@router.put("/object/{object_id}/acceptance_certificate/",
+@router.put(path="/object/{object_id}/acceptance_certificate/",
             response_model=SingleEntityResponse[ObjectGet],
             name='Изменить Акт приемки',
             description='Изменить Акт приемки для объектов, если отправить пустой файл - сбрасывает',
@@ -203,7 +229,7 @@ def create_acceptance_certificate_file(
 
 
 # UPDATE act_pto
-@router.put("/object/{object_id}/act_pto/",
+@router.put(path="/object/{object_id}/act_pto/",
             response_model=SingleEntityResponse[ObjectGet],
             name='Изменить Акт ПТО',
             description='Изменить Акт ПТО для объектов, если отправить пустой файл - сбрасывает',
@@ -229,7 +255,7 @@ def create_act_pto_file(
 
 
 # АПИ ПО АРХИВАЦИИ объекта
-@router.get('/object/{object_id}/archive/',
+@router.get(path='/object/{object_id}/archive/',
             response_model=SingleEntityResponse,
             name='Заморозить объекта',
             description='Архивация объекта',
@@ -249,7 +275,7 @@ def archiving_objects(
 
 
 # АПИ ПО РАЗАРХИВАЦИИ объекта
-@router.get('/object/{object_id}/unzip/',
+@router.get(path='/object/{object_id}/unzip/',
             response_model=SingleEntityResponse,
             name='Разморозка объекта',
             description='Разархивация объекта, доступ к приложению размораживается',
