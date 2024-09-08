@@ -100,13 +100,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get_by_name_old(self, db: Session, name: str) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.name == name).first()
 
-    def get_by_name(self, db: Session, name: str, is_exist: int) -> Optional[ModelType]:
+    def get_by_name(self, db: Session, name: str, is_exist: int):
         obj = db.query(self.model).filter(self.model.name == name).first()
         if obj is not None:
             return None, is_exist, None
         return obj, 0, None
 
-    def get_by_id(self, db: Session, id: int, not_found: int) -> Optional[ModelType]:
+    def get_by_id(self, db: Session, id: int, not_found: int):
         obj = db.query(self.model).filter(self.model.id == id).first()
         if obj is None:
             return None, not_found, None
