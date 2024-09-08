@@ -21,17 +21,17 @@ PATH_TYPE = "photo"
 router = APIRouter()
 
 
-# GET-MULTY
-@router.get('/order-photo/all',
+@router.get(path='/order-photo/all',
             response_model=ListOfEntityResponse,
             name='get_order_photo',
+            summary='Получение списка всех фотографий',
             description='Получение списка всех фотографий',
             tags=['Админ панель / Фотографии Задачи']
             )
 def get_order_photo(
         request: Request,
         session=Depends(deps.get_db),
-        page: int = Query(1, title="Номер страницы")
+        page: int = Query(default=1, title="Номер страницы")
 ):
     logging.info(crud_order_photo.get_multi(db=session, page=None))
 
@@ -41,10 +41,10 @@ def get_order_photo(
                                 meta=Meta(paginator=paginator))
 
 
-# GET ORDERS BY ORDER_ID
-@router.get('/order-photo/{order_id}',
+@router.get(path='/order-photo/{order_id}',
             response_model=ListOfEntityResponse,
             name='get_photo_by_order_id',
+            summary='Получение списка всех фотографий по номеру задачи',
             description='Получение списка всех фотографий по номеру задачи',
             tags=['Админ панель / Фотографии Задачи']
             )
@@ -61,17 +61,17 @@ def get_photo_by_order_id(
     return ListOfEntityResponse(data=[getting_order_photo(obj=datum, request=request) for datum in data])
 
 
-# GET BY ID
-@router.get('/order-photo/{order_photo_id}/',
+@router.get(path='/order-photo/{order_photo_id}/',
             response_model=SingleEntityResponse[OrderPhotoGet],
             name='get_order_photo_by_id',
+            summary='Получить фотографию по id',
             description='Получить фотографию по id',
             tags=['Админ панель / Фотографии Задачи']
             )
 def get_order_photo_by_id(
         request: Request,
         session=Depends(deps.get_db),
-        order_photo_id: int = Path(..., title='ID order_photo'),
+        order_photo_id: int = Path(default=..., title='ID order_photo'),
         # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
 ):
     obj, code, indexes = crud_order_photo.get_photo_by_id(db=session, order_photo_id=order_photo_id)
@@ -80,9 +80,10 @@ def get_order_photo_by_id(
     return SingleEntityResponse(data=getting_order_photo(obj, request))
 
 
-@router.post("/order-photo/{order_id}/",
+@router.post(path="/order-photo/{order_id}/",
              response_model=SingleEntityResponse,
              name='add_photo',
+             summary='Добавить фотографию к задаче',
              description='Добавить фотографию к задаче',
              tags=['Админ панель / Фотографии Задачи'],
              )
@@ -90,7 +91,7 @@ def add_photo(
         request: Request,
         file: Optional[UploadFile] = File(None),
         current_user=Depends(deps.get_current_universal_user_by_bearer),
-        order_id: int = Path(..., title='Id задачи'),
+        order_id: int = Path(default=..., title='Id задачи'),
         session=Depends(deps.get_db),
         ):
     obj, code, indexes = crud_order_photo.check_executor(db=session, order_id=order_id, executor_id=current_user.id)
@@ -103,6 +104,36 @@ def add_photo(
     data, code, indexes = crud_order_photo.get_photo_by_order_id(db=session, order_id=order_id)
     get_raise(code=code)
     return ListOfEntityResponse(data=[getting_order_photo(obj=datum, request=request) for datum in data])
+
+
+@router.delete(
+    path='/order-photo/{order_photo_id}/',
+    name='get_order_photo_by_id',
+    summary='Удалить фотографию по id',
+    description="""
+Удаляет запись о фотографии задачи из базы данных по её ID.
+Важно отметить, что физический файл фотографии, сохранённый на сервере, **не удаляется** — 
+удаляется только информация о фотографии из базы данных. 
+
+Используйте этот метод, если необходимо убрать запись о фотографии, но не удалять сам файл с сервера. 
+
+#### Пример использования:
+- Удалить фотографию по `order_photo_id`.
+
+#### Ответ:
+- Успешное удаление возвращает текст подтверждения и статус 200.
+- В случае ошибки возвращается соответствующий код ошибки и сообщение.
+    """,
+    tags=['Админ панель / Фотографии Задачи']
+)
+def delete_order_photo_by_id(
+        session=Depends(deps.get_db),
+        order_photo_id: int = Path(default=..., title='ID order_photo'),
+        # current_universal_user=Depends(deps.get_current_universal_user_by_bearer),
+):
+    text, code, indexes = crud_order_photo.delete_photo_by_photo_id(db=session, id=order_photo_id)
+    get_raise(code=code)
+    return text
 
 
 if __name__ == "__main__":
