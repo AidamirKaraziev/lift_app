@@ -7,7 +7,7 @@ from src.utils.time_stamp import to_timestamp
 from src.models import UniversalUser
 from src.schemas.universal_user import UniversalUserGet
 
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.getters.location import get_location
 from src.getters.role import get_roles
 from src.getters.working_specialty import get_working_specialty
@@ -47,7 +47,7 @@ def get_universal_user(universal_user: UniversalUser, request: Optional[Request]
         if universal_user.working_specialty is not None else None,
         identity_card=universal_user.identity_card,
         qualification_file=universal_user.qualification_file,
-        company_id=get_company(company=universal_user.company, request=request)
+        company_id=getting_company(company=universal_user.company, request=request)
         if universal_user.company is not None else None,
         division_id=get_division(obj=universal_user.division, request=request)
         if universal_user.division is not None else None,

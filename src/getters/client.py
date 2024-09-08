@@ -10,7 +10,7 @@ from src.getters.role import get_roles
 from src.getters.working_specialty import get_working_specialty
 from src.models import UniversalUser
 
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.schemas.client import ClientGet
 
 
@@ -35,6 +35,6 @@ def get_client(client: UniversalUser, request: Optional[Request],
         working_specialty_id=get_working_specialty(client.working_specialty)
         if client.working_specialty is not None else None,
         identity_card=client.identity_card,
-        company_id=get_company(company=client.company, request=request) if client.company is not None else None,
+        company_id=getting_company(company=client.company, request=request) if client.company is not None else None,
         is_actual=client.is_actual
     )

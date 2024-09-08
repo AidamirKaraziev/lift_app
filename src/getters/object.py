@@ -4,7 +4,7 @@ from fastapi import Request
 from src.config import Settings, settings
 
 from src.getters.division import get_division
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.getters.contact_person import get_contact_person
 from src.getters.contract import get_contract
 from src.getters.factory_model import get_factory_model
@@ -58,7 +58,7 @@ def get_object(obj: Object, request: Optional[Request], config: Settings = setti
         cost_nds=obj.cost_nds,
         cost_no_nds=obj.cost_no_nds,
     
-        company_id=get_company(obj.company_obj, request=request) if obj.company_obj is not None else None,
+        company_id=getting_company(obj.company_obj, request=request) if obj.company_obj is not None else None,
         contact_person_id=get_contact_person(obj.contact_person, request=request) if obj.contact_person is not None else None,
         contract_id=get_contract(obj.contract, request=request) if obj.contract is not None else None,
     
