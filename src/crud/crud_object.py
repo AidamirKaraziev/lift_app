@@ -206,5 +206,16 @@ class CrudObject(CRUDBase[Object, ObjectCreate, ObjectUpdate]):
         objs = db.query(Object).filter(Object.mechanic_id == mechanic_id)
         return pagination.get_page(objs, page)
 
+    def get_object_by_client_id(self, *, db: Session, client_id: int, page: Optional[int] = None):
+        """
+        Получение объектов для клиента по id.
+        """
+        objs = (
+            db.query(self.model)
+            .join(Company, Company.id == self.model.company_id)
+            .join(UniversalUser, self.model.company_id == UniversalUser.company_id)
+            .filter(UniversalUser.company_id == client_id))
+        return pagination.get_page(objs, page)
+
 
 crud_objects = CrudObject(Object)
