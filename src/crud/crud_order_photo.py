@@ -4,6 +4,7 @@ import uuid
 from typing import Optional
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
+from starlette import status
 
 from src.crud.base import CRUDBase
 from src.crud.crud_order import crud_orders
@@ -13,19 +14,16 @@ from src.models import OrderPhoto
 
 
 class CrudOrderPhoto(CRUDBase[OrderPhoto, OrderPhotoCreate, OrderPhotoUpdate]):
-    not_found = -131
-    order_not_found = -129
+    obj_name = "Фотографии Задач"
+    not_found_id = {
+        "status_code": status.HTTP_404_NOT_FOUND,
+        "detail": f"{obj_name}: не найден с таким id"
+    }
 
     def get_photo_by_id(self, *, db: Session, order_photo_id: int):
         obj = db.query(OrderPhoto).filter(OrderPhoto.id == order_photo_id).first()
         if obj is None:
-            return None, self.not_found, None
-        return obj, 0, None
-
-    def get_order_photo_by_id(self, *, db: Session, order_id: int):
-        obj = db.query(OrderPhoto).filter(OrderPhoto.order_id == order_id).first()
-        if obj is None:
-            return None, self.not_found, None
+            return None, self.not_found_id, None
         return obj, 0, None
 
     def get_photo_by_order_id(self, *, db: Session, order_id: int):
@@ -70,6 +68,18 @@ class CrudOrderPhoto(CRUDBase[OrderPhoto, OrderPhotoCreate, OrderPhotoUpdate]):
         db.add(new)
         db.commit()
         return order, 0, None
+
+    def delete_photo_by_photo_id(self, db: Session, id: int):
+        """
+        Удаление фотографии из базы данных, но не удаляем файл с сервера.
+        """
+        text = f"Фотография для задачи с id {id} успешно удалена из БД"
+        try:
+
+            super().remove(db=db, id=id)
+            return text, 0, None
+        except:
+            return None, self.not_found_id, None
 
 
 crud_order_photo = CrudOrderPhoto(OrderPhoto)
