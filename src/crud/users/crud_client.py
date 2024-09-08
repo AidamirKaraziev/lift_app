@@ -4,6 +4,9 @@ import shutil
 import uuid
 from typing import Optional, Any, Union, Dict
 
+from starlette import status
+
+from src.core.roles import CLIENT_ID
 from src.crud.base import CRUDBase
 from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
@@ -23,8 +26,23 @@ FOLDER_UNIVERSAL_USER_PHOTO = './static/universal_user_photo/'
 
 
 class CrudClient(CRUDBase[UniversalUser, UniversalUserCreate, UniversalUserUpdate]):
+    obj_name = "Клиенты"
+    not_found_id = {
+        "status_code": status.HTTP_404_NOT_FOUND,
+        "detail": f"{obj_name}: не найден с таким id"
+    }
+
+    def get_client_by_id(self, *, db: Session, id: int):
+        """
+        Получение клиента по id.
+        """
+        client = db.query(self.model).filter(self.model.id == id, self.model.role_id == CLIENT_ID).first()
+        if not client:
+            return None, self.not_found_id, None
+        return client, 0, None
+
     def updating_client_self(self, db: Session, *, current_user: UniversalUser,
-                             obj_in: Union[ClientUpdateSelf, Dict[str, Any]]) -> UniversalUser:
+                             obj_in: Union[ClientUpdateSelf, Dict[str, Any]]):
         db_obj = crud_universal_users.get(db=db, id=current_user.id)
         obj_data = jsonable_encoder(db_obj)
         new_obj = jsonable_encoder(obj_in)

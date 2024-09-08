@@ -70,7 +70,7 @@ class CrudCompany(CRUDBase[Company, CompanyCreate, CompanyUpdate]):
         obj, code, indexes = super().unzipping(db=db, db_obj=obj)
         return obj, code, None
 
-    def get_company(self, *, db: Session, company_id: int):
+    def get_company_by_id(self, *, db: Session, company_id: int):
         comp = db.query(Company).filter(Company.id == company_id).first()
         if comp is None:
             return None, -106, None

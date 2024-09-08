@@ -3,7 +3,7 @@ from typing import Optional
 
 from src.config import Settings, settings
 
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.getters.cost_type import get_cost_types
 from src.getters.type_contract import get_type_contracts
 from src.models.contract import Contract
@@ -19,7 +19,7 @@ def get_contract(obj: Contract, request: Optional[Request],
 
     return ContractGet(
         id=obj.id,
-        company_id=get_company(company=obj.company, request=request)
+        company_id=getting_company(company=obj.company, request=request)
         if obj.company is not None else None,
         title=obj.title,
         validity_period=obj.validity_period,

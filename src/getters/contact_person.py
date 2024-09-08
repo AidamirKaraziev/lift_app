@@ -3,7 +3,7 @@ from typing import Optional
 
 from src.config import Settings, settings
 
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.models.contact_person import ContactPerson
 from src.schemas.contact_person import ContactPersonGet
 
@@ -19,7 +19,7 @@ def get_contact_person(contact_person: ContactPerson, request: Optional[Request]
     return ContactPersonGet(
         id=contact_person.id,
         name=contact_person.name,
-        company_id=get_company(contact_person.company, request=request) if contact_person.company is not None else None,
+        company_id=getting_company(contact_person.company, request=request) if contact_person.company is not None else None,
         phone=contact_person.phone,
         email=contact_person.email,
         address=contact_person.address,
