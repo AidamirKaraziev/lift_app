@@ -9,7 +9,7 @@ from fastapi.params import Path
 from src.api import deps
 from src.exceptions import UnfoundEntity, InaccessibleEntity
 
-from src.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+from src.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT_ID
 from src.core.response import SingleEntityResponse
 from src.templates_raise import get_raise
 
@@ -32,8 +32,8 @@ PATH_TYPE_QUALIFICATION = "qualification_file"
 ROLES_ELIGIBLE = [ADMIN]
 EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
 ALL_EMPLOYEE = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
-ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT]
-CLIENT_LIST = [CLIENT]
+ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT_ID]
+CLIENT_LIST = [CLIENT_ID]
 
 
 router = APIRouter()
