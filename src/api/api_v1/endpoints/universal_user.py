@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 from fastapi import APIRouter, Depends, Request, UploadFile, File, Query
 from fastapi.params import Path
+from sqlalchemy.orm import Session
 
 from src.api import deps
 
@@ -28,15 +29,16 @@ router = APIRouter()
 
 # SIGN-IN
 # Вход по почте и паролю
-@router.post('/cp/sign-in/', response_model=SingleEntityResponse[TokenBase],
+@router.post(path='/cp/sign-in/',
+             response_model=SingleEntityResponse[TokenBase],
              name='Войти в админ панель',
              description='Войти в админ панель',
              tags=['Вход / Админ панель'])
 def entrance(
-    universal_user: UniversalUserEntrance,
-    session=Depends(deps.get_db),
+    entrance_data: UniversalUserEntrance,
+    session: Session = Depends(deps.get_db),
 ):
-    db_obj = crud_universal_users.get_universal_user(session, universal_user=universal_user)
+    db_obj = crud_universal_users.entrance_universal_user(db=session, entrance_data=entrance_data)
     token = create_token_universal_user(subject=db_obj.id)
     return SingleEntityResponse(data=TokenBase(token=token))
 
@@ -118,7 +120,7 @@ def get_data(
         page: int = Query(1, title="Номер страницы")
 ):
     # проверка компании
-    comp, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    comp, code, indexes = crud_company.get_company_by_id(db=session, company_id=company_id)
     get_raise(code=code)
 
     logging.info(crud_universal_users.get_multi_client_by_company(db=session, company_id=company_id, page=None))

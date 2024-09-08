@@ -72,21 +72,24 @@ class CrudUniversalUser(CRUDBaseUser[
         db_obj = super().create(db=db, obj_in=new_data)
         return db_obj, 0, None
 
-    def get_universal_user(
-            self, db: Session, *, universal_user: UniversalUserEntrance):
-        getting_universal_user = db.query(
+    def entrance_universal_user(
+            self, *,
+            db: Session,
+            entrance_data: UniversalUserEntrance
+    ):
+        current_user = db.query(
             UniversalUser).filter(
-            UniversalUser.email == universal_user.email).first()
-        if getting_universal_user is None or not verify_password(
-                plain_password=universal_user.password,
-                hashed_password=getting_universal_user.password):
+            UniversalUser.email == entrance_data.email).first()
+        if current_user is None or not verify_password(
+                plain_password=entrance_data.password,
+                hashed_password=current_user.password):
             raise UnprocessableEntity(
                 message="Неверный логин или пароль",
                 num=1,
                 description="Неверный логи или пароль",
                 path="$.body"
             )
-        if getting_universal_user.is_actual is False:
+        if current_user.is_actual is False:
             raise UnprocessableEntity(
                 message="Вам отказано в доступе",
                 num=1,
@@ -94,7 +97,7 @@ class CrudUniversalUser(CRUDBaseUser[
                 path="$.body"
             )
 
-        return getting_universal_user
+        return current_user
 
     def get_by_email(self, db: Session, *, email: str):
         return db.query(UniversalUser).filter(
