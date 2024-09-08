@@ -3,6 +3,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request, UploadFile, File, Query
 from fastapi.params import Path
+
+from src.crud.users.crud_client import crud_client
 from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
@@ -93,6 +95,39 @@ def get_objects_by_mechanic(
                                 meta=Meta(paginator=paginator))
 
 
+@router.get(path='/object/by-client/',
+            response_model=ListOfEntityResponse,
+            summary="Получение списка объектов по id клиента",
+            description="""
+🔧 Получение списка объектов, связанных с клиентом по его ID.
+
+Этот эндпоинт используется для получения постраничного списка объектов, привязанных к конкретному клиенту по его уникальному идентификатору `client_id`.
+
+Параметры:
+- `client_id` (обязательный): уникальный идентификатор клиента, по которому будут отфильтрованы объекты.
+- `page` (опциональный, по умолчанию 1): номер страницы для пагинации результатов.
+
+Возвращает:
+- JSON с постраничным списком объектов, связанных с указанным клиентом, и метаинформацией о пагинации.
+
+Примечание:
+- Доступ к этому ресурсу может быть ограничен в зависимости от уровня доступа пользователя.""",
+            tags=['Админ панель / Объекты']
+            )
+def get_objects_by_mechanic(
+        request: Request,
+        client_id: int,
+        # current_user=Depends(deps.get_current_universal_user_by_bearer),
+        session=Depends(deps.get_db),
+        page: int = Query(default=1, title="Номер страницы")
+):
+    user, code, indexes = crud_client.get_client_by_id(db=session, id=client_id)
+    get_raise(code=code)
+    data, paginator = crud_objects.get_object_by_client_id(db=session, page=page, client_id=client_id)
+    return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
+                                meta=Meta(paginator=paginator))
+
+
 @router.get(path='/object/sort-by-company/{company_id}/',
             response_model=ListOfEntityResponse,
             name='get_objects_by_company_id',
@@ -106,7 +141,7 @@ def get_objects_by_company_id(
         session=Depends(deps.get_db),
         page: int = Query(1, title="Номер страницы")
 ):
-    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    obj, code, indexes = crud_company.get_company_by_id(db=session, company_id=company_id)
     get_raise(code=code)
     data, paginator = crud_objects.get_objects_by_company_id(db=session, page=page, company_id=company_id)
     return ListOfEntityResponse(data=[get_object(datum, request) for datum in data],
