@@ -7,7 +7,7 @@ from src.api import deps
 
 from src.core.response import SingleEntityResponse, ListOfEntityResponse, Meta
 from src.templates_raise import get_raise
-from src.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT
+from src.core.roles import FOREMAN, MECHANIC, ENGINEER, DISPATCHER, ADMIN, CLIENT_ID
 
 from src.exceptions import UnfoundEntity
 
@@ -25,8 +25,8 @@ PATH_TYPE = "file"
 ROLE_ADMIN = [ADMIN]
 EMPLOYEE_LIST = [FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
 ALL_EMPLOYEE = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER]
-ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT]
-CLIENT_LIST = [CLIENT]
+ALL = [ADMIN, FOREMAN, MECHANIC, ENGINEER, DISPATCHER, CLIENT_ID]
+CLIENT_LIST = [CLIENT_ID]
 
 
 router = APIRouter()
@@ -67,7 +67,7 @@ def get_contract_by_company_id(
         session=Depends(deps.get_db),
         page: int = Query(1, title="Номер страницы")
 ):
-    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    obj, code, indexes = crud_company.get_company_by_id(db=session, company_id=company_id)
     get_raise(code=code)
 
     data, paginator = crud_contracts.get_contract_by_company_id(db=session, page=page, company_id=company_id)

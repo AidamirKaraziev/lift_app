@@ -1,7 +1,7 @@
 from typing import Optional, Tuple, List
 
 from sqlalchemy.orm import Session
-from src.core.roles import ADMIN, FOREMAN, CLIENT
+from src.core.roles import ADMIN, FOREMAN, CLIENT_ID
 from src.core.response import Paginator
 from src.crud.base import CRUDBase, ModelType
 from src.utils import pagination
@@ -12,7 +12,7 @@ from src.schemas.contact_person import ContactPersonCreate, ContactPersonUpdate
 
 
 DATA_FOLDER_CONTACT_PERSON = "./static/photo_contact_person/"
-ADMIN_FOREMAN_LIST = [ADMIN, FOREMAN, CLIENT]
+ADMIN_FOREMAN_LIST = [ADMIN, FOREMAN, CLIENT_ID]
 
 
 class CrudContactPerson(CRUDBase[ContactPerson, ContactPersonCreate, ContactPersonUpdate]):

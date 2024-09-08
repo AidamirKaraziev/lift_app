@@ -5,17 +5,17 @@ from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 from src.api import deps
 
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-from src.core.roles import ADMIN, CLIENT
+from src.core.roles import ADMIN, CLIENT_ID
 from src.templates_raise import get_raise
 
 from src.crud.crud_company import crud_company
 from src.crud.users.crud_universal_user import crud_universal_users
-from src.getters.company import get_company
+from src.getters.company import getting_company
 from src.schemas.company import CompanyUpdate, CompanyGet, CompanyCreate
 from src.getters.universal_user import get_universal_user
 
 ROLES_ELIGIBLE = [ADMIN]
-ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]
+ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT_ID]
 
 PATH_MODEL = "company"
 PATH_TYPE = "photo"
@@ -24,7 +24,7 @@ router = APIRouter()
 
 # Вывод всех Компаний
 # GET-MULTY
-@router.get('/all-company/',
+@router.get(path='/all-company/',
             response_model=ListOfEntityResponse,
             name='Список Компаний',
             description='Получение списка всех компаний',
@@ -40,12 +40,12 @@ def get_data(
 
     data, paginator = crud_company.get_multi(db=session, page=page)
 
-    return ListOfEntityResponse(data=[get_company(datum, request=request) for datum in data],
+    return ListOfEntityResponse(data=[getting_company(datum, request=request) for datum in data],
                                 meta=Meta(paginator=paginator))
 
 
 # CREATE NEW COMPANY
-@router.post('/company/',
+@router.post(path='/company/',
              response_model=SingleEntityResponse,
              name='Добавить Компанию',
              description='Добавить одну компанию в базу данных ',
@@ -63,11 +63,11 @@ def create_company(
 
     company, code, index = crud_company.create_company(db=session, new_data=new_data)
     get_raise(code=code)
-    return SingleEntityResponse(data=get_company(company=company, request=request))
+    return SingleEntityResponse(data=getting_company(company=company, request=request))
 
 
 # GET ID
-@router.get('/company/{company_id}/',
+@router.get(path='/company/{company_id}/',
             response_model=SingleEntityResponse,
             name='Компания',
             description='Получение данных компании',
@@ -79,13 +79,13 @@ def get_data(
         current_user=Depends(deps.get_current_universal_user_by_bearer),
         session=Depends(deps.get_db),
 ):
-    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    obj, code, indexes = crud_company.get_company_by_id(db=session, company_id=company_id)
     get_raise(code=code)
-    return SingleEntityResponse(data=get_company(obj, request=request))
+    return SingleEntityResponse(data=getting_company(obj, request=request))
 
 
 # UPDATE
-@router.put('/company/{company_id}/',
+@router.put(path='/company/{company_id}/',
             response_model=SingleEntityResponse,
             name='Изменить данные компании',
             description='Изменяет изменяет данные компании',
@@ -104,11 +104,11 @@ def update_company(
     company, code, indexes = crud_company.update_company(db=session, company=new_data, company_id=company_id)
     get_raise(code=code)
 
-    return SingleEntityResponse(data=get_company(company=company, request=request))
+    return SingleEntityResponse(data=getting_company(company=company, request=request))
 
 
 # UPDATE PHOTO
-@router.put("/company/{company_id}/photo/",
+@router.put(path="/company/{company_id}/photo/",
             response_model=SingleEntityResponse[CompanyGet],
             name='Изменить фотографию',
             description='Изменить фотографию для компаний, если отправить пустой файл сбрасывает фото',
@@ -125,17 +125,18 @@ def create_upload_file(
     code = crud_universal_users.check_role_list(current_user=current_user, role_list=ROLES_ELIGIBLE_ADMIN_CLIENT)
     get_raise(code=code)
 
-    obj, code, indexes = crud_company.get_company(db=session, company_id=company_id)
+    obj, code, indexes = crud_company.get_company_by_id(db=session, company_id=company_id)
     get_raise(code=code)
     crud_company.adding_file(db=session, file=file, path_model=PATH_MODEL, path_type=PATH_TYPE, db_obj=obj)
 
-    return SingleEntityResponse(data=get_company(crud_company.get(db=session, id=company_id), request=request))
+    return SingleEntityResponse(data=getting_company(crud_company.get(db=session, id=company_id), request=request))
 
 
 # АПИ ПО АРХИВАЦИИ КОМПАНИИ
-@router.get('/company/{company_id}/archive/',
+@router.get(path='/company/{company_id}/archive/',
             response_model=SingleEntityResponse,
             name='Заморозить компании',
+            summary='Архивация компании',
             description='Архивация компании',
             tags=['Админ панель / Компании'])
 def archiving_companies(
@@ -150,12 +151,13 @@ def archiving_companies(
                                                         role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
 
-    return SingleEntityResponse(data=get_company(obj, request=request))
+    return SingleEntityResponse(data=getting_company(obj, request=request))
 
 
 # АПИ ПО РАЗАРХИВАЦИИ КОМПАНИИ
-@router.get('/company/{company_id}/unzip/',
+@router.get(path='/company/{company_id}/unzip/',
             response_model=SingleEntityResponse,
+            summary='Разморозка компании',
             name='Разморозка компании',
             description='Разархивация Компании, доступ к приложению размораживается',
             tags=['Админ панель / Компании'])
@@ -170,7 +172,7 @@ def unzipping_companies(
                                                         company_id=company_id,
                                                         role_list=ROLES_ELIGIBLE)
     get_raise(code=code)
-    return SingleEntityResponse(data=get_company(obj, request=request))
+    return SingleEntityResponse(data=getting_company(obj, request=request))
 
 
 @router.get(

@@ -7,7 +7,7 @@ from src.exceptions import UnfoundEntity, InaccessibleEntity
 
 from src.api import deps
 
-from src.crud.crud_client import crud_client
+from src.crud.users.crud_client import crud_client
 from src.getters.client import get_client
 from src.schemas.client import ClientGet, ClientUpdateSelf
 

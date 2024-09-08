@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, UploadFile, File, Query, Path, Request
 
 from src.api import deps
 from src.core.response import ListOfEntityResponse, SingleEntityResponse, Meta
-from src.core.roles import ADMIN, CLIENT
+from src.core.roles import ADMIN, CLIENT_ID
 from src.templates_raise import get_raise
 from src.exceptions import UnfoundEntity
 
@@ -15,7 +15,7 @@ from src.schemas.organization import OrganizationCreate, OrganizationUpdate, Org
 
 
 ROLES_ELIGIBLE = [ADMIN]
-ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT]
+ROLES_ELIGIBLE_ADMIN_CLIENT = [ADMIN, CLIENT_ID]
 
 PATH_MODEL = "organization"
 PATH_TYPE = "photo"

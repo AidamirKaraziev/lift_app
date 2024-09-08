@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from src.core.roles import CLIENT
+from src.core.roles import CLIENT_ID
 from src.schemas.location import LocationGet
 from src.schemas.role import RoleGet
 from src.schemas.working_specialty import WorkingSpecialtyGet
@@ -33,7 +33,7 @@ class ClientCreate(BaseModel):
     contact_phone: Optional[str]
     birthday: Optional[int]
     location_id: Optional[int]
-    role_id: int = CLIENT
+    role_id: int = CLIENT_ID
     company_id: int = Field(..., title="Компания")
 
 
